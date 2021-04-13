@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, ScrollView, Text, ActivityIndicator,StyleSheet} from 'react-native';
-import {Container, Row} from 'native-base';
+import {Container, Header,Row} from 'native-base';
 import {Feather} from '@expo/vector-icons';
 import * as Font from 'expo-font';
 
@@ -35,17 +35,17 @@ export default class HomeTab extends Component {
         return (
             <ScrollView style={style.container}>
                 
-                <Container style={{flexDirection:'row',backgroundColor:'white',height:100}}>
+                <Header style={{flexDirection:'row',backgroundColor:'white',height:100}}>
                     <Image source={require('./logo_icon.png')} style={{ marginLeft: 20, marginBottom: 30, marginTop: 40, paddingLeft: 10, width: 40, height: 40 }}></Image>
                     {this.state.isReady?(
                         <Text style={{fontFamily: 'Dancing', marginTop: 42, marginLeft: 10, fontSize: 25,}}>Connect Ajou</Text>
                     ) : (
                     <Text style={style.title}>Connect Ajou</Text>
                     )}
-                </Container>
+                </Header>
 
                 {this.state.isReady ? (
-                    <Text style={{ fontFamily: 'EBS훈민정음새론R',  marginBottom :10,marginLeft: 20, fontSize: 15, }}>About Ajou</Text>
+                    <Text style={{ fontFamily: 'EBS훈민정음새론R',  marginBottom :10,marginLeft: 20, fontSize: 20, }}>About Ajou</Text>
                 ) : (
                     <Text style={style.title}>About Ajou</Text>
                 )}
@@ -62,7 +62,7 @@ export default class HomeTab extends Component {
                 </ScrollView>
 
                 {this.state.isReady ? (
-                    <Text style={{ fontFamily: 'EBS훈민정음새론R', marginTop:10, marginBottom: 10, marginLeft: 20, fontSize: 15, }}>Community</Text>
+                    <Text style={{ fontFamily: 'EBS훈민정음새론R', marginTop:10, marginBottom: 10, marginLeft: 20, fontSize: 20, }}>Community</Text>
                 ) : (
                     <Text style={style.title}>Community</Text>
                 )}
