@@ -4,7 +4,10 @@ import { Feather } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 
 export default class showAll extends Component {
-
+    static navigationOptions = {
+        tabBarIcon: <Text>ALL</Text>
+    }
+    ren
     constructor() {
         super();
 

@@ -13,10 +13,7 @@ export default class getInfo extends Component {
             sectionDatas: [
                 // SectionList의 섹션 하나 객체에는 title, data 2개의 프로퍼티 필요
                 { title: 'Get Info', data: ["Official Announcement", "About Course", "Campus", "Random Question"] },
-                { title: 'Find Friend', data: ["Sports mate", "Finding Party Mates", "Finding Roommates"] },
-                { title: 'Food Yummy', data: ["Near Campus", "Vege Restaurant", "Halal Restaurant"] },
-                { title: 'Study Group', data: ["Languague Exchange", "Major Study", "Other Hobby"] },
-            ],
+            ],   
         };
     }
     render() {

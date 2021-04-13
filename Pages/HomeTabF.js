@@ -35,21 +35,21 @@ export default class HomeTab extends Component {
         return (
             <ScrollView style={style.container}>
                 
-                <Header style={{flexDirection:'row',backgroundColor:'white',height:100}}>
+                <Container style={{ borderBottomWidth:1 ,borderBottomColor:'#D7DDE2',flexDirection:'row',backgroundColor:'white',height:100}}>
                     <Image source={require('./logo_icon.png')} style={{ marginLeft: 20, marginBottom: 30, marginTop: 40, paddingLeft: 10, width: 40, height: 40 }}></Image>
                     {this.state.isReady?(
                         <Text style={{fontFamily: 'Dancing', marginTop: 42, marginLeft: 10, fontSize: 25,}}>Connect Ajou</Text>
                     ) : (
                     <Text style={style.title}>Connect Ajou</Text>
                     )}
-                </Header>
+                </Container>
 
                 {this.state.isReady ? (
-                    <Text style={{ fontFamily: 'EBS훈민정음새론R',  marginBottom :10,marginLeft: 20, fontSize: 20, }}>About Ajou</Text>
+                    <Text style={{ fontFamily: 'EBS훈민정음새론R', marginTop: 10,marginBottom :10, marginLeft: 20, fontSize: 20, }}>About Ajou</Text>
                 ) : (
                     <Text style={style.title}>About Ajou</Text>
                 )}
-                <ScrollView horizontal = {true} style={{ flexDirection: 'row', backgroundColor: 'white' }}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flexDirection: 'row', backgroundColor: 'white' }}>
                     <Container style={style.preview}>
                         <Text>Hello</Text>
                     </Container>
@@ -97,7 +97,7 @@ const style = StyleSheet.create({
    preview:{
         width:280,
         height:210,
-        borderWidth:3,
+        borderWidth:2,
         backgroundColor:'white',
         borderColor:'#D7DDE2',
         borderRadius:10,
@@ -107,7 +107,7 @@ const style = StyleSheet.create({
     containerCommunity: {
         width: 360,
         height: 910,
-        borderWidth: 3,
+        borderWidth: 2,
         backgroundColor: 'white',
         borderColor: '#D7DDE2',
         borderRadius: 10,
