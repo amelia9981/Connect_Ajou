@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Font from 'expo-font';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
+import listShow from './subCommunityPage/showList';
 
 export default class showAll extends Component {
     static navigationOptions = {
-        tabBarIcon: <Text>ALL</Text>
+        header: null,
     }
-    ren
+    
     constructor() {
         super();
 
@@ -16,9 +20,8 @@ export default class showAll extends Component {
             sectionDatas: [
                 // SectionList의 섹션 하나 객체에는 title, data 2개의 프로퍼티 필요
                 { title: 'Get Info', data: ["Official Announcement", "About Course", "Campus", "Random Question"] },
-                { title: 'Find Friend', data: ["Sports mate","Finding Party Mates", "Finding Roommates"] },
-                { title: 'Food Yummy', data: ["Near Campus", "Vege Restaurant", "Halal Restaurant"] },
-                { title: 'Study Group', data:["Languague Exchange","Major Study","Other Hobby"] },
+                { title: 'School Life', data: ["Random Chatting","School Events","Near Campus", "Vege Restaurant", "Halal Restaurant"] },
+                { title: 'Find Friend Group', data: ["Sports mate", "Finding Party Mates", "Finding Roommates", "Languague Exchange", "Major Study", "Other Hobby"] },
             ],
         };
     }
@@ -41,7 +44,7 @@ export default class showAll extends Component {
                     }}
                     renderItem={({ item, index, section }) => {
                         return (
-                            <TouchableOpacity style={style.itemView} onPress={() => { this.clickItem(item) }} >
+                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("viewList") }} >
                                 <Text style={style.itemView}>{item}</Text>
                             </TouchableOpacity>
                         );
@@ -54,10 +57,8 @@ export default class showAll extends Component {
             </ScrollView>
         );
     }//render method..
-    clickItem = (item) => {
-        Alert.alert(item);
-    }
 }
+
 
 const style = StyleSheet.create({
     root: { flex: 1, padding: 16 },

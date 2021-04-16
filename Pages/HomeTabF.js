@@ -8,35 +8,13 @@ import {
 } from "react-native";
 import { Container, Header, Row } from "native-base";
 import { Feather } from "@expo/vector-icons";
-import * as Font from "expo-font";
 
 class HomeTab extends Component {
-  constructor(props) {
-    super(props);
-    // 폰트로딩이 완료되면 true로 변경
-    this.state = { isReady: false };
-  }
-
-  async componentDidMount() {
-    // await키워드를 붙여 비동기식으로 변경
-    await Font.loadAsync({
-      Dancing: require("../assets/fonts/Dancing.ttf"),
-      EBS훈민정음새론L: require("../assets/fonts/EBS훈민정음새론L.ttf"),
-      EBS훈민정음새론R: require("../assets/fonts/EBS훈민정음새론R.ttf"),
-      EBS훈민정음새론SB: require("../assets/fonts/EBS훈민정음새론SB.ttf"),
-      "IBMPlexSansKR-Light": require("../assets/fonts/IBMPlexSansKR-Light.ttf"),
-      "IBMPlexSansKR-Regular": require("../assets/fonts/IBMPlexSansKR-Regular.ttf"),
-    });
-
-    // 폰트로드가 완료되어 true로 변경
-    this.setState({ isReady: true });
-  }
-
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
-      <Feather name="home" size={24} style={{ color: tintColor }} />
-    ),
-  };
+      <Feather name='home' size={24} style={{ color: tintColor }} />
+    )
+  }
   render() {
     return (
       <ScrollView style={style.container}>
@@ -60,37 +38,18 @@ class HomeTab extends Component {
               height: 40,
             }}
           ></Image>
-          {this.state.isReady ? (
             <Text
-              style={{
-                fontFamily: "Dancing",
-                marginTop: 42,
-                marginLeft: 10,
-                fontSize: 25,
-              }}
+              style={style.title}
             >
               Connect Ajou
             </Text>
-          ) : (
-            <Text style={style.title}>Connect Ajou</Text>
-          )}
+          
         </Container>
 
-        {this.state.isReady ? (
-          <Text
-            style={{
-              fontFamily: "EBS훈민정음새론R",
-              marginTop: 10,
-              marginBottom: 10,
-              marginLeft: 20,
-              fontSize: 20,
-            }}
-          >
+          <Text style={style.subTitle}>
             About Ajou
           </Text>
-        ) : (
-          <Text style={style.title}>About Ajou</Text>
-        )}
+
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -107,21 +66,10 @@ class HomeTab extends Component {
           </Container>
         </ScrollView>
 
-        {this.state.isReady ? (
-          <Text
-            style={{
-              fontFamily: "EBS훈민정음새론R",
-              marginTop: 10,
-              marginBottom: 10,
-              marginLeft: 20,
-              fontSize: 20,
-            }}
-          >
+          <Text style={style.subTitle}>
             Community
           </Text>
-        ) : (
-          <Text style={style.title}>Community</Text>
-        )}
+       
         <Container style={style.community}>
           <Container style={style.containerCommunity}>
             <Text>Hello2</Text>
@@ -138,11 +86,18 @@ const style = StyleSheet.create({
     backgroundColor: "white",
   },
   title: {
+    fontFamily: "Dancing",
     marginTop: 42,
     marginLeft: 10,
     fontSize: 25,
   },
-  aboutAjou: {},
+  subTitle: {
+    fontFamily: "EBS훈민정음새론R",
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 20,
+    fontSize: 20,
+  },
   community: {
     alignItems: "center",
     justifyContent: "center",

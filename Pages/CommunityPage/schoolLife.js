@@ -3,7 +3,7 @@ import { ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Aler
 import { Feather } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 
-export default class Foody extends Component {
+export default class schoolLife extends Component {
 
     constructor() {
         super();
@@ -11,9 +11,9 @@ export default class Foody extends Component {
         // 대량의 데이터
         this.state = {
             sectionDatas: [
-                // SectionList의 섹션 하나 객체에는 title, data 2개의 프로퍼티 필
-                { title: 'Food Yummy', data: ["Near Campus", "Vege Restaurant", "Halal Restaurant"] },
-                
+                // SectionList의 섹션 하나 객체에는 title, data 2개의 프로퍼티 필요
+                { title: 'School Life', data: ["Random Chatting", "School Events", "Near Campus", "Vege Restaurant", "Halal Restaurant"] },
+
             ],
         };
     }

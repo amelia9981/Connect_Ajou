@@ -1,56 +1,39 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
 import getInfo from './CommunityPage/GetInfo';
 import showAll from './CommunityPage/showAll';
 import findFriend from './CommunityPage/FindFriend';
-import study from './CommunityPage/study';
-import Foody from './CommunityPage/Foody';
+import schoolLife from './CommunityPage/schoolLife';
 
-const AppTabNavigator = createMaterialTopTabNavigator({
-    All: { screen: showAll },
-    getInfo: { screen: getInfo },
-    findFriend: { screen: findFriend },
-    Foody: { screen: Foody },
-    study: { screen: study }
-}, {
-    animationEnabled: true,
-    swipeEnabled: true,
-    tabBarPosition: "top",
-    tabBarOptions: {
-        style: {
-            ...Platform.select({
-                ios: {
-                    backgroundColor: 'white',
-                },
-                android: {
-                    backgroundColor: "white",
-                }
-            })
-        },
-        iconStyle: { height: 40 },
-        activeTintColor: '#1E3D6B',
-        inactiveTintColor: '#D7DDE2',
-        upperCaseLabel: false,
-        showLabel: false,
-        showIcon: true,
-    }
-});
+import listShow from'./CommunityPage/subCommunityPage/showList';
+import { createStackNavigator } from 'react-navigation-stack';
 
-const AppTabContainet = createAppContainer(AppTabNavigator);
+const Screens = {
+    ALL:{screen:showAll},
+    viewList:{screen:listShow},
+}
+const subCommunityPages = createStackNavigator(Screens);
+
+const AppTabContainer = createAppContainer(subCommunityPages);
+
+
+
+
 
 export default class CommunityMain extends Component {
     static navigationOptions = {
         tabBarIcon: ({ tintColor }) => (
             <Feather name='list' size={24} style={{ color: tintColor }} />
-        )
+        ),
+        header: null
     }
     render() {
         return (
-                <AppTabContainet />
+                <AppTabContainer />
         );
     }
 }

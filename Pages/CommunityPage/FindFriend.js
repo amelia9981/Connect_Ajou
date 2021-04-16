@@ -12,9 +12,8 @@ export default class findFriend extends Component {
         this.state = {
             sectionDatas: [
                 // SectionList의 섹션 하나 객체에는 title, data 2개의 프로퍼티 필요
+                { title: 'Find Friend Group', data: ["Sports mate", "Finding Party Mates", "Finding Roommates", "Languague Exchange", "Major Study", "Other Hobby"] },
 
-                { title: 'Find Friend', data: ["Sports mate", "Finding Party Mates", "Finding Roommates"] },
-                
             ],
         };
     }
