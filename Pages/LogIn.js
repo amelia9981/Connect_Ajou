@@ -1,35 +1,12 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TextInput, Button } from "react-native";
-import * as Font from "expo-font";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import MainScreen from "../MainScreenF";
 
-class loginPage extends Component {
-  state = {
-    isChecked: false,
-    setChecked: false,
-  };
-
+class LogInScreen extends Component {
   static navigationOptions = {
     headerShown: false,
   };
 
-  async componentDidMount() {
-    // await키워드를 붙여 비동기식으로 변경
-    await Font.loadAsync({
-      Dancing: require("../assets/fonts/Dancing.ttf"),
-      EBS훈민정음새론L: require("../assets/fonts/EBS훈민정음새론L.ttf"),
-      EBS훈민정음새론R: require("../assets/fonts/EBS훈민정음새론R.ttf"),
-      EBS훈민정음새론SB: require("../assets/fonts/EBS훈민정음새론SB.ttf"),
-      "IBMPlexSansKR-Light": require("../assets/fonts/IBMPlexSansKR-Light.ttf"),
-      "IBMPlexSansKR-Regular": require("../assets/fonts/IBMPlexSansKR-Regular.ttf"),
-    });
-  }
-
   render() {
-    const { isChecked, setChecked } = this.state;
-
     return (
       <View style={styles.container}>
         <Image style={styles.logo} source={require("../assets/logo1.png")} />
@@ -37,21 +14,20 @@ class loginPage extends Component {
           style={styles.input_id}
           placeholder="ID"
           autoCapitalize="none"
-          autoCorrect="none"
         />
         <TextInput
           style={[styles.input_id, styles.input_pwd]}
           placeholder="Password"
           secureTextEntry={true}
         />
-        <View
-          style={styles.checkbox}
-          value={isChecked}
-          onValueChange={setChecked}
-        />
+        <View style={styles.checkbox} />
         <Text style={styles.checkbox_label}>Automatic login</Text>
         <View style={styles.button_register}>
-          <Button title="Register" color="#FFFFFF" />
+          <Button
+            title="Register"
+            color="#FFFFFF"
+            onPress={() => console.log("Moving to the Registration Page")}
+          />
         </View>
         <View style={styles.button_login}>
           <Button
@@ -64,17 +40,6 @@ class loginPage extends Component {
     );
   }
 }
-
-const AppNavigator = createStackNavigator({
-  LogInScreen: {
-    screen: loginPage,
-  },
-  MainScreen: {
-    screen: MainScreen,
-  },
-});
-
-const AppContainer = createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
   container: {
@@ -93,7 +58,6 @@ const styles = StyleSheet.create({
     height: "30%",
   },
   input_id: {
-    fontFamily: "IBMPlexSansKR-Light",
     opacity: 1,
     position: "absolute",
     top: "42%",
@@ -138,14 +102,12 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   checkbox_label: {
-    fontFamily: "IBMPlexSansKR-Regular",
     position: "absolute",
     top: "58%",
     left: "15%",
     color: "#FFFFFF",
   },
   button_register: {
-    fontFamily: "IBMPlexSansKR-Regular",
     opacity: 1,
     position: "absolute",
     bottom: "25%",
@@ -168,7 +130,6 @@ const styles = StyleSheet.create({
     height: 43,
   },
   button_login: {
-    fontFamily: "IBMPlexSansKR-Regular",
     opacity: 1,
     position: "absolute",
     bottom: "25%",
@@ -192,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppContainer;
+export default LogInScreen;

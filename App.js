@@ -1,42 +1,49 @@
-import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import MainScreen from "./MainScreenF";
+import React, { Component } from "react";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import LoadingScreen from "./Pages/Loading";
+import MainScreen from "./MainScreenF";
 import LogInScreen from "./Pages/LogIn";
 
-export default class extends React.Component {
-  state = {
-    isLoading: true,
-    isLogIn: true,
-  };
-  componentDidMount = async () => {
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-    }, 3000);
-  };
+// export default class extends React.Component {
+//   state = {
+//     isLoading: true,
+//     isLoggedIn: true,
+//   };
+//   componentDidMount = async () => {
+//     setTimeout(() => {
+//       this.setState({ isLoading: false });
+//     }, 3000);
+//   };
+//   render() {
+//     const { isLoading, isLoggedIn } = this.state;
+//     return isLoading ? (
+//       <LoadingScreen />
+//     ) : isLoggedIn ? (
+//       <LogInScreen />
+//     ) : (
+//       <MainScreen />
+//     );
+//   }
+// }
+
+const switchNavigator = createSwitchNavigator(
+  {
+    LoadingScreen: LoadingScreen,
+    MainScreen: MainScreen,
+    LogInScreen: LogInScreen,
+  },
+  {
+    initialRouteName: "LoadingScreen",
+  }
+);
+
+const AppNavigator = createAppContainer(switchNavigator);
+
+class App extends Component {
   render() {
-    const { isLoading, isLogIn } = this.state;
-    return isLoading ? (
-      <LoadingScreen />
-    ) : isLogIn ? (
-      <LogInScreen />
-    ) : (
-      <MainScreen />
-    );
+    return <AppNavigator />;
   }
 }
 
-// const AppStackNavigator = createStackNavigator({
-//   Main: {
-//     screen: MainScreen, // MainScreen 컴포넌트를 네비게이터에 등록
-//   },
-// });
-
-// export default createAppContainer(AppStackNavigator);
-
-// export default function App() {
-
-//}
+export default App;

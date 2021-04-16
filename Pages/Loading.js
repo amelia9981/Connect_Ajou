@@ -1,12 +1,35 @@
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, View, Image } from "react-native";
 
-export default function Loading() {
-  return (
-    <View style={styles.container}>
-      <Image style={styles.logo} source={require("../assets/logo1.png")} />
-    </View>
-  );
+class LoadingScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false,
+    };
+  }
+
+  checkLoggedInStatus = () => {
+    if (this.state.isLoggedIn) {
+      return this.props.navigation.navigate("MainScreen");
+    }
+
+    return this.props.navigation.navigate("LogInScreen");
+  };
+
+  componentDidMount = async () => {
+    setTimeout(() => {
+      this.checkLoggedInStatus();
+    }, 3000);
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Image style={styles.logo} source={require("../assets/logo1.png")} />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -22,3 +45,5 @@ const styles = StyleSheet.create({
     height: "50%",
   },
 });
+
+export default LoadingScreen;
