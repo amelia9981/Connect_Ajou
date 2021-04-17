@@ -5,7 +5,7 @@ import * as Font from 'expo-font';
 
 //리스트보기
 
-export default class listShow extends Component{
+export default class viewList extends Component{
 
     render(){
         return(

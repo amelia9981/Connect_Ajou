@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { Container, Header } from 'native-base';
 
-import listShow from './subCommunityPage/showList';
 
 export default class showAll extends Component {
     static navigationOptions = {
-        header: null,
+        tabBarIcon: ({ tintColor }) => (
+            <Feather name='list' size={24} style={{ color: tintColor }} />
+        ),
     }
-    
     constructor() {
         super();
-
         // 대량의 데이터
         this.state = {
             sectionDatas: [
@@ -27,41 +26,53 @@ export default class showAll extends Component {
     }
     render() {
         return (
-            <ScrollView style={style.root}>
-                {/* 리스트에 그룹칭이 가능하 리스트뷰 */}
-                {/* 3개의 필수 속성 */}
-                {/* 1) section - 섹션 title과 섹션별 data들을 가진 대량의 데이터*/}
-                {/* 2) renderSectionHeader - 섹션별 title영역에 그려질 컴포넌트를 리턴하는 콜백함수 지정 */}
-                {/* 3) renderItem - 섹션별 Item영역에 그려질 컴포넌트를 리턴하는 콜백함수 지정 */}
-                <SectionList
-                    sections={this.state.sectionDatas}
-                    renderSectionHeader={({ section }) => {
-                        return (
-                            <View style={style.sectionHeader}>
-                                <Text style={style.sectionTitle}>{section.title}</Text>
-                            </View>
-                        );
-                    }}
-                    renderItem={({ item, index, section }) => {
-                        return (
-                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("viewList") }} >
-                                <Text style={style.itemView}>{item}</Text>
-                            </TouchableOpacity>
-                        );
-                    }}
-                    // keyExtractor={(item,index)=>{return index}}
-                    keyExtractor={(item, index) => index}
-                >
-
-                </SectionList>
-            </ScrollView>
+            <View style={{flex:1}}>
+                    <SectionList
+                        sections={this.state.sectionDatas}
+                        renderSectionHeader={({ section }) => {
+                            return (
+                                <View style={style.sectionHeader}>
+                                    <Text style={style.sectionTitle}>{section.title}</Text>
+                                </View>
+                            );
+                        }}
+                        renderItem={({ item, index, section }) => {
+                            return (
+                                <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("ViewList") }} >
+                                    <Text style={style.itemView}>{item}</Text>
+                                </TouchableOpacity>
+                            );
+                        }}
+                        // keyExtractor={(item,index)=>{return index}}
+                        keyExtractor={(item, index) => index}
+                    >
+                    </SectionList>
+            </View>
         );
     }//render method..
 }
 
 
 const style = StyleSheet.create({
-    root: { flex: 1, padding: 16 },
+    container:{
+        marginLeft:30,
+        marginRight:30,
+        backgroundColor:'#F6F8F8'
+    },
+    header:{
+        borderBottomColor:'#D7DDE2',
+        backgroundColor:'white',
+        flexDirection: "row",
+        borderWidth:1,
+        height:60
+    },
+    title:{
+        fontSize: 25,
+        fontFamily:'EBS훈민정음새론SB',
+        marginLeft: 20,
+        marginTop:15,
+        marginBottom:10,
+    },
     sectionHeader: {
         padding: 4,
         backgroundColor: "#eeeeee",

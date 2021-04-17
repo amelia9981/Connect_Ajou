@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import * as Font from 'expo-font';
+import { Container, Header } from 'native-base';
+
 
 export default class getInfo extends Component {
-
+    
     constructor() {
         super();
 
@@ -18,12 +18,7 @@ export default class getInfo extends Component {
     }
     render() {
         return (
-            <ScrollView style={style.root}>
-                {/* 리스트에 그룹칭이 가능하 리스트뷰 */}
-                {/* 3개의 필수 속성 */}
-                {/* 1) section - 섹션 title과 섹션별 data들을 가진 대량의 데이터*/}
-                {/* 2) renderSectionHeader - 섹션별 title영역에 그려질 컴포넌트를 리턴하는 콜백함수 지정 */}
-                {/* 3) renderItem - 섹션별 Item영역에 그려질 컴포넌트를 리턴하는 콜백함수 지정 */}
+            <Container>
                 <SectionList
                     sections={this.state.sectionDatas}
                     renderSectionHeader={({ section }) => {
@@ -35,7 +30,7 @@ export default class getInfo extends Component {
                     }}
                     renderItem={({ item, index, section }) => {
                         return (
-                            <TouchableOpacity style={style.itemView} onPress={() => { this.clickItem(item) }} >
+                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("viewList") }} >
                                 <Text style={style.itemView}>{item}</Text>
                             </TouchableOpacity>
                         );
@@ -43,9 +38,8 @@ export default class getInfo extends Component {
                     // keyExtractor={(item,index)=>{return index}}
                     keyExtractor={(item, index) => index}
                 >
-
                 </SectionList>
-            </ScrollView>
+            </Container>
         );
     }//render method..
     clickItem = (item) => {
@@ -54,7 +48,24 @@ export default class getInfo extends Component {
 }
 
 const style = StyleSheet.create({
-    root: { flex: 1, padding: 16 },
+    container: {
+        flex: 1,
+        marginLeft: 30,
+        marginRight: 30,
+        backgroundColor: '#F6F8F8'
+    },
+    headContainer: {
+        marginTop: 10,
+        height: 40,
+        borderBottomColor: '#D7DDE2',
+        borderWidth: 1,
+    },
+    title: {
+        marginTop: 20,
+        marginLeft: 10,
+        fontSize: 25,
+        fontFamily: 'EBS훈민정음새론SB'
+    },
     sectionHeader: {
         padding: 4,
         backgroundColor: "#eeeeee",
