@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     height: "30%",
   },
   input_id: {
-    opacity: 1,
+    fontFamily: "IBMPlexSansKR-Light",
     position: "absolute",
     top: "42%",
     padding: 10,
@@ -102,13 +102,14 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   checkbox_label: {
+    fontFamily: "IBMPlexSansKR-Regular",
     position: "absolute",
     top: "58%",
     left: "15%",
     color: "#FFFFFF",
   },
   button_register: {
-    opacity: 1,
+    fontFamily: "IBMPlexSansKR-Regular",
     position: "absolute",
     bottom: "25%",
     left: "10%",
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     height: 43,
   },
   button_login: {
-    opacity: 1,
+    fontFamily: "IBMPlexSansKR-Regular",
     position: "absolute",
     bottom: "25%",
     right: "10%",
