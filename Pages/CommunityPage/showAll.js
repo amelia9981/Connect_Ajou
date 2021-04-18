@@ -20,8 +20,8 @@ import { Container, Header } from 'native-base';
 export default class showAll extends Component {
     
     static navigationOptions = {
-        header: null
-    };
+        headerShown: false,
+      };
     constructor() {
         super();
         // 대량의 데이터

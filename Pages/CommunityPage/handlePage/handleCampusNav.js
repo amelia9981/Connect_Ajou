@@ -18,8 +18,9 @@ const AppContainer = createAppContainer(CampusNav);
 
 export default class handleCampus extends Component {
     static navigationOptions = {
-        header:null
-    };
+        headerShown: false,
+      };
+      
     render() {
         return (
             <AppContainer />

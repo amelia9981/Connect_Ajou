@@ -7,6 +7,9 @@ import { Container } from 'native-base';
 //리스트보기
 
 export default class viewList extends Component{
+    static navigationOptions = {
+        headerShown: false,
+      };
     
     render(){
         return(

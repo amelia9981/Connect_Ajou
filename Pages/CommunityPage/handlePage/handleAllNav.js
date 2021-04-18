@@ -8,7 +8,7 @@ import searchWriting from '../subCommunityPage/searchWriting';
 import seeWriting from '../subCommunityPage/seeWriting';
 
 const AllNav = createStackNavigator({
-    Main: { screen: showAll, navigationOptions:{header:null} },
+    Main: { screen: showAll},
     ViewList: { screen: viewList, navigationOptions:{tabBarVisible:false} },
     Add: { screen: addWriting },
     Search: { screen: searchWriting },
@@ -17,6 +17,10 @@ const AllNav = createStackNavigator({
 const AppTabContainer = createAppContainer(AllNav);
 
 export default class handleAll extends Component{
+    static navigationOptions = {
+        headerShown: false,
+      };
+      
     render(){
         return(
             <AppTabContainer />
