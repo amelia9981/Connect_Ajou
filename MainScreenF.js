@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Platform } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import { Feather } from '@expo/vector-icons';
 
 // 하단 탭에 들어갈 컴포넌트들
 import HomeTab from "./Pages/HomeTabF";
@@ -13,7 +14,12 @@ import UserTab from "./Pages/User";
 const AppTabNavigator = createMaterialTopTabNavigator(
   {
     HomeTab: { screen: HomeTab },
-    CommunityMain: { screen: CommunityMain },
+    CommunityMain: {
+      screen: CommunityMain, navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Feather name='list' size={24} style={{ color: tintColor }} />
+        ),
+        header: null}},
     TimetableTab: { screen: TimetableTab },
     AlarmTab: { screen: AlarmTab },
     UserTab: { screen: UserTab },

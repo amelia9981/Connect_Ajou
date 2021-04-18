@@ -30,7 +30,7 @@ export default class getInfo extends Component {
                     }}
                     renderItem={({ item, index, section }) => {
                         return (
-                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("viewList") }} >
+                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("ViewList") }} >
                                 <Text style={style.itemView}>{item}</Text>
                             </TouchableOpacity>
                         );
@@ -42,9 +42,6 @@ export default class getInfo extends Component {
             </Container>
         );
     }//render method..
-    clickItem = (item) => {
-        Alert.alert(item);
-    }
 }
 
 const style = StyleSheet.create({

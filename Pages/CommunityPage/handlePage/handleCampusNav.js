@@ -14,13 +14,15 @@ const CampusNav = createStackNavigator({
     Search: { screen: searchWriting },
     See: { screen: seeWriting }
 })
-const AppTabContainer = createAppContainer(CampusNav);
+const AppContainer = createAppContainer(CampusNav);
 
 export default class handleCampus extends Component {
-    
+    static navigationOptions = {
+        header:null
+    };
     render() {
         return (
-            <AppTabContainer />
+            <AppContainer />
         );
     }
 }

@@ -17,7 +17,9 @@ const FriendNav = createStackNavigator({
 const AppTabContainer = createAppContainer(FriendNav);
 
 export default class handleFriend extends Component {
-    
+    static navigationOptions = {
+        header: null
+    };
     render() {
         return (
             <AppTabContainer />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
 import { Container, Header } from 'native-base';
 
 
@@ -43,9 +43,6 @@ export default class schoolLife extends Component {
             </Container>
         );
     }//render method..
-    clickItem = (item) => {
-        Alert.alert(item);
-    }
 }
 
 const style = StyleSheet.create({

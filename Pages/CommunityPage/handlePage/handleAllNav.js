@@ -8,8 +8,8 @@ import searchWriting from '../subCommunityPage/searchWriting';
 import seeWriting from '../subCommunityPage/seeWriting';
 
 const AllNav = createStackNavigator({
-    Main: { screen: showAll },
-    ViewList: { screen: viewList },
+    Main: { screen: showAll, navigationOptions:{header:null} },
+    ViewList: { screen: viewList, navigationOptions:{tabBarVisible:false} },
     Add: { screen: addWriting },
     Search: { screen: searchWriting },
     See: { screen: seeWriting }

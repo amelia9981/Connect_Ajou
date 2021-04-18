@@ -33,25 +33,19 @@ const AppTabNavigator = createMaterialTopTabNavigator(
                     },
                 }),
             },
-            iconStyle: { height: 30 },
             activeTintColor: "#1E3D6B",
             inactiveTintColor: "#D7DDE2",
             upperCaseLabel: false,
-            showLabel: false,
-            showIcon: true,
+            showLabel: true,
+            labelStyle: { marginTop:40, fontSize:15,fontFamily:"EBS훈민정음새론SB"},
         },
+
     }
 );
 
 const AppTabContainer = createAppContainer(AppTabNavigator);
 
 export default class CommunityMain extends Component {
-    static navigationOptions = {
-        tabBarIcon: ({ tintColor }) => (
-            <Feather name='list' size={24} style={{ color: tintColor }} />
-        ),
-        header:null
-    }
     render() {
         return (
                 <AppTabContainer />

@@ -17,6 +17,9 @@ const InfoNav = createStackNavigator({
 const AppTabContainer  = createAppContainer(InfoNav);
 
 export default class handleInfo extends Component {
+    static navigationOptions = {
+        header: null
+    };
     render() {
         return (
             <AppTabContainer />

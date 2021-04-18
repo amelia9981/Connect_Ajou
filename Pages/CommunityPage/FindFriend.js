@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
 import { Container, Header } from 'native-base';
 
 
@@ -31,7 +31,7 @@ export default class findFriend extends Component {
                     }}
                     renderItem={({ item, index, section }) => {
                         return (
-                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("viewList") }} >
+                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("ViewList") }} >
                                 <Text style={style.itemView}>{item}</Text>
                             </TouchableOpacity>
                         );

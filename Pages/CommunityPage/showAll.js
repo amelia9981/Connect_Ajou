@@ -6,12 +6,22 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { Container, Header } from 'native-base';
 
 
+
+/*
+처리해야할 문제 1. 헤더 & 밑에 탭 없애는거 
+    = > header: null 적용 안되는데 다른 방법은 show full screen? 이건 찾아봐야할 듯
+처리해야할 문제 2. coummunity 세부 페이지에서 다른 페이지로 이동시 그 화면 고정
+    => popTopop 이런 함수 있던데 이거 사용
+    => 앱에 사용되는 모든 페이지 handle 할 js파일 만들기
+*/
+
+
+
 export default class showAll extends Component {
+    
     static navigationOptions = {
-        tabBarIcon: ({ tintColor }) => (
-            <Feather name='list' size={24} style={{ color: tintColor }} />
-        ),
-    }
+        header: null
+    };
     constructor() {
         super();
         // 대량의 데이터
@@ -24,6 +34,8 @@ export default class showAll extends Component {
             ],
         };
     }
+    
+
     render() {
         return (
             <View style={{flex:1}}>
@@ -36,9 +48,10 @@ export default class showAll extends Component {
                                 </View>
                             );
                         }}
-                        renderItem={({ item, index, section }) => {
+                        renderItem={({ item, navigation, index, section }) => {
                             return (
-                                <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("ViewList") }} >
+                                <TouchableOpacity style={style.itemView} onPress={() => {
+                                    this.props.navigation.navigate("ViewList") }} >
                                     <Text style={style.itemView}>{item}</Text>
                                 </TouchableOpacity>
                             );
