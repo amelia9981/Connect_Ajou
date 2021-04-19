@@ -34,7 +34,6 @@ export default class showAll extends Component {
             ],
         };
     }
-    
 
     render() {
         return (

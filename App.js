@@ -2,7 +2,9 @@ import React, { Component , useState} from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+//import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import LoadingScreen from "./Pages/Loading";
 import MainScreen from "./MainScreenF";
 import LogInScreen from "./Pages/LogIn";
@@ -17,6 +19,8 @@ const getFont = ()=>Font.loadAsync({
   "IBMPlexSansKR-Light": require("./assets/fonts/IBMPlexSansKR-Light.ttf"),
   "IBMPlexSansKR-Regular": require("./assets/fonts/IBMPlexSansKR-Regular.ttf"),
 });
+/*
+const Stack = createStackNavigator();
 
 const switchNavigator = createSwitchNavigator(
   {
@@ -28,15 +32,13 @@ const switchNavigator = createSwitchNavigator(
     initialRouteName: "LoadingScreen",
   }
 );
-
-const AppNavigaitor = createAppContainer(switchNavigator);
-
+*/
 export default function App(){
 
   const [fontloaded, setFontsLoaded] = useState(false);
 
   if(fontloaded){
-    return <AppNavigaitor />;
+    return (<MainScreen/>);
   }
   else{
     return(

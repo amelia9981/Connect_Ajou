@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, Platform } from "react-native";
-import { createAppContainer } from "react-navigation";
-import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Feather } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
 
 // 하단 탭에 들어갈 컴포넌트들
 import HomeTab from "./Pages/HomeTabF";
@@ -11,56 +11,54 @@ import TimetableTab from "./Pages/TimetableTab";
 import AlarmTab from "./Pages/Alarm";
 import UserTab from "./Pages/User";
 
-const AppTabNavigator = createMaterialTopTabNavigator(
-  {
-    HomeTab: { screen: HomeTab },
-    CommunityMain: {
-      screen: CommunityMain, navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Feather name='list' size={24} style={{ color: tintColor }} />
-        ),
-        header: null}},
-    TimetableTab: { screen: TimetableTab },
-    AlarmTab: { screen: AlarmTab },
-    UserTab: { screen: UserTab },
-  },
-  {
-    animationEnabled: true,
-    swipeEnabled: false,
-    tabBarPosition: "bottom",
-    tabBarOptions: {
-      style: {
-        ...Platform.select({
-          ios: {
-            backgroundColor: "white",
-          },
-          android: {
-            backgroundColor: "white",
-          },
-        }),
-      },
-      iconStyle: { height: 30 },
-      activeTintColor: "#1E3D6B",
-      inactiveTintColor: "#D7DDE2",
-      upperCaseLabel: false,
-      showLabel: false,
-      showIcon: true,
-    },
-  }
-);
-
-const AppTabContainer = createAppContainer(AppTabNavigator);
-
+const Tab = createMaterialBottomTabNavigator();
 class MainScreen extends Component {
   static navigationOptions = {
     header: null,
   };
 
   render() {
-    return <AppTabContainer />; // AppTabContainet 컴포넌트를 리턴한다.
+    return(
+      <NavigationContainer>
+        <Tab.Navigator tabBarOptions={{
+          animationEnabled: true,
+          swipeEnabled: false,
+          tabBarPosition: "bottom",
+          tabBarOptions: {
+            style: {
+              ...Platform.select({
+                ios: {
+                  backgroundColor: "white",
+                },
+                android: {
+                  backgroundColor: "white",
+                },
+              }),
+            },
+            activeTintColor: "#1E3D6B",
+            inactiveTintColor: "#D7DDE2",
+            upperCaseLabel: false,
+            showLabel: true,
+            labelStyle: {
+              marginTop: 40,
+              fontSize: 15,
+              fontFamily: "EBS훈민정음새론SB",
+            },
+            indicatorStyle: {
+              backgroundColor: "#1E3D6B",
+            },
+          },
+        }}>
+          <Tab.Screen name="Home" component={HomeTab} />
+          <Tab.Screen name="Community" component={CommunityMain} />
+          <Tab.Screen name="Timetable" component={TimetableTab} />
+          <Tab.Screen name="Alarm" component={AlarmTab} />
+          <Tab.Screen name="User" component={UserTab} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
