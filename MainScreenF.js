@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { StyleSheet, Platform } from "react-native";
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -10,50 +9,44 @@ import CommunityMain from "./Pages/CommunityMain";
 import TimetableTab from "./Pages/TimetableTab";
 import AlarmTab from "./Pages/Alarm";
 import UserTab from "./Pages/User";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 class MainScreen extends Component {
-  static navigationOptions = {
-    header: null,
-  };
-
+ 
   render() {
     return(
-      <NavigationContainer>
-        <Tab.Navigator tabBarOptions={{
-          animationEnabled: true,
-          swipeEnabled: false,
-          tabBarPosition: "bottom",
-          tabBarOptions: {
-            style: {
-              ...Platform.select({
-                ios: {
-                  backgroundColor: "white",
-                },
-                android: {
-                  backgroundColor: "white",
-                },
-              }),
-            },
-            activeTintColor: "#1E3D6B",
-            inactiveTintColor: "#D7DDE2",
-            upperCaseLabel: false,
-            showLabel: true,
-            labelStyle: {
-              marginTop: 40,
-              fontSize: 15,
-              fontFamily: "EBS훈민정음새론SB",
-            },
-            indicatorStyle: {
-              backgroundColor: "#1E3D6B",
-            },
-          },
-        }}>
-          <Tab.Screen name="Home" component={HomeTab} />
-          <Tab.Screen name="Community" component={CommunityMain} />
-          <Tab.Screen name="Timetable" component={TimetableTab} />
-          <Tab.Screen name="Alarm" component={AlarmTab} />
-          <Tab.Screen name="User" component={UserTab} />
+      <NavigationContainer independent={true}>
+        <Tab.Navigator 
+        labeled='false'  
+        barStyle={{backgroundColor:'white'}}
+          tabBarOptions={{ activeTintColor:"#1E3D6B", inactiveTintColor: "#D7DDE2"}}
+        >
+          <Tab.Screen name="Home" component={HomeTab} options={{
+            tabBarIcon: ({ tintColor }) => (
+              <Feather name='home' size={24} style={{ color: tintColor }} />
+            )}}/>
+          <Tab.Screen name="Community" component={CommunityMain} options={{
+            
+            tabBarIcon: ({ tintColor }) => (
+              <Feather name='list' size={24} style={{ color: tintColor }} />
+            )
+          }} />
+          <Tab.Screen name="Timetable" component={TimetableTab} options={{
+            tabBarIcon: ({ tintColor }) => (
+              <Feather name='layout' size={24} style={{ color: tintColor }} />
+            )
+          }}/>
+          <Tab.Screen name="Alarm" component={AlarmTab} options={{
+            tabBarIcon: ({ tintColor }) => (
+              <Feather name='bell' size={24} style={{ color: tintColor }} />
+            )
+          }}/>
+          <Tab.Screen name="User" component={UserTab} options={{
+            tabBarIcon: ({ tintColor }) => (
+              <Feather name='user' size={24} style={{ color: tintColor }} />
+            )
+          }} />
         </Tab.Navigator>
       </NavigationContainer>
     );

@@ -13,12 +13,7 @@ import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
 
 class UserTab extends Component {
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) => (
-      <Feather name="user" size={24} style={{ color: tintColor }} />
-    ),
-  };
-
+ 
   state = {
     name: "Jeanine Han",
     id: "namu1092",

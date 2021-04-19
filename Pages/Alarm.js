@@ -8,11 +8,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 const Tab = createMaterialTopTabNavigator();
 class AlarmTab extends Component {
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) => (
-      <Feather name="bell" size={24} style={{ color: tintColor }} />
-    ),
-  };
+  
   render() {
     return (
       <Tab.Navigator tabBarOptions={{

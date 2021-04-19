@@ -3,11 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 class TimetableTab extends Component {
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) => (
-      <Feather name="layout" size={24} style={{ color: tintColor }} />
-    ),
-  };
+  
   render() {
     return (
       <View style={style.container}>

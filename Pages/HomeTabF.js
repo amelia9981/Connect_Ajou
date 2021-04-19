@@ -10,11 +10,7 @@ import { Container, Header, Row } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
 class HomeTab extends Component {
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) => (
-      <Feather name='home' size={24} style={{ color: tintColor }} />
-    )
-  }
+  
   render() {
     return (
       <ScrollView style={style.container}>
