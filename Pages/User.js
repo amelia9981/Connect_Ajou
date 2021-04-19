@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ImagePickerIOS } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import ProfilePicture from "react-native-profile-picture";
 import UserPermissions from "../Utilities/UserPermissions";
@@ -18,19 +25,22 @@ class UserTab extends Component {
     email: "namu1092@ajou.ac.kr",
     isPicture: false,
     url: "",
-  }
+  };
 
   pickGalleryImage = async () => {
-    UserPermissions.getCameraPermission()
+    UserPermissions.getCameraPermission();
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3]
+      aspect: [4, 3],
     });
 
     if (!result.cancelled) {
-      this.setState({isPicture: true, url: result.uri});
+      this.setState({
+        isPicture: true,
+        url: result.uri,
+      });
     }
 
     console.log(this.state.isPicture);
@@ -43,20 +53,32 @@ class UserTab extends Component {
         <Text style={style.my_page}>My Page</Text>
 
         <View style={style.profile_photo}>
-          <ProfilePicture width={125} height={125} backgroundColor={"#1E3D6B"} isPicture={this.state.isPicture} user={this.state.name} URLPicture={this.state.uri} />
+          <ProfilePicture
+            style={{ resizeMode: "contain" }}
+            width={125}
+            height={125}
+            backgroundColor={"#1E3D6B"}
+            isPicture={this.state.isPicture}
+            user={this.state.name}
+            URLPicture={this.state.url}
+          />
         </View>
-        
-        <TouchableOpacity activeOpacity={1} style={style.camera} onPress={this.pickGalleryImage}>
-          <Image source={require("../assets/camera.png")} style={style.image}/>
+
+        <TouchableOpacity
+          activeOpacity={1}
+          style={style.camera}
+          onPress={this.pickGalleryImage}
+        >
+          <Image source={require("../assets/camera.png")} style={style.image} />
         </TouchableOpacity>
 
         <View style={style.box_1}>
-          <View style={{flex: 1, padding: "3%"}}>
+          <View style={{ flex: 1 }}>
             <Text style={style.box_label}>Name</Text>
             <Text style={style.box_label}>ID</Text>
             <Text style={style.box_label}>Email</Text>
           </View>
-          <View style={{flex: 3, padding: "3%"}}>
+          <View style={{ flex: 3 }}>
             <Text style={style.box_data}>{this.state.name}</Text>
             <Text style={style.box_data}>{this.state.id}</Text>
             <Text style={style.box_data}>{this.state.email}</Text>
@@ -142,6 +164,10 @@ const style = StyleSheet.create({
   },
   box_1: {
     position: "absolute",
+    paddingLeft: "5%",
+    paddingRight: "5%",
+    paddingTop: "3%",
+    paddingBottom: "3%",
     backgroundColor: "rgba(255, 255, 255, 1)",
     borderColor: "rgba(215, 221, 226, 1)",
     borderWidth: 1,
@@ -153,6 +179,10 @@ const style = StyleSheet.create({
   },
   box_2: {
     position: "absolute",
+    paddingLeft: "5%",
+    paddingRight: "5%",
+    paddingTop: "3%",
+    paddingBottom: "3%",
     backgroundColor: "rgba(255, 255, 255, 1)",
     borderColor: "rgba(215, 221, 226, 1)",
     borderWidth: 1,
@@ -163,6 +193,10 @@ const style = StyleSheet.create({
   },
   box_3: {
     position: "absolute",
+    paddingLeft: "5%",
+    paddingRight: "5%",
+    paddingTop: "3%",
+    paddingBottom: "3%",
     backgroundColor: "rgba(255, 255, 255, 1)",
     borderColor: "rgba(215, 221, 226, 1)",
     borderWidth: 1,
@@ -173,30 +207,24 @@ const style = StyleSheet.create({
   },
   box_label: {
     flex: 1,
-    padding: "5%",
     color: "#2C5E9E",
     fontFamily: "IBMPlexSansKR-Regular",
     fontSize: 15,
   },
   box_data: {
     flex: 1,
-    padding: "2%",
     fontFamily: "IBMPlexSansKR-Light",
     fontSize: 13,
-    textAlign: "right"
+    textAlign: "right",
   },
   box_title: {
     flex: 1,
-    paddingLeft: "5%",
-    paddingTop: "2%",
     color: "#2C5E9E",
     fontFamily: "IBMPlexSansKR-Regular",
     fontSize: 15,
   },
   box_content_wrapper: {
     flex: 1,
-    paddingLeft: "5%",
-    paddingTop: "2%",
   },
   box_content: {
     fontFamily: "IBMPlexSansKR-Light",
