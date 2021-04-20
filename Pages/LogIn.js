@@ -33,7 +33,7 @@ class LogInScreen extends Component {
           <Button
             title="Login"
             color="#FFFFFF"
-            onPress={() => this.props.navigation.navigate("MainScreen")}
+            onPress={() => this.props.navigation.replace("Main")}
           />
         </View>
       </View>

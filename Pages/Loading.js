@@ -11,10 +11,10 @@ class LoadingScreen extends Component {
 
   checkLoggedInStatus = () => {
     if (this.state.isLoggedIn) {
-      return this.props.navigation.navigate("MainScreen");
+      return this.props.navigation.replace("Main");
     }
 
-    return this.props.navigation.navigate("LogInScreen");
+    return this.props.navigation.replace("LogIn");
   };
 
   componentDidMount = async () => {
