@@ -6,7 +6,6 @@ import { Container, Header } from 'native-base';
 export default class findFriend extends Component {
     constructor() {
         super();
-
         // 대량의 데이터
         this.state = {
             sectionDatas: [
@@ -42,9 +41,6 @@ export default class findFriend extends Component {
             </Container>
         );
     }//render method..
-    clickItem = (item) => {
-        Alert.alert(item);
-    }
 }
 const style = StyleSheet.create({
     container: {

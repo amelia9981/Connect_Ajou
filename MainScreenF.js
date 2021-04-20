@@ -12,39 +12,58 @@ import UserTab from "./Pages/User";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
-class MainScreen extends Component {
- 
-  render() {
+
+class MainScreen extends Component{
+  render(){
     return(
         <Tab.Navigator 
-        labeled='false'  
-        barStyle={{backgroundColor:'white'}}
-          tabBarOptions={{ activeTintColor:"#1E3D6B", inactiveTintColor: "#D7DDE2"}}
+        screenOptions={{}}
+        tabBarOptions={{
+          style: {
+            ...Platform.select({
+              ios: {
+                backgroundColor: "white",
+              },
+              android: {
+                backgroundColor: "white",
+              },
+            }),
+          },
+          activeTintColor: "#1E3D6B",
+          inactiveTintColor: "#D7DDE2",
+          upperCaseLabel: false,
+          showLabel: false,
+          indicatorStyle: {
+            backgroundColor: "#1E3D6B",
+          },
+        }}
         >
           <Tab.Screen name="Home" component={HomeTab} options={{
-            tabBarIcon: ({ tintColor }) => (
-              <Feather name='home' size={24} style={{ color: tintColor }} />
+            tabBarIcon: ({ color }) => (
+              <Feather name='home' size={24} color={color} />
             )}}
             />
-          <Tab.Screen name="Community" component={CommunityMain} options={{
-            
-            tabBarIcon: ({ tintColor }) => (
-              <Feather name='list' size={24} style={{ color: tintColor }} />
+          <Tab.Screen name="Community" component={CommunityMain} 
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Feather name='list' size={24} color={color} />
             )
           }} />
           <Tab.Screen name="Timetable" component={TimetableTab} options={{
-            tabBarIcon: ({ tintColor }) => (
-              <Feather name='layout' size={24} style={{ color: tintColor }} />
+            tabBarIcon: ({ color }) => (
+              <Feather name='layout' size={24} color={color} />
             )
-          }}/>
+        }} 
+          />
           <Tab.Screen name="Alarm" component={AlarmTab} options={{
-            tabBarIcon: ({ tintColor }) => (
-              <Feather name='bell' size={24} style={{ color: tintColor }} />
+            tabBarIcon: ({ color }) => (
+              <Feather name='bell' size={24} color={color}/>
             )
-          }}/>
+          }}
+          />
           <Tab.Screen name="User" component={UserTab} options={{
-            tabBarIcon: ({ tintColor }) => (
-              <Feather name='user' size={24} style={{ color: tintColor }} />
+            tabBarIcon: ({ color }) => (
+              <Feather name='user' size={24} color={color} />
             )
           }} />
         </Tab.Navigator>
