@@ -13,7 +13,6 @@ import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
 
 class UserTab extends Component {
- 
   state = {
     name: "Jeanine Han",
     id: "namu1092",
@@ -204,7 +203,7 @@ const style = StyleSheet.create({
     flex: 1,
     color: "#2C5E9E",
     fontFamily: "IBMPlexSansKR-Regular",
-    fontSize: 15,
+    fontSize: 13,
   },
   box_data: {
     flex: 1,
