@@ -16,7 +16,7 @@ class MainScreen extends Component {
  
   render() {
     return(
-      <NavigationContainer independent={true}>
+      <NavigationContainer>
         <Tab.Navigator 
         labeled='false'  
         barStyle={{backgroundColor:'white'}}

@@ -18,10 +18,7 @@ import { Container, Header } from 'native-base';
 
 
 export default class showAll extends Component {
-    
-    static navigationOptions = {
-        headerShown: false,
-      };
+
     constructor() {
         super();
         // 대량의 데이터
@@ -50,7 +47,7 @@ export default class showAll extends Component {
                         renderItem={({ item, navigation, index, section }) => {
                             return (
                                 <TouchableOpacity style={style.itemView} onPress={() => {
-                                    this.props.navigation.navigate("ViewList") }} >
+                                    this.props.navigation.push("ViewList") }} >
                                     <Text style={style.itemView}>{item}</Text>
                                 </TouchableOpacity>
                             );

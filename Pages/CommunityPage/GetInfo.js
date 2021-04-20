@@ -4,26 +4,7 @@ import { Container, Header } from 'native-base';
 
 
 export default class getInfo extends Component {
-    static navigationOptions = {
-        tabBarOptions: {
-            style: {
-                ...Platform.select({
-                    ios: {
-                        backgroundColor: "white",
-                    },
-                    android: {
-                        backgroundColor: "white",
-                    },
-                }),
-            },
-            activeTintColor: "#1E3D6B",
-            inactiveTintColor: "#D7DDE2",
-            upperCaseLabel: false,
-            showLabel: true,
-            labelStyle: { marginTop: 40, fontSize: 15, fontFamily: "EBS훈민정음새론SB" },
-        }
-    };
-    
+
     constructor() {
         super();
 

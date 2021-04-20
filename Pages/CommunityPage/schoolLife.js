@@ -4,10 +4,7 @@ import { Container, Header } from 'native-base';
 
 
 export default class schoolLife extends Component {
-    static navigationOptions = {
-        headerShown: false,
-      };
-    
+
     constructor() {
         super();
 
