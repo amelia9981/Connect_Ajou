@@ -16,7 +16,6 @@ class MainScreen extends Component {
  
   render() {
     return(
-      <NavigationContainer>
         <Tab.Navigator 
         labeled='false'  
         barStyle={{backgroundColor:'white'}}
@@ -25,7 +24,8 @@ class MainScreen extends Component {
           <Tab.Screen name="Home" component={HomeTab} options={{
             tabBarIcon: ({ tintColor }) => (
               <Feather name='home' size={24} style={{ color: tintColor }} />
-            )}}/>
+            )}}
+            />
           <Tab.Screen name="Community" component={CommunityMain} options={{
             
             tabBarIcon: ({ tintColor }) => (
@@ -48,7 +48,6 @@ class MainScreen extends Component {
             )
           }} />
         </Tab.Navigator>
-      </NavigationContainer>
     );
   }
 }
