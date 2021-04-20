@@ -17,7 +17,7 @@ export default class findFriend extends Component {
     }
     render() {
         return (
-            <Container>
+            <View style={style.container}>
                 <SectionList
                     sections={this.state.sectionDatas}
                     renderSectionHeader={({ section }) => {
@@ -27,9 +27,11 @@ export default class findFriend extends Component {
                             </View>
                         );
                     }}
-                    renderItem={({ item, index, section }) => {
+                    renderItem={({ item, navigation, index, section }) => {
                         return (
-                            <TouchableOpacity style={style.itemView} onPress={() => { this.props.navigation.navigate("ViewList") }} >
+                            <TouchableOpacity style={style.itemView} onPress={() => {
+                                this.props.navigation.push("ViewList")
+                            }} >
                                 <Text style={style.itemView}>{item}</Text>
                             </TouchableOpacity>
                         );
@@ -38,38 +40,35 @@ export default class findFriend extends Component {
                     keyExtractor={(item, index) => index}
                 >
                 </SectionList>
-            </Container>
+            </View>
         );
     }//render method..
 }
+
+
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        marginLeft: 30,
-        marginRight: 30,
-        backgroundColor: '#F6F8F8'
-    },
-    headContainer: {
-        marginTop: 10,
-        height: 40,
-        borderBottomColor: '#D7DDE2',
-        borderWidth: 1,
-    },
-    title: {
-        marginTop: 20,
-        marginLeft: 10,
-        fontSize: 25,
-        fontFamily: 'EBS훈민정음새론SB'
+        backgroundColor: "#F6F8F8",
     },
     sectionHeader: {
-        padding: 4,
-        backgroundColor: "#eeeeee",
+        padding: "1.5%",
+        backgroundColor: "#5995DD",
     },
     sectionTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        marginLeft: "5%",
+        flex: 1,
+        fontFamily: "Mono-SB",
+        fontSize: 20,
+        color: "white",
     },
     itemView: {
-        padding: 8,
+        marginLeft: "5%",
+        padding: '1.5%',
+        flex: 1,
+        flexDirection: 'row',
+        fontFamily: "IBMPlexSansKR-Regular",
+        fontSize: 15,
+        color: "#3D3D3D",
     },
 });
