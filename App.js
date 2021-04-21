@@ -16,6 +16,7 @@ const getFont = () =>
     EBS훈민정음새론SB: require("./assets/fonts/EBS훈민정음새론SB.ttf"),
     "IBMPlexSansKR-Light": require("./assets/fonts/IBMPlexSansKR-Light.ttf"),
     "IBMPlexSansKR-Regular": require("./assets/fonts/IBMPlexSansKR-Regular.ttf"),
+    "IBM-SB": require('./assets/fonts/IBMPlexSans-SemiBold.ttf'),
     'Mono-SB': require('./assets/fonts/RobotoMono-SemiBold.ttf'),
   });
 

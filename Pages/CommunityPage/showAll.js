@@ -34,7 +34,7 @@ export default class showAll extends Component {
                     renderItem={({ item, navigation, index, section }) => {
                         return (
                             <TouchableOpacity style={style.itemView} onPress={() => {
-                                this.props.navigation.push("ViewList") }} >
+                                this.props.navigation.push("ViewList",{name:item}) }} >
                                 <Text style={style.itemView}>{item}</Text>
                             </TouchableOpacity>
                         );

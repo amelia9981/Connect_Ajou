@@ -31,7 +31,7 @@ export default class getInfo extends Component {
                     renderItem={({ item, navigation, index, section }) => {
                         return (
                             <TouchableOpacity style={style.itemView} onPress={() => {
-                                this.props.navigation.push("ViewList")
+                                navigation.navigate("ViewList")
                             }} >
                                 <Text style={style.itemView}>{item}</Text>
                             </TouchableOpacity>
