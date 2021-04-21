@@ -51,7 +51,7 @@ class UserTab extends Component {
             style={{ resizeMode: "contain" }}
             width={125}
             height={125}
-            backgroundColor={"#1E3D6B"}
+            backgroundColor={"#2c5e9e"}
             isPicture={this.state.isPicture}
             user={this.state.name}
             URLPicture={this.state.url}

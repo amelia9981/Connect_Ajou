@@ -54,11 +54,7 @@ const renderItem = ({ item }) => {
   const url = item.url;
 
   return (
-    <TouchableOpacity
-      activeOpacity={1}
-      style={style.box}
-      onPress={() => noticeClick(url)}
-    >
+    <TouchableOpacity style={style.box} onPress={() => noticeClick(url)}>
       <View style={{ flex: 1, flexDirection: "row" }}>
         <Text style={style.title}>{item.title}</Text>
         <Text style={style.time}>{item.time}</Text>
@@ -107,6 +103,8 @@ const style = StyleSheet.create({
     borderRadius: 10,
     marginBottom: "5%",
     padding: "5%",
+    width: 380,
+    height: 120,
   },
   title: {
     flex: 1,
