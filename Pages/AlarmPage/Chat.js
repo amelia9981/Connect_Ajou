@@ -1,3 +1,4 @@
+/*
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
@@ -55,3 +56,4 @@ const style = StyleSheet.create({
 });
 
 export default Message;
+*/

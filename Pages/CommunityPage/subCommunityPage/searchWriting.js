@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { ScrollView, View, TextInput, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
-import { CardItem, Card, Container, Left, Button, Header, Right } from 'native-base';
+import {TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
-import * as Font from 'expo-font';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Container } from 'native-base';
 
 //
 const searchWriting = ({ navigation, route }) => {
@@ -22,10 +22,19 @@ const searchWriting = ({ navigation, route }) => {
     });
 
     return (
-        <TextInput
-            style={{ height: 40 }}
-            placeholder="Type here to translate!"
-        />
+        <ScrollView>
+            <Container style={{flexDirection:'row'}}>
+                <TouchableOpacity onPress={()=>(navigation.goBack())}>
+                    <Feather name='arrow-left' size={25} />
+                </TouchableOpacity>
+                <TextInput
+                    style={{ height: 40 }}
+                    placeholder="Title, Content "
+                />
+            </Container>
+        </ScrollView>
+        //카드 컴포넌트 추가하기
+        
     )
 }
 

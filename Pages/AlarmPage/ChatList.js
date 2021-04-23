@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/*import React, { Component } from "react";
 import {
   View,
   Text,
@@ -129,3 +129,4 @@ const style = StyleSheet.create({
 });
 
 export default ChatList;
+*/

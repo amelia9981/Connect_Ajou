@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
-import { CardItem, Card, Container, Left, Button, Header, Right } from 'native-base';
+import { ScrollView, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import { CardItem, Card, Left } from 'native-base';
 import { Feather } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 
-//
+//댓글 쓰기 
+//댓글 보기
+//댓글 추가하기
+//하트 누르기
+
+
 const seeWriting = ({ navigation, route }) => {
     navigation.setOptions({
         headerTitle:null,
@@ -22,19 +26,19 @@ const seeWriting = ({ navigation, route }) => {
 
     return (
         <ScrollView style={style.container}>
-                <Card style={style.box} >
-                    <CardItem>
-                        <Text style={style.title}> TITLE </Text>
-                    </CardItem>
-                    <CardItem cardBody>
-                        <Text style={style.content}> blablablabla </Text>
-                    </CardItem>
-                    <CardItem>
-                        <Left>
-                            <Feather name='heart' />
-                        </Left>
-                    </CardItem>
-                </Card>
+            <Card style={style.box} >
+                <CardItem>
+                <Text style={style.title}> TITLE </Text>
+                </CardItem>
+                <CardItem cardBody>
+                    <Text style={style.content}> blablablabla </Text>
+                </CardItem>
+                <CardItem>
+                    <Left>
+                        <Feather name='heart' />
+                    </Left>
+                </CardItem>
+            </Card>
         </ScrollView>
     )
 }

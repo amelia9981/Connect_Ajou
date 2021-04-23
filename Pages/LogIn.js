@@ -1,12 +1,32 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, TextInput, Button } from "react-native";
+import React, { Component, useState } from "react";
+import { StyleSheet, View, Image, Text, TextInput, Button, KeyboardAvoidingView } from "react-native";
+import { firebase } from '../Utilities/Firebase';
 
-class LogInScreen extends Component {
-  static navigationOptions = {
-    headerShown: false,
-  };
-
-  render() {
+export default function LoginScreen({ navigation }) {
+    const [email, setEmail] = useState("");
+    const [password,setPassword] = useState("");
+    const onLoginPress = ()=>{
+      firebase
+      .auth()
+      .signInWithEmailAndPassword(email,password)
+      .then((response)=>{
+        const uid = response.uid
+        const usersRef = firebase.firestore().collection('users')
+        usersRef
+        .doc(uid)
+        .get()
+        .then(firestoreDocument => {
+          /*if(!firestoreDocument.exists){
+            alert("User does not exist anymore.")
+            return;
+          }*/
+          const user = firestoreDocument.data()
+          navigation.navigate('Main',{user})
+        })
+        .catch((error)=>{alert(error)})
+      })
+      .catch((error)=>{alert(error)})
+    }
     return (
       <View style={styles.container}>
         <Image style={styles.logo} source={require("../assets/logo1.png")} />
@@ -14,32 +34,35 @@ class LogInScreen extends Component {
           style={styles.input_id}
           placeholder="ID"
           autoCapitalize="none"
+          onChangeText={(text)=>setEmail(text)}
+          value={email}
         />
         <TextInput
           style={[styles.input_id, styles.input_pwd]}
           placeholder="Password"
           secureTextEntry={true}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
         />
         <View style={styles.checkbox} />
         <Text style={styles.checkbox_label}>Automatic login</Text>
         <View style={styles.button_register}>
           <Button
             title="Register"
-            color="#FFFFFF"
-            onPress={() => console.log("Moving to the Registration Page")}
+            color="#3D3D3D"
+            onPress={() => navigation.replace("Registration")}
           />
         </View>
         <View style={styles.button_login}>
           <Button
             title="Login"
             color="#FFFFFF"
-            onPress={() => this.props.navigation.replace("Main")}
+              onPress={()=>onLoginPress()}
           />
         </View>
       </View>
     );
   }
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -154,4 +177,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LogInScreen;

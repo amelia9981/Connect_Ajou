@@ -1,12 +1,23 @@
-import React, { Component } from 'react';
-import { ScrollView, View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Alert } from 'react-native';
-import {  Left, Header} from 'native-base';
+import React, { Component, useEffect, useState } from 'react';
+import { ScrollView, View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
+import {  Left, Header, Form} from 'native-base';
 import { Feather } from '@expo/vector-icons';
-import * as Font from 'expo-font';
-
+import {firebase} from '../../../Utilities/Firebase';
 //
-
 const addWriting = ({ navigation, route }) => {
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const CommunityRef = firebase.firestore().collection('Community');
+    const onAdd=()=>{
+       const data={
+           title: title,
+           content: content,
+           createdAt: Date.now()
+       };
+       CommunityRef
+       .add(data)
+       .catch(error=>{alert(error)})
+    }
     navigation.setOptions({
         headerTitle: null,
         headerRightContainerStyle: {
@@ -24,70 +35,30 @@ const addWriting = ({ navigation, route }) => {
         ),
         headerRight: () => (
             //저장하고 리프레스
-            <Button style={style.button} onPress={()=>{navigation.goBack()}} title='Save'/>
+            <Button style={style.button} onPress={()=>{onAdd(); navigation.goBack()}} title='Save'/>
         ),
     });
 
+    
     return (
-        <View style={{ padding: 10 }}>
+        <KeyboardAvoidingView style={{ padding: 10 }}>
             <TextInput
                 style={{ height: 40 }}
-                placeholder="Type here to translate!"
+                placeholder="Title"
+                onChange={(text)=> setTitle(text)}
+                value ={title}
+
             />
-        </View>
+            <TextInput
+                placeholder="Content"
+                onChange={(text)=>setContent(text)}
+                value={content}
+            />
+        </KeyboardAvoidingView>
     )
 }
 
 const style = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#F6F8F8",
-    },
-    header: {
-        backgroundColor: 'white',
-    },
-    button:{
-        backgroundColor: '#5995DD',
-        borderRadius: 10,
-        fontFamily: "EBS훈민정음새론SB",
-
-    },
-
-    headerTitle: {
-        fontFamily: 'EBS훈민정음새론SB',
-        marginTop: 15,
-        fontSize: 20,
-        alignContent: "flex-start",
-
-    },
-    box: {
-        backgroundColor: "#FFFFFF",
-        borderColor: "#D7DDE2",
-        borderWidth: 1,
-        borderRadius: 10,
-        marginBottom: "0.5%",
-        padding: "1%",
-    },
-    title: {
-        flex: 1,
-        fontFamily: "IBM-SB",
-        fontSize: 15,
-        color: "#3D3D3D",
-    },
-    headerButtonL: {
-        backgroundColor: 'white',
-        marginLeft: '5%',
-    },
-    headerButtonR: {
-        backgroundColor: 'white',
-        marginRight: '5%',
-    },
-    content: {
-        flex: 2,
-        paddingTop: "3%",
-        fontFamily: "IBMPlexSansKR-Regular",
-        fontSize: 13,
-        color: "#3D3D3D",
-    },
+   
 });
 export default addWriting;

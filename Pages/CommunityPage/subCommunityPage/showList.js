@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View,ScrollView, Text, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View,ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import * as Font from 'expo-font';
-import { CardItem, Card, Container, Left, Button, Header, Right } from 'native-base';
-import { HeaderTitle } from 'react-navigation-stack';
-import { render } from 'react-dom';
+import { CardItem, Card,  Left } from 'native-base';
+
+//하트수 표시 & 댓글수 표시
+
 
 //리스트보기
 const viewList=({ navigation, route })=>{
