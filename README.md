@@ -39,5 +39,5 @@ yarn start
 
 ## Contact
 
-<img alt="Gmail" src="https://img.shields.io/badge/amelia0081@gmail.com-D14836?&logo=gmail&logoColor=white" />
+<img alt="Gmail" src="https://img.shields.io/badge/amelia9981@gmail.com-D14836?&logo=gmail&logoColor=white" />
 <img alt="Gmail" src="https://img.shields.io/badge/hanjieun9874@gmail.com-D14836?&logo=gmail&logoColor=white" />
