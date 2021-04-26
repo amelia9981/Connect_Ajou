@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
   View,
   Text,
@@ -12,16 +12,14 @@ import ProfilePicture from "react-native-profile-picture";
 import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
 
-class UserTab extends Component {
-  state = {
-    name: "Jeanine Han",
-    id: "namu1092",
-    email: "namu1092@ajou.ac.kr",
-    isPicture: false,
-    url: "",
-  };
+function UserTab(props){
+  const [picture,setPicture] = useState(false);
+  const [url,setUrl] = useState("");
+  const uid = props.extraData.id;
+  const userName = props.extraData.fullName;
+  const userEmail = props.extraData.email;
 
-  pickGalleryImage = async () => {
+  const pickGalleryImage = async () => {
     UserPermissions.getCameraPermission();
 
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -31,17 +29,13 @@ class UserTab extends Component {
     });
 
     if (!result.cancelled) {
-      this.setState({
-        isPicture: true,
-        url: result.uri,
-      });
+      setPicture(true);
+      setUrl(result.uri);
+      const usersRef = firebase.firestore().collection('users');
+      usersRef.doc(uid).set(picture,url);
     }
-
-    console.log(this.state.isPicture);
-    console.log(this.state.url);
   };
 
-  render() {
     return (
       <ScrollView contentContainerStyle={style.container}>
         <Text style={style.my_page}>My Page</Text>
@@ -52,16 +46,16 @@ class UserTab extends Component {
             width={125}
             height={125}
             backgroundColor={"#2c5e9e"}
-            isPicture={this.state.isPicture}
-            user={this.state.name}
-            URLPicture={this.state.url}
+            isPicture={picture}
+            user={userName}
+            URLPicture={url}
           />
         </View>
 
         <TouchableOpacity
           activeOpacity={1}
           style={style.camera}
-          onPress={this.pickGalleryImage}
+          onPress={pickGalleryImage}
         >
           <Image source={require("../assets/camera.png")} style={style.image} />
         </TouchableOpacity>
@@ -69,13 +63,11 @@ class UserTab extends Component {
         <View style={style.box_1}>
           <View style={{ flex: 1 }}>
             <Text style={style.box_label}>Name</Text>
-            <Text style={style.box_label}>ID</Text>
             <Text style={style.box_label}>Email</Text>
           </View>
           <View style={{ flex: 3 }}>
-            <Text style={style.box_data}>{this.state.name}</Text>
-            <Text style={style.box_data}>{this.state.id}</Text>
-            <Text style={style.box_data}>{this.state.email}</Text>
+            <Text style={style.box_data}>{userName}</Text>
+            <Text style={style.box_data}>{userEmail}</Text>
           </View>
         </View>
 
@@ -103,7 +95,7 @@ class UserTab extends Component {
         </View>
       </ScrollView>
     );
-  }
+  
 }
 
 const style = StyleSheet.create({

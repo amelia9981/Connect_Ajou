@@ -3,21 +3,21 @@ import { ScrollView, View, Text, TextInput, StyleSheet, Button, TouchableOpacity
 import {  Left, Header, Form} from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import {firebase} from '../../../Utilities/Firebase';
+import CommunityMain from '../../CommunityMain';
 //
 const addWriting = ({ navigation, route }) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const CommunityRef = firebase.firestore().collection('Community');
+    const listName=route.params.listName;
     const onAdd=()=>{
-       const data={
-           title: title,
-           content: content,
-           createdAt: Date.now()
-       };
-       CommunityRef
-       .add(data)
-       .catch(error=>{alert(error)})
+       CommunityRef.doc(String(listName)).add({
+        title,
+        content,
+        createdAt:Date.now()
+       })
     }
+    
     navigation.setOptions({
         headerTitle: null,
         headerRightContainerStyle: {
@@ -54,6 +54,7 @@ const addWriting = ({ navigation, route }) => {
                 onChange={(text)=>setContent(text)}
                 value={content}
             />
+            <Button style={style.button} onPress={() => { onAdd(); navigation.goBack() }} title='Save' />
         </KeyboardAvoidingView>
     )
 }

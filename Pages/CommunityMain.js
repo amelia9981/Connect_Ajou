@@ -59,6 +59,8 @@ class handleCommunity extends Component {
 
 class CommunityMain extends Component{
     render(){
+    const user = this.props.extraData;
+
     //커뮤니티 세부페이지 들어가면 탭안보이는 코드
     this.props.route.state && this.props.route.state.index > 0
         ? this.props.navigation.setOptions({ tabBarVisible: false })
@@ -66,12 +68,12 @@ class CommunityMain extends Component{
     
     //여기에 각 페이지별 리스트 추가해주면 될 것 같아용
         return (
-            <AllStack.Navigator>
+        <AllStack.Navigator>
             <AllStack.Screen name="Main" component={handleCommunity}  options={{headerShown:false}}/>
-                <AllStack.Screen name="ViewList" component={viewList} />
-                <AllStack.Screen name="Add" component={addWriting} />
-                <AllStack.Screen name="Search" component={searchWriting}/>
-                <AllStack.Screen name="See" component={seeWriting} />
+            <AllStack.Screen name="ViewList" component={viewList} />
+            <AllStack.Screen name="Add" component={addWriting} />
+            <AllStack.Screen name="Search" component={searchWriting}/>
+            <AllStack.Screen name="See" component={seeWriting} />
         </AllStack.Navigator>
     );
     }

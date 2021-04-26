@@ -27,6 +27,7 @@ const RootStack = createStackNavigator();
 export default function App() {
   const [fontloaded, setFontsLoaded] = useState(false);
   const [loaded, setLoaded] = useState(true);
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection('users');
@@ -37,7 +38,7 @@ export default function App() {
           .get()
           .then((document) => {
             const userData = document.data()
-            
+            setUser(userData)
           })
           .catch((error) => {
             setLoaded(false)
@@ -51,12 +52,13 @@ export default function App() {
   if (fontloaded && loaded) {
     return (
       <NavigationContainer>
-        <RootStack.Navigator initialRouteName="Loading">
-          <RootStack.Screen
-            name="Loading"
-            component={LoadingScreen}
-            options={{ headerShown: false }}
-          />
+        <RootStack.Navigator options={{headerShown:false}}>
+          {user ? (
+            <RootStack.Screen name="Main" options={{ headerShown: false }} >
+              {props => <MainScreen {...props} extraData={user}/>}
+          </RootStack.Screen>
+          ) : (
+          <>
           <RootStack.Screen
             name="Registration"
             component={Registration}
@@ -67,11 +69,12 @@ export default function App() {
             component={LogInScreen}
             options={{ headerShown: false }}
           />
-          <RootStack.Screen
-            name="Main"
-            component={MainScreen}
-            options={{ headerShown: false }}
-          />
+          <RootStack.Screen name="Main" options={{ headerShown: false }}>
+            {props => <MainScreen {...props} extraData={user} />}
+          </RootStack.Screen>
+          </>
+          )}
+          
         </RootStack.Navigator>
       </NavigationContainer>
     );

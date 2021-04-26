@@ -22,7 +22,7 @@ const viewList=({ navigation, route })=>{
                         <Feather name='search' size={25}/>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Add')}>
+                        onPress={() => navigation.push('Add',{listName:name})}>
                         <Feather name='plus-square' size={25}/>
                     </TouchableOpacity>
                 </View>

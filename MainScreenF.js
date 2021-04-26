@@ -15,6 +15,7 @@ const Tab = createBottomTabNavigator();
 
 class MainScreen extends Component{
   render(){
+    const user = this.props.extraData;
     return(
         <Tab.Navigator 
         screenOptions={{}}
@@ -43,12 +44,13 @@ class MainScreen extends Component{
               <Feather name='home' size={24} color={color} />
             )}}
             />
-          <Tab.Screen name="Community" component={CommunityMain} 
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Feather name='list' size={24} color={color} />
-            )
-          }} />
+        <Tab.Screen name="Community" options={{
+          tabBarIcon: ({ color }) => (
+            <Feather name='list' size={24} color={color} />
+          )
+        }}>
+          {props => <CommunityMain {...props} extraData={user} />}
+        </Tab.Screen>
           <Tab.Screen name="Timetable" component={TimetableTab} options={{
             tabBarIcon: ({ color }) => (
               <Feather name='layout' size={24} color={color} />
@@ -61,11 +63,13 @@ class MainScreen extends Component{
             )
           }}
           />
-          <Tab.Screen name="User" component={UserTab} options={{
+          <Tab.Screen name="User"options={{
             tabBarIcon: ({ color }) => (
               <Feather name='user' size={24} color={color} />
             )
-          }} />
+          }}>
+          {props => <UserTab {...props} extraData={user} />}
+        </Tab.Screen>
         </Tab.Navigator>
     );
   }
