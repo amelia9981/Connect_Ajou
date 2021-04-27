@@ -15,9 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 function UserTab(props){
   const [picture,setPicture] = useState(false);
   const [url,setUrl] = useState("");
-  const uid = props.extraData.id;
-  const userName = props.extraData.fullName;
-  const userEmail = props.extraData.email;
+  const user = props.extraData;
 
   const pickGalleryImage = async () => {
     UserPermissions.getCameraPermission();
@@ -32,7 +30,7 @@ function UserTab(props){
       setPicture(true);
       setUrl(result.uri);
       const usersRef = firebase.firestore().collection('users');
-      usersRef.doc(uid).set(picture,url);
+      usersRef.doc(user.email).set({picture,url});
     }
   };
 
@@ -47,7 +45,7 @@ function UserTab(props){
             height={125}
             backgroundColor={"#2c5e9e"}
             isPicture={picture}
-            user={userName}
+            user={user.fullName}
             URLPicture={url}
           />
         </View>
@@ -66,8 +64,8 @@ function UserTab(props){
             <Text style={style.box_label}>Email</Text>
           </View>
           <View style={{ flex: 3 }}>
-            <Text style={style.box_data}>{userName}</Text>
-            <Text style={style.box_data}>{userEmail}</Text>
+            <Text style={style.box_data}>{user.fullName}</Text>
+            <Text style={style.box_data}>{user.email}</Text>
           </View>
         </View>
 

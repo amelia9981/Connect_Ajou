@@ -44,13 +44,11 @@ class MainScreen extends Component{
               <Feather name='home' size={24} color={color} />
             )}}
             />
-        <Tab.Screen name="Community" options={{
+        <Tab.Screen name="Community" component = {CommunityMain} options={{
           tabBarIcon: ({ color }) => (
             <Feather name='list' size={24} color={color} />
           )
-        }}>
-          {props => <CommunityMain {...props} extraData={user} />}
-        </Tab.Screen>
+        }}/>
           <Tab.Screen name="Timetable" component={TimetableTab} options={{
             tabBarIcon: ({ color }) => (
               <Feather name='layout' size={24} color={color} />

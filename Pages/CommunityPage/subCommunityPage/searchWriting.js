@@ -3,36 +3,32 @@ import {TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Container } from 'native-base';
+import { Body, Container, Left, Right } from 'native-base';
+import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view';
 
 //
 const searchWriting = ({ navigation, route }) => {
     navigation.setOptions({
-        headerTitle: null,
-        headerRightContainerStyle: {
-            marginRight: '3%',
-            padding: '1%'
-        },
-        headerRight: () => (
-            //메세지 보내기 페이지로 이동
-            <TouchableOpacity>
-                <Feather name='message-square' size={25} />
-            </TouchableOpacity>
-        ),
+        headerShown:false
     });
 
     return (
-        <ScrollView>
-            <Container style={{flexDirection:'row'}}>
-                <TouchableOpacity onPress={()=>(navigation.goBack())}>
-                    <Feather name='arrow-left' size={25} />
-                </TouchableOpacity>
-                <TextInput
-                    style={{ height: 40 }}
-                    placeholder="Title, Content "
-                />
-            </Container>
-        </ScrollView>
+       <KeyboardAwareScrollView>
+           <Header>
+               <Left>
+
+               </Left>
+               <Body>
+                    <TextInput>
+                        
+                    </TextInput>
+               </Body>
+               <Right>
+
+               </Right>
+           </Header>
+
+       </KeyboardAwareScrollView>
         //카드 컴포넌트 추가하기
         
     )

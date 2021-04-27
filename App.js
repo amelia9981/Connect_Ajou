@@ -34,10 +34,11 @@ export default function App() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         usersRef
-          .doc(user.uid)
+          .doc(user.email)
           .get()
           .then((document) => {
             const userData = document.data()
+            setLoaded(false)
             setUser(userData)
           })
           .catch((error) => {
@@ -49,16 +50,17 @@ export default function App() {
     });
   }, []);
 
-  if (fontloaded && loaded) {
+  if (fontloaded) {
     return (
       <NavigationContainer>
-        <RootStack.Navigator options={{headerShown:false}}>
-          {user ? (
-            <RootStack.Screen name="Main" options={{ headerShown: false }} >
-              {props => <MainScreen {...props} extraData={user}/>}
-          </RootStack.Screen>
-          ) : (
-          <>
+        <RootStack.Navigator initialRouteName="LoadingScreen" options={{headerShown:false}}>
+        
+            <RootStack.Screen
+            name="LoadingScreen"
+            component={LoadingScreen}
+            options={{ headerShown: false } }
+          />
+
           <RootStack.Screen
             name="Registration"
             component={Registration}
@@ -72,8 +74,8 @@ export default function App() {
           <RootStack.Screen name="Main" options={{ headerShown: false }}>
             {props => <MainScreen {...props} extraData={user} />}
           </RootStack.Screen>
-          </>
-          )}
+      
+     
           
         </RootStack.Navigator>
       </NavigationContainer>

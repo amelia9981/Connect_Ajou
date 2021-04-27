@@ -8,7 +8,8 @@ export default function Registration({ navigation }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-
+    const [picture,setPicture] = useState(false)
+    const [url,setUrl] = useState("")
     const onFooterLinkPress = () => {
         navigation.navigate('LogIn')
     }
@@ -24,13 +25,14 @@ export default function Registration({ navigation }) {
         .then((response)=>{
             const uid = response.user.uid
             const data ={
-                id: uid,
                 email,
                 fullName,
+                picture,
+                url,
             };
             const usersRef = firebase.firestore().collection('users')
             usersRef
-            .doc(uid)
+            .doc(email)
             .set(data)
             .then(()=>{
                 navigation.navigate('Main',{user:data})

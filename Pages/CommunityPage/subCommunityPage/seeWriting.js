@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { ScrollView, Text, StyleSheet,TouchableOpacity } from 'react-native';
 import { CardItem, Card, Left } from 'native-base';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 
 //댓글 쓰기 
 //댓글 보기
@@ -10,6 +10,10 @@ import { Feather } from '@expo/vector-icons';
 
 
 const seeWriting = ({ navigation, route }) => {
+    const [comments,setComments]= useState([])
+    const [like, setLike] = useState("")
+
+
     navigation.setOptions({
         headerTitle:null,
         headerRightContainerStyle: {
@@ -39,6 +43,7 @@ const seeWriting = ({ navigation, route }) => {
                     </Left>
                 </CardItem>
             </Card>
+            <MaterialCommunityIcons name="comment-plus-outline" size={24} color="black" />
         </ScrollView>
     )
 }

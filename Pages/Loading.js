@@ -13,7 +13,6 @@ class LoadingScreen extends Component {
     if (this.state.isLoggedIn) {
       return this.props.navigation.replace("Main");
     }
-
     return this.props.navigation.replace("LogIn");
   };
 

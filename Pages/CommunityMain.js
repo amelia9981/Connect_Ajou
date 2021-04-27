@@ -59,8 +59,6 @@ class handleCommunity extends Component {
 
 class CommunityMain extends Component{
     render(){
-    const user = this.props.extraData;
-
     //커뮤니티 세부페이지 들어가면 탭안보이는 코드
     this.props.route.state && this.props.route.state.index > 0
         ? this.props.navigation.setOptions({ tabBarVisible: false })
