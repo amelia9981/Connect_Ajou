@@ -4,19 +4,80 @@ import {  Left, Header, Form} from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import {firebase} from '../../../Utilities/Firebase';
 //
-const addWriting = ({ navigation, route }) => {
+const addWriting = ({ navigation, route}) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [writing,setWriting] = useState([])
     const CommunityRef = firebase.firestore().collection('Community');
     const listName=route.params.listName;
+/*
+    useEffect(() => {
+        CommunityRef
+            .orderBy('createdAt', 'desc')
+            .onSnapshot(
+                querySnapshot => {
+                    const newWriting = []
+                    querySnapshot.forEach(doc => {
+                        const title = doc.data()
+                        title.id = doc.id
+                        newWriting.push(title)
+                    });
+                    setWriting(newWriting)
+                },
+                error => {
+                    console.log(error)
+                }
+            )
+    }, [])
 
+    const onAddButtonPress = () => {
+        if (title && title.length > 0) {
+            const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+            const data = {
+                title: title,
+                content: content,
+                createdAt: timestamp,
+            };
+            CommunityRef
+                .add(data)
+                .then(_doc => {
+                    setTitle('')
+                    setContent('')
+                    Keyboard.dismiss()
+                })
+                .catch((error) => {
+                    alert(error)
+                });
+        }
+    }
+
+
+
+
+
+
+*/
     const onAdd = () => {
-        CommunityRef.doc(String(listName)).add({
+        const data = {
             title,
             content,
             createdAt: Date.now()
-        })
+        };
+    
+            CommunityRef
+                .doc()
+                .add(data)
+                .then(() => {
+                    navigation.goBack()
+                })
+                .catch((error) => {
+                    alert(error)
+                })
+        
+        //const CommunityRef = firebase.firestore().collection('Community');
+        
     }
+
     navigation.setOptions({
         headerTitle: null,
         headerRightContainerStyle: {
@@ -34,13 +95,14 @@ const addWriting = ({ navigation, route }) => {
         ),
         headerRight: () => (
             //저장하고 리프레스
-            <Button style={style.button} onPress={()=>{onAdd(); navigation.goBack()}} title='Save'/>
+            <Button style={style.button} onPress={()=>onAdd} title='Save'/>
         ),
     });
 
     
     return (
         <KeyboardAvoidingView style={{ padding: 10 }}>
+            <Form onSubmit={onAdd}>
             <TextInput
                 style={{ height: 40 }}
                 placeholder="Title"
@@ -53,7 +115,7 @@ const addWriting = ({ navigation, route }) => {
                 onChange={(text)=>setContent(text)}
                 value={content}
             />
-            <Button style={style.button} onPress={() => { onAdd(); navigation.goBack() }} title='Save' />
+            </Form>
 
         </KeyboardAvoidingView>
     )

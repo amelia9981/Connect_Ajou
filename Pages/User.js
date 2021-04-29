@@ -30,7 +30,7 @@ function UserTab(props){
       setPicture(true);
       setUrl(result.uri);
       const usersRef = firebase.firestore().collection('users');
-      usersRef.doc(user.email).set({picture,url});
+      usersRef.doc(user.email).update({picture,url});
     }
   };
 

@@ -6,8 +6,9 @@ import Chat from "./Chat";
 
 const MsgStack = createStackNavigator();
 
-class MessageNav extends Component {
-  render() {
+function MessageNav(props) {
+
+    const user = props.extraData;
     return (
       <MsgStack.Navigator initialRouteName="Message">
         <MsgStack.Screen
@@ -17,12 +18,13 @@ class MessageNav extends Component {
         />
         <MsgStack.Screen
           name="Chat"
-          component={Chat}
           options={{ headerShown: false }}
-        />
+        >
+          {props => <Chat {...props} extraData={user} />}
+        </MsgStack.Screen>
       </MsgStack.Navigator>
     );
-  }
+  
 }
 
 export default MessageNav;

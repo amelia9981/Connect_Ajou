@@ -3,7 +3,7 @@ import {TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Body, Container, Left, Right } from 'native-base';
+import { Body, Container, Header, Left, Right } from 'native-base';
 import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view';
 
 //
@@ -14,17 +14,20 @@ const searchWriting = ({ navigation, route }) => {
 
     return (
        <KeyboardAwareScrollView>
-           <Header>
+            <Header style={{ backgroundColor: 'white', borderColor:"#D7DDE2"}}>
                <Left>
-
+                    <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                        <Feather name='x' size={30} />
+                    </TouchableOpacity>
                </Left>
                <Body>
-                    <TextInput>
-                        
-                    </TextInput>
+                    <TextInput style={{ backgroundColor: '#eeeeee', width: '170%',height:40 }} 
+                        placeholder="Search"/>
                </Body>
                <Right>
-
+                    <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                        <Feather name='search' size={30} />
+                    </TouchableOpacity>
                </Right>
            </Header>
 

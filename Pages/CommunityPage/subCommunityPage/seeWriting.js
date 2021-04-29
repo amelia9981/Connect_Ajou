@@ -3,11 +3,11 @@ import { ScrollView, Text, StyleSheet,TouchableOpacity } from 'react-native';
 import { CardItem, Card, Left } from 'native-base';
 import { Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 
-//댓글 쓰기 
+//댓글 쓰기 => ID
 //댓글 보기
 //댓글 추가하기
-//하트 누르기
-
+//하트 누르기 
+//DB => 글제목, 내용, 댓글 아이디, 하트 수, 글쓴사람 ID, 커뮤니티 제목
 
 const seeWriting = ({ navigation, route }) => {
     const [comments,setComments]= useState([])
@@ -43,7 +43,6 @@ const seeWriting = ({ navigation, route }) => {
                     </Left>
                 </CardItem>
             </Card>
-            <MaterialCommunityIcons name="comment-plus-outline" size={24} color="black" />
         </ScrollView>
     )
 }

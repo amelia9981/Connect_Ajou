@@ -6,7 +6,8 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 
 const Tab = createMaterialTopTabNavigator();
 
-function AlarmTab() {
+function AlarmTab(props) {
+  const user = props.extraData;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -39,7 +40,9 @@ function AlarmTab() {
       }}
     >
       <Tab.Screen name="Notification" component={Notification} />
-      <Tab.Screen name="Message" component={Message} />
+      <Tab.Screen name="Message">
+        {props => <Message {...props} extraData={user} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

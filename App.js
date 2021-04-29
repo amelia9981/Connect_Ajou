@@ -50,18 +50,17 @@ export default function App() {
     });
   }, []);
 
-  if (fontloaded) {
+  if (fontloaded&&!loaded) {
     return (
       <NavigationContainer>
-        <RootStack.Navigator initialRouteName="LoadingScreen" options={{headerShown:false}}>
-        
+        <RootStack.Navigator  options={{headerShown:false}}>
+          {user?(
+            <RootStack.Screen name="Main" options={{ headerShown: false }}>
+              {props => <MainScreen {...props} extraData={user} />}
+            </RootStack.Screen>
+          ):(
+            <>
             <RootStack.Screen
-            name="LoadingScreen"
-            component={LoadingScreen}
-            options={{ headerShown: false } }
-          />
-
-          <RootStack.Screen
             name="Registration"
             component={Registration}
             options={{ headerShown: false }}
@@ -71,12 +70,8 @@ export default function App() {
             component={LogInScreen}
             options={{ headerShown: false }}
           />
-          <RootStack.Screen name="Main" options={{ headerShown: false }}>
-            {props => <MainScreen {...props} extraData={user} />}
-          </RootStack.Screen>
-      
-     
-          
+          </>
+          )}  
         </RootStack.Navigator>
       </NavigationContainer>
     );

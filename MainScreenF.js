@@ -55,12 +55,13 @@ class MainScreen extends Component{
             )
         }} 
           />
-          <Tab.Screen name="Alarm" component={AlarmTab} options={{
-            tabBarIcon: ({ color }) => (
-              <Feather name='bell' size={24} color={color}/>
-            )
-          }}
-          />
+        <Tab.Screen name="Alarm" options={{
+          tabBarIcon: ({ color }) => (
+            <Feather name='bell' size={24} color={color} />
+          )
+        }}>
+          {props => <AlarmTab {...props} extraData={user} />}
+        </Tab.Screen>
           <Tab.Screen name="User"options={{
             tabBarIcon: ({ color }) => (
               <Feather name='user' size={24} color={color} />
