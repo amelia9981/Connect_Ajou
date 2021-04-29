@@ -70,6 +70,9 @@ export default function App() {
             component={LogInScreen}
             options={{ headerShown: false }}
           />
+          <RootStack.Screen name="Main" options={{ headerShown: false }}>
+            {props => <MainScreen {...props} extraData={user} />}
+          </RootStack.Screen>
           </>
           )}  
         </RootStack.Navigator>
