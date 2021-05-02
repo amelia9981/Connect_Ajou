@@ -1,16 +1,11 @@
 import React, { Component, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import {View,Text,StyleSheet,ScrollView,Image,TouchableOpacity} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import ProfilePicture from "react-native-profile-picture";
 import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
+import { cos } from "react-native-reanimated";
+import { firebase } from '../Utilities/Firebase';
 
 function UserTab(props){
   const [picture,setPicture] = useState(false);
@@ -29,8 +24,19 @@ function UserTab(props){
     if (!result.cancelled) {
       setPicture(true);
       setUrl(result.uri);
-      const usersRef = firebase.firestore().collection('users');
-      usersRef.doc(user.email).update({picture,url});
+      //console.log(picture)
+      //console.log(url)
+      const usersRef = firebase.firestore().collection('users').doc(user.email);
+      usersRef
+      .update({picture: picture, url:url})
+        .then(() => {
+          console.log("Document successfully updated!");
+        })
+        .catch((error) => {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        });
+
     }
   };
 

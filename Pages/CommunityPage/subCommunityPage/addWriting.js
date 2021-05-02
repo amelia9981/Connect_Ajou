@@ -10,53 +10,6 @@ const addWriting = ({ navigation, route}) => {
     const [writing,setWriting] = useState([])
     const CommunityRef = firebase.firestore().collection('Community');
     const listName=route.params.listName;
-/*
-    useEffect(() => {
-        CommunityRef
-            .orderBy('createdAt', 'desc')
-            .onSnapshot(
-                querySnapshot => {
-                    const newWriting = []
-                    querySnapshot.forEach(doc => {
-                        const title = doc.data()
-                        title.id = doc.id
-                        newWriting.push(title)
-                    });
-                    setWriting(newWriting)
-                },
-                error => {
-                    console.log(error)
-                }
-            )
-    }, [])
-
-    const onAddButtonPress = () => {
-        if (title && title.length > 0) {
-            const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-            const data = {
-                title: title,
-                content: content,
-                createdAt: timestamp,
-            };
-            CommunityRef
-                .add(data)
-                .then(_doc => {
-                    setTitle('')
-                    setContent('')
-                    Keyboard.dismiss()
-                })
-                .catch((error) => {
-                    alert(error)
-                });
-        }
-    }
-
-
-
-
-
-
-*/
     const onAdd = () => {
         const data = {
             title,
