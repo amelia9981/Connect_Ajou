@@ -1,55 +1,81 @@
-import React, { Component } from 'react';
-import { View,ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { Component, useState, useEffect } from 'react';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Icon } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { CardItem, Card,  Left } from 'native-base';
+import { firebase } from '../../../Utilities/Firebase';
 
 //하트수 표시 & 댓글수 표시
 
 
 //리스트보기
 const viewList=({ navigation, route })=>{
-        var name = route.params.name
-        navigation.setOptions({
-            headerTitle: name,
-            headerRightContainerStyle:{
-                marginRight:'3%',
-                padding:'1%'
-            },
-            headerRight: () => (
-                <View style={{flexDirection:'row'}}>
-                    <TouchableOpacity 
-                        onPress={() => navigation.navigate('Search')}>
-                        <Feather name='search' size={25}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => navigation.push('Add',{listName:name})}>
-                        <Feather name='plus-square' size={25}/>
-                    </TouchableOpacity>
-                </View>
-            ),
-        });
-        
-        //DB에서 가지고 오는거 나중에 수정 필요!! 일단 카드세개로 구성
-        return(
-            <ScrollView style={style.container}>
-                
-                <TouchableOpacity onPress={() => {
-                    navigation.push("See")
-                }}>
-                    <Card style={style.box} >
-                        <CardItem>
-                            <Text style={style.title}> TITLE </Text>
-                        </CardItem>
-                        <CardItem cardBody>
-                            <Text style={style.content}> blablablabla </Text>
-                        </CardItem>
-                        <CardItem>
-                            <Left>
-                                <Feather name='heart' />
-                            </Left>
-                        </CardItem>
-                    </Card>
+    const [title,setTitle] = useState("")
+    const [content, setContent] = useState("")
+    const [like, setLike] = useState(0)
+    const [comment, setComment] = useState(0)
+    const [writing,setWriting] = useState([])
+    const list=[];
+    const listName = route.params.name;
+    const db = firebase.firestore().collection(listName)
+ 
+    const getData=()=>{
+        db.get().then((querySnapshot)=>{
+            querySnapshot.forEach(doc => {
+                const data = doc.data()
+                setWriting((prev)=>[data,...prev]);
+            });
+        })
+    }
+    useEffect(() => {
+        getData();
+    }, []);        
+    var name = route.params.name
+    
+    navigation.setOptions({
+        headerTitle: name,
+        headerRightContainerStyle:{
+            marginRight:'3%',
+            padding:'1%'
+        },
+        headerRight: () => (
+            <View style={{flexDirection:'row'}}>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Search')}>
+                    <Feather name='search' size={25}/>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.push('Add',{listName:name})}>
+                    <Feather name='plus-square' size={25}/>
+                </TouchableOpacity>
+            </View>
+        ),
+    });
+        
+    //DB에서 가지고 오는거 나중에 수정 필요!! 일단 카드세개로 구성
+    return(
+        <ScrollView style={style.container}>
+                {
+                    writing.map((writing) => (
+                        <TouchableOpacity onPress={() => {navigation.push("See")}}>
+                            <Card style={style.box} >
+                                <CardItem>
+                                    <Text style={style.title}> {writing.title} </Text>
+                                </CardItem>
+                                <CardItem cardBody>
+                                    <Text style={style.content}> {writing.content} </Text>
+                                </CardItem>
+                                <CardItem>
+                                    <Left>
+                                        <Feather name='heart' style={{ color: 'black', marginRight: 5 }} />
+                                        <Text>count</Text>
+                                        <Feather name='heart' style={{ color: 'black', marginRight: 5 }} />
+                                        <Text>count</Text>
+                                    </Left>
+                                </CardItem>
+                            </Card>
+                        </TouchableOpacity>
+                    ))
+                }
             </ScrollView>
         )
     }

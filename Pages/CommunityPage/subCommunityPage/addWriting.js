@@ -7,6 +7,7 @@ import {firebase} from '../../../Utilities/Firebase';
 const addWriting = ({ navigation, route}) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [Writing,setWriting] = useState({title,content});
     const listName=route.params.listName;
     
     const onSubmit = async (event) => {
