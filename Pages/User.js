@@ -11,22 +11,28 @@ function UserTab(props){
   const [picture,setPicture] = useState(false);
   const [url,setUrl] = useState("");
   const user = props.extraData;
+  const usersRef = firebase.firestore().collection('users').doc(user.email);
 
+  usersRef.get().then(doc=>{
+    const getuser = doc.data()
+    if(getuser.picture){
+      setPicture(true)
+      setUrl(getuser.url)
+    }
+  })
+  
   const pickGalleryImage = async () => {
     UserPermissions.getCameraPermission();
-
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
     });
-
     if (!result.cancelled) {
       setPicture(true);
       setUrl(result.uri);
       //console.log(picture)
       //console.log(url)
-      const usersRef = firebase.firestore().collection('users').doc(user.email);
       usersRef
       .update({picture: picture, url:url})
         .then(() => {

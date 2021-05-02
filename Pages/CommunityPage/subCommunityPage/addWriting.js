@@ -7,29 +7,18 @@ import {firebase} from '../../../Utilities/Firebase';
 const addWriting = ({ navigation, route}) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [writing,setWriting] = useState([])
-    const CommunityRef = firebase.firestore().collection('Community');
     const listName=route.params.listName;
-    const onAdd = () => {
-        const data = {
-            title,
-            content,
-            createdAt: Date.now()
-        };
     
-            CommunityRef
-                .doc()
-                .add(data)
-                .then(() => {
-                    navigation.goBack()
-                })
-                .catch((error) => {
-                    alert(error)
-                })
-        
-        //const CommunityRef = firebase.firestore().collection('Community');
-        
-    }
+    const onSubmit = async (event) => {
+        firebase
+        .firestore().collection(listName).doc(title)
+        .set({title,content})
+        .then(() => {
+            navigation.goBack()
+        });
+        setTitle("");
+        setContent("")
+    };
 
     navigation.setOptions({
         headerTitle: null,
@@ -48,24 +37,23 @@ const addWriting = ({ navigation, route}) => {
         ),
         headerRight: () => (
             //저장하고 리프레스
-            <Button style={style.button} onPress={()=>onAdd} title='Save'/>
+            <Button style={style.button} onPress={() => { onSubmit() }}title='Save'/>
         ),
     });
 
-    
     return (
         <KeyboardAvoidingView style={{ padding: 10 }}>
-            <Form onSubmit={onAdd}>
+            <Form>
             <TextInput
                 style={{ height: 40 }}
                 placeholder="Title"
-                onChange={(text)=> setTitle(text)}
-                value ={title}
-
+                onChangeText={(text) => setTitle(text)}
+                value={title}
             />
             <TextInput
+                style={{height:300}}
                 placeholder="Content"
-                onChange={(text)=>setContent(text)}
+                onChangeText={(text) => setContent(text)}
                 value={content}
             />
             </Form>
