@@ -1,4 +1,4 @@
-/*import React, { Component } from "react";
+import React, { Component } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import ProfilePicture from "react-native-profile-picture";
-
 const data = [
   {
     id: "1",
@@ -19,21 +18,18 @@ const data = [
     url: "",
   },
 ];
-
 class ChatList extends Component {
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
       <Feather name="layout" size={24} style={{ color: tintColor }} />
     ),
   };
-
   moveToChat() {
     this.props.navigation.navigate("Chat"),
       {
         name: data.name,
       };
   }
-
   renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={style.box} onPress={() => this.moveToChat()}>
@@ -56,7 +52,6 @@ class ChatList extends Component {
       </TouchableOpacity>
     );
   };
-
   render() {
     return (
       <View style={style.container}>
@@ -70,7 +65,6 @@ class ChatList extends Component {
     );
   }
 }
-
 const style = StyleSheet.create({
   container: {
     flex: 1,
@@ -127,6 +121,4 @@ const style = StyleSheet.create({
     color: "#3D3D3D",
   },
 });
-
 export default ChatList;
-*/
