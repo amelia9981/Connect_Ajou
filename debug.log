@@ -6,3 +6,6 @@
 [0426/090723.259:ERROR:exception_snapshot_win.cc(99)] thread ID 5472 not found in process
 [0426/090723.259:ERROR:exception_snapshot_win.cc(99)] thread ID 6504 not found in process
 [0429/200824.902:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+[0503/080113.891:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+[0503/130822.359:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+[0503/190343.871:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)

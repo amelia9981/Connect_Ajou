@@ -3,17 +3,26 @@ import { ScrollView, View, Text, TextInput, StyleSheet, Button, TouchableOpacity
 import {  Left, Header, Form} from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import {firebase} from '../../../Utilities/Firebase';
-//
-const addWriting = ({ navigation, route}) => {
+//디자인만 이쁘게 수정하기!! 
+
+const AddWriting = ({ navigation, route}) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [Writing,setWriting] = useState({title,content});
     const listName=route.params.listName;
+    const user = route.params.extraData
     
     const onSubmit = async (event) => {
         firebase
         .firestore().collection(listName).doc(title)
-        .set({title,content})
+        .set({
+            title: title,
+            content : content,
+            creator: user,
+            createdAt: Date.now(),
+            like:0,
+            comments:[]
+        })
         .then(() => {
             navigation.goBack()
         });
@@ -66,4 +75,4 @@ const addWriting = ({ navigation, route}) => {
 const style = StyleSheet.create({
    
 });
-export default addWriting;
+export default AddWriting;

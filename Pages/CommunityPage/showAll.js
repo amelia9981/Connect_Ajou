@@ -15,10 +15,9 @@ const DATA = [
         data: ["Sports mate", "Finding Party Mates", "Finding Roommates", "Languague Exchange", "Major Study", "Other Hobby"]
     },
 ];
-
-const Item = ({ title, navigation }) => (
+const Item = ({ title, navigation}) => (
     <TouchableOpacity style={styles.itemView} onPress={() => {
-        navigation.push("ViewList", { name: title })
+        navigation.push("ViewList", {name: title })
     }} >
         <Text style={styles.itemView}>{title}</Text>
     </TouchableOpacity>
@@ -28,7 +27,7 @@ const Title = ({ title }) => (
         <Text style={styles.sectionTitle}>{title}</Text>
     </View>
 );
-const showAll = ({ navigation }) => (
+const ShowAll = ({ navigation }) => (
     <SafeAreaView style={styles.container}>
         <SectionList
             sections={DATA}
@@ -70,4 +69,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default showAll;
+export default ShowAll;

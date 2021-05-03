@@ -6,8 +6,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Body, Container, Header, Left, Right } from 'native-base';
 import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view';
 
-//
-const searchWriting = ({ navigation, route }) => {
+const SearchWriting = ({ navigation, route }) => {
+    const user = route.params.extraData
     navigation.setOptions({
         headerShown:false
     });
@@ -82,4 +82,4 @@ const style = StyleSheet.create({
         color: "#3D3D3D",
     },
 });
-export default searchWriting;
+export default SearchWriting;

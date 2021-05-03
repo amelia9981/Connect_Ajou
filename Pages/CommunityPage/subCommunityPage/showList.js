@@ -5,19 +5,12 @@ import { CardItem, Card,  Left } from 'native-base';
 import { firebase } from '../../../Utilities/Firebase';
 
 //하트수 표시 & 댓글수 표시
-
-
 //리스트보기
 const viewList=({ navigation, route })=>{
-    const [title,setTitle] = useState("")
-    const [content, setContent] = useState("")
-    const [like, setLike] = useState(0)
-    const [comment, setComment] = useState(0)
     const [writing,setWriting] = useState([])
-    const list=[];
     const listName = route.params.name;
     const db = firebase.firestore().collection(listName)
- 
+    const user = route.params.extraData
     const getData=()=>{
         db.get().then((querySnapshot)=>{
             querySnapshot.forEach(doc => {
@@ -29,10 +22,9 @@ const viewList=({ navigation, route })=>{
     useEffect(() => {
         getData();
     }, []);        
-    var name = route.params.name
     
     navigation.setOptions({
-        headerTitle: name,
+        headerTitle: listName,
         headerRightContainerStyle:{
             marginRight:'3%',
             padding:'1%'
@@ -44,19 +36,18 @@ const viewList=({ navigation, route })=>{
                     <Feather name='search' size={25}/>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigation.push('Add',{listName:name})}>
+                    onPress={() => navigation.push('Add',{listName:listName})}>
                     <Feather name='plus-square' size={25}/>
                 </TouchableOpacity>
             </View>
         ),
     });
         
-    //DB에서 가지고 오는거 나중에 수정 필요!! 일단 카드세개로 구성
     return(
         <ScrollView style={style.container}>
                 {
                     writing.map((writing) => (
-                        <TouchableOpacity onPress={() => {navigation.push("See")}}>
+                        <TouchableOpacity onPress={() => {navigation.push("See", {data : writing, listName:listName} )}}>
                             <Card style={style.box} >
                                 <CardItem>
                                     <Text style={style.title}> {writing.title} </Text>
@@ -66,10 +57,8 @@ const viewList=({ navigation, route })=>{
                                 </CardItem>
                                 <CardItem>
                                     <Left>
-                                        <Feather name='heart' style={{ color: 'black', marginRight: 5 }} />
-                                        <Text>count</Text>
-                                        <Feather name='heart' style={{ color: 'black', marginRight: 5 }} />
-                                        <Text>count</Text>
+                                        <Feather name='heart' size ={25} style={{ color: 'black', marginRight: 5 }} />
+                                        <Text>{writing.like}</Text>
                                     </Left>
                                 </CardItem>
                             </Card>
@@ -82,7 +71,6 @@ const viewList=({ navigation, route })=>{
 
 const style = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: "#F6F8F8",
     },
     header:{
