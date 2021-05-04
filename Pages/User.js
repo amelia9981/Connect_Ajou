@@ -1,26 +1,31 @@
-import React, { Component, useState } from "react";
-import {View,Text,StyleSheet,ScrollView,Image,TouchableOpacity} from "react-native";
-import { Feather } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import ProfilePicture from "react-native-profile-picture";
 import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
-import { cos } from "react-native-reanimated";
-import { firebase } from '../Utilities/Firebase';
+import { firebase } from "../Utilities/Firebase";
 
-function UserTab(props){
-  const [picture,setPicture] = useState(false);
-  const [url,setUrl] = useState("");
+function UserTab(props) {
+  const [picture, setPicture] = useState(false);
+  const [url, setUrl] = useState("");
   const user = props.extraData;
-  const usersRef = firebase.firestore().collection('users').doc(user.email);
+  const usersRef = firebase.firestore().collection("users").doc(user.email);
 
-  usersRef.get().then(doc=>{
-    const getuser = doc.data()
-    if(getuser.picture){
-      setPicture(true)
-      setUrl(getuser.url)
+  usersRef.get().then((doc) => {
+    const getuser = doc.data();
+    if (getuser.picture) {
+      setPicture(true);
+      setUrl(getuser.url);
     }
-  })
-  
+  });
+
   const pickGalleryImage = async () => {
     UserPermissions.getCameraPermission();
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -34,7 +39,7 @@ function UserTab(props){
       //console.log(picture)
       //console.log(url)
       usersRef
-      .update({picture: picture, url:url})
+        .update({ picture: picture, url: url })
         .then(() => {
           console.log("Document successfully updated!");
         })
@@ -42,70 +47,68 @@ function UserTab(props){
           // The document probably doesn't exist.
           console.error("Error updating document: ", error);
         });
-
     }
   };
 
-    return (
-      <ScrollView contentContainerStyle={style.container}>
-        <Text style={style.my_page}>My Page</Text>
+  return (
+    <ScrollView contentContainerStyle={style.container}>
+      <Text style={style.my_page}>My Page</Text>
 
-        <View style={style.profile_photo}>
-          <ProfilePicture
-            style={{ resizeMode: "contain" }}
-            width={125}
-            height={125}
-            backgroundColor={"#2c5e9e"}
-            isPicture={picture}
-            user={user.fullName}
-            URLPicture={url}
-          />
+      <View style={style.profile_photo}>
+        <ProfilePicture
+          style={{ resizeMode: "contain" }}
+          width={125}
+          height={125}
+          backgroundColor={"#2c5e9e"}
+          isPicture={picture}
+          user={user.fullName}
+          URLPicture={url}
+        />
+      </View>
+
+      <TouchableOpacity
+        activeOpacity={1}
+        style={style.camera}
+        onPress={pickGalleryImage}
+      >
+        <Image source={require("../assets/camera.png")} style={style.image} />
+      </TouchableOpacity>
+
+      <View style={style.box_1}>
+        <View style={{ flex: 1 }}>
+          <Text style={style.box_label}>Name</Text>
+          <Text style={style.box_label}>Email</Text>
         </View>
+        <View style={{ flex: 3 }}>
+          <Text style={style.box_data}>{user.fullName}</Text>
+          <Text style={style.box_data}>{user.email}</Text>
+        </View>
+      </View>
 
-        <TouchableOpacity
-          activeOpacity={1}
-          style={style.camera}
-          onPress={pickGalleryImage}
-        >
-          <Image source={require("../assets/camera.png")} style={style.image} />
+      <View style={style.box_2}>
+        <Text style={style.box_title}>Account</Text>
+        <TouchableOpacity style={style.box_content_wrapper}>
+          <Text style={style.box_content}>Change password</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={style.box_content_wrapper}>
+          <Text style={style.box_content}>Change name</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={style.box_content_wrapper}>
+          <Text style={style.box_content}>Logout</Text>
+        </TouchableOpacity>
+      </View>
 
-        <View style={style.box_1}>
-          <View style={{ flex: 1 }}>
-            <Text style={style.box_label}>Name</Text>
-            <Text style={style.box_label}>Email</Text>
-          </View>
-          <View style={{ flex: 3 }}>
-            <Text style={style.box_data}>{user.fullName}</Text>
-            <Text style={style.box_data}>{user.email}</Text>
-          </View>
-        </View>
-
-        <View style={style.box_2}>
-          <Text style={style.box_title}>Account</Text>
-          <TouchableOpacity style={style.box_content_wrapper}>
-            <Text style={style.box_content}>Change password</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.box_content_wrapper}>
-            <Text style={style.box_content}>Change name</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.box_content_wrapper}>
-            <Text style={style.box_content}>Logout</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={style.box_3}>
-          <Text style={style.box_title}>Configure</Text>
-          <TouchableOpacity style={style.box_content_wrapper}>
-            <Text style={style.box_content}>Notification settings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.box_content_wrapper}>
-            <Text style={style.box_content}>Language</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    );
-  
+      <View style={style.box_3}>
+        <Text style={style.box_title}>Configure</Text>
+        <TouchableOpacity style={style.box_content_wrapper}>
+          <Text style={style.box_content}>Notification settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={style.box_content_wrapper}>
+          <Text style={style.box_content}>Language</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
 }
 
 const style = StyleSheet.create({
@@ -122,7 +125,7 @@ const style = StyleSheet.create({
     fontSize: 30,
     fontWeight: "400",
     fontStyle: "normal",
-    fontFamily: "IBMPlexSansKR-Regular",
+    fontFamily: "IBM-SB",
     top: "10%",
   },
   profile_photo: {
@@ -162,8 +165,7 @@ const style = StyleSheet.create({
     position: "absolute",
     paddingLeft: "5%",
     paddingRight: "5%",
-    paddingTop: "3%",
-    paddingBottom: "3%",
+    paddingTop: "4%",
     backgroundColor: "rgba(255, 255, 255, 1)",
     borderColor: "rgba(215, 221, 226, 1)",
     borderWidth: 1,
@@ -205,12 +207,12 @@ const style = StyleSheet.create({
     flex: 1,
     color: "#2C5E9E",
     fontFamily: "IBMPlexSansKR-Regular",
-    fontSize: 13,
+    fontSize: 14,
   },
   box_data: {
     flex: 1,
     fontFamily: "IBMPlexSansKR-Light",
-    fontSize: 13,
+    fontSize: 14,
     textAlign: "right",
   },
   box_title: {
