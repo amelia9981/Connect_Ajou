@@ -20,19 +20,20 @@ const seeWriting = ({ navigation, route }) => {
     const db = firebase.firestore().collection(listName)
     const user = route.params.extraData
     //댓글달기
-    const onSubmit = async (event) => {
+    const onSubmit = () => {
         const comment={
             user,
             text:com,
             time:Date.now()
         };
+        console.log(comment)
         setComments((prev) => [comment, ...prev]);
         db.doc(writing.title)
             .update({
                 comments:comments
             })
             .then(() => {
-                //refresh
+               console.log("update!!!")
             });
         setCom("");
     };
