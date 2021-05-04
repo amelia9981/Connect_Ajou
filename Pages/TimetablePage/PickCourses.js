@@ -5,12 +5,34 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import CourseItem from "./CourseItem";
+import { firebase } from "../../Utilities/Firebase";
 
 function TimetableTab({ navigation: { goBack } }) {
+  const [courses, setCourses] = useState([]);
+  let array = [];
+
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("courses")
+      .onSnapshot((snapshot) => {
+        if (snapshot.size) {
+          console.log(snapshot);
+          snapshot.forEach((doc) => array.push({ ...doc.data() }));
+          setCourses(array);
+        } else {
+          console.log("No such document!");
+        }
+      });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <ScrollView contentContainerStyle={style.container}>
       <Text style={style.title}>Timetable</Text>
@@ -247,7 +269,18 @@ function TimetableTab({ navigation: { goBack } }) {
         ]}
       >
         <Text style={style.title_lecture_list}>Lecture List</Text>
-        <CourseItem />
+        <ScrollView>
+          {courses.map((course) => (
+            <CourseItem
+              name={course.name}
+              prof={course.prof}
+              schedule={course.schedule}
+              credits={course.credits}
+              code={course.code}
+              key={course.code}
+            />
+          ))}
+        </ScrollView>
       </View>
     </ScrollView>
   );
