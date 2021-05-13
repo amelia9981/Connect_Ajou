@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, useLayoutEffect } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,27 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { firebase } from "../../Utilities/Firebase";
+import { useNavigation } from "@react-navigation/core";
 
-function TimetableTab({ navigation: { navigate } }) {
-  //   useEffect(() => {
-  //     const courses = firebase.firestore().collection("courses").get();
-  //   });
+function TimetableTab(props) {
+  let selected_array = Array.from({ length: 8 }, () =>
+    Array(5).fill("#FFFFFF")
+  );
+  const [isSelected, setSelected] = useState(selected_array);
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    setSelected(props.extraData);
+    console.log("---------------");
+    console.log(isSelected);
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={style.container}>
       <Text style={style.title}>Timetable</Text>
       <TouchableOpacity
         style={style.plus_icon}
-        onPress={() => navigate("PickCourses")}
+        onPress={() => navigation.navigate("PickCourses")}
       >
         <AntDesign name="pluscircle" size={25} color="#1E3D6B" />
       </TouchableOpacity>
@@ -59,19 +67,49 @@ function TimetableTab({ navigation: { navigate } }) {
           >
             <Text style={style.time}>A</Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[0][0] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[0][1] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[0][2] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[0][3] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[0][4] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
         </View>
@@ -87,19 +125,49 @@ function TimetableTab({ navigation: { navigate } }) {
           >
             <Text style={style.time}>B</Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[1][0] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[1][1] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[1][2] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[1][3] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[1][4] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
         </View>
@@ -115,19 +183,49 @@ function TimetableTab({ navigation: { navigate } }) {
           >
             <Text style={style.time}>C</Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[2][0] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[2][1] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[2][2] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[2][3] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[2][4] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
         </View>
@@ -143,19 +241,49 @@ function TimetableTab({ navigation: { navigate } }) {
           >
             <Text style={style.time}>D</Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[3][0] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[3][1] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[3][2] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[3][3] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[3][4] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
         </View>
@@ -171,19 +299,49 @@ function TimetableTab({ navigation: { navigate } }) {
           >
             <Text style={style.time}>E</Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[4][0] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[4][1] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[4][2] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[4][3] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[4][4] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
         </View>
@@ -199,19 +357,49 @@ function TimetableTab({ navigation: { navigate } }) {
           >
             <Text style={style.time}>F</Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[5][0] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[5][1] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[5][2] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[5][3] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[5][4] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
         </View>
@@ -227,19 +415,49 @@ function TimetableTab({ navigation: { navigate } }) {
           >
             <Text style={style.time}>G</Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[6][0] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[6][1] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[6][2] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[6][3] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
-          <View style={[{ flex: 1 }, style.column]}>
+          <View
+            style={[
+              { flex: 1 },
+              style.column,
+              { backgroundColor: isSelected[6][4] },
+            ]}
+          >
             <Text style={style.days}></Text>
           </View>
         </View>

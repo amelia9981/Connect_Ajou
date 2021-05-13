@@ -4,15 +4,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 function CourseItem(props) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => Alert.alert("Click!")}>
-        <Text style={styles.name}>{props.name}</Text>
-        <Text style={styles.prof}>{props.prof}</Text>
-        <Text style={styles.schedule}>{props.schedule}</Text>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={styles.credits}>{props.credits} credits</Text>
-          <Text style={styles.code}>{props.code}</Text>
-        </View>
-      </TouchableOpacity>
+      <Text style={styles.name}>{props.name}</Text>
+      <Text style={styles.prof}>{props.prof}</Text>
+      <Text style={styles.schedule}>{props.schedule}</Text>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.credits}>{props.credits} credits</Text>
+        <Text style={styles.code}>{props.code}</Text>
+      </View>
     </View>
   );
 }
