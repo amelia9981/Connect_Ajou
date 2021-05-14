@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -71,6 +71,7 @@ let matchTime = (time) => {
 function TimetableTab(props) {
   const isSelected = props.extraData;
   const user = props.user;
+  const courseName = props.courseName;
   const navigation = useNavigation();
   const [courses, setCourses] = useState([]);
   const [background, setBackground] = useState(randomHex());
@@ -85,7 +86,6 @@ function TimetableTab(props) {
       .collection("courses")
       .onSnapshot((snapshot) => {
         if (snapshot.size) {
-          // console.log(snapshot);
           snapshot.forEach((doc) => array.push({ ...doc.data() }));
           setCourses(array);
         } else {
@@ -107,14 +107,19 @@ function TimetableTab(props) {
     };
   }, []);
 
-  const handlePickCourse = (schedule, code) => {
+  const handlePickCourse = (schedule, code, name) => {
     console.log("handling");
     let array_of_schedules = splitSchedule(schedule);
     setBackground(randomHex());
     for (var i = 0; i < array_of_schedules.length; i++) {
       let day = array_of_schedules[i].substr(0, 3);
       let time = array_of_schedules[i].substr(4, 1);
+      if (isSelected[matchTime(time)][matchDays(day)] != "#FFFFFF") {
+        Alert.alert("Duplicate Entry");
+        return;
+      }
       isSelected[matchTime(time)][matchDays(day)] = background;
+      courseName[matchTime(time)][matchDays(day)] = name;
     }
     myCourses.push(code);
     userRef
@@ -182,7 +187,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[0][0] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[0][0]}</Text>
               </View>
               <View
                 style={[
@@ -191,7 +196,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[0][1] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[0][1]}</Text>
               </View>
               <View
                 style={[
@@ -200,7 +205,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[0][2] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[0][2]}</Text>
               </View>
               <View
                 style={[
@@ -209,7 +214,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[0][3] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[0][3]}</Text>
               </View>
               <View
                 style={[
@@ -218,9 +223,10 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[0][4] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[0][4]}</Text>
               </View>
             </View>
+            {/* 3rd Row */}
             {/* 3rd Row */}
             <View style={style.row}>
               <View
@@ -239,7 +245,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[1][0] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[1][0]}</Text>
               </View>
               <View
                 style={[
@@ -248,7 +254,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[1][1] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[1][1]}</Text>
               </View>
               <View
                 style={[
@@ -257,7 +263,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[1][2] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[1][2]}</Text>
               </View>
               <View
                 style={[
@@ -266,7 +272,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[1][3] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[1][3]}</Text>
               </View>
               <View
                 style={[
@@ -275,7 +281,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[1][4] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[1][4]}</Text>
               </View>
             </View>
 
@@ -297,7 +303,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[2][0] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[2][0]}</Text>
               </View>
               <View
                 style={[
@@ -306,7 +312,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[2][1] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[2][1]}</Text>
               </View>
               <View
                 style={[
@@ -315,7 +321,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[2][2] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[2][2]}</Text>
               </View>
               <View
                 style={[
@@ -324,7 +330,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[2][3] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[2][3]}</Text>
               </View>
               <View
                 style={[
@@ -333,7 +339,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[2][4] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[2][4]}</Text>
               </View>
             </View>
 
@@ -355,7 +361,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[3][0] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[3][0]}</Text>
               </View>
               <View
                 style={[
@@ -364,7 +370,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[3][1] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[3][1]}</Text>
               </View>
               <View
                 style={[
@@ -373,7 +379,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[3][2] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[3][2]}</Text>
               </View>
               <View
                 style={[
@@ -382,7 +388,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[3][3] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[3][3]}</Text>
               </View>
               <View
                 style={[
@@ -391,7 +397,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[3][4] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[3][4]}</Text>
               </View>
             </View>
 
@@ -413,7 +419,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[4][0] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[4][0]}</Text>
               </View>
               <View
                 style={[
@@ -422,7 +428,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[4][1] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[4][1]}</Text>
               </View>
               <View
                 style={[
@@ -431,7 +437,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[4][2] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[4][2]}</Text>
               </View>
               <View
                 style={[
@@ -440,7 +446,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[4][3] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[4][3]}</Text>
               </View>
               <View
                 style={[
@@ -449,7 +455,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[4][4] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[4][4]}</Text>
               </View>
             </View>
 
@@ -471,7 +477,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[5][0] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[5][0]}</Text>
               </View>
               <View
                 style={[
@@ -480,7 +486,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[5][1] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[5][1]}</Text>
               </View>
               <View
                 style={[
@@ -489,7 +495,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[5][2] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[5][2]}</Text>
               </View>
               <View
                 style={[
@@ -498,7 +504,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[5][3] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[5][3]}</Text>
               </View>
               <View
                 style={[
@@ -507,7 +513,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[5][4] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[5][4]}</Text>
               </View>
             </View>
 
@@ -529,7 +535,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[6][0] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[6][0]}</Text>
               </View>
               <View
                 style={[
@@ -538,7 +544,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[6][1] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[6][1]}</Text>
               </View>
               <View
                 style={[
@@ -547,7 +553,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[6][2] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[6][2]}</Text>
               </View>
               <View
                 style={[
@@ -556,7 +562,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[6][3] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[6][3]}</Text>
               </View>
               <View
                 style={[
@@ -565,7 +571,7 @@ function TimetableTab(props) {
                   { backgroundColor: isSelected[6][4] },
                 ]}
               >
-                <Text style={style.days}></Text>
+                <Text style={style.content}>{courseName[6][4]}</Text>
               </View>
             </View>
           </View>
@@ -581,7 +587,9 @@ function TimetableTab(props) {
         <ScrollView>
           {courses.map((course) => (
             <TouchableOpacity
-              onPress={() => handlePickCourse(course.schedule, course.code)}
+              onPress={() =>
+                handlePickCourse(course.schedule, course.code, course.name)
+              }
             >
               <CourseItem
                 name={course.name}
@@ -670,6 +678,11 @@ const style = StyleSheet.create({
     fontFamily: "IBMPlexSansKR-Regular",
     flex: 1,
     paddingTop: "50%",
+  },
+  content: {
+    fontSize: 10,
+    fontFamily: "IBMPlexSansKR-Light",
+    flex: 1,
   },
   lecture_list: {
     paddingLeft: 15,
