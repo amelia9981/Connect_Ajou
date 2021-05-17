@@ -1,22 +1,29 @@
 import React, { Component } from "react";
 import {
+  View,
   Image,
   ScrollView,
   Text,
-  ActivityIndicator,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { Container, Header, Row } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialIcons,
+  MaterialCommunityIcons,
+  FontAwesome,
+  FontAwesome5,
+  Entypo,
+} from "@expo/vector-icons";
 
 class HomeTab extends Component {
-  
   render() {
     return (
       <ScrollView style={style.container}>
-        <Container
+        <View
           style={{
-            borderBottomWidth: 1,
+            borderBottomWidth: 2,
             borderBottomColor: "#D7DDE2",
             flexDirection: "row",
             backgroundColor: "white",
@@ -34,43 +41,117 @@ class HomeTab extends Component {
               height: 40,
             }}
           ></Image>
-            <Text
-              style={style.title}
-            >
-              Connect Ajou
-            </Text>
-          
-        </Container>
+          <Text style={style.title}>Connect Ajou</Text>
+        </View>
 
-          <Text style={style.subTitle}>
-            About Ajou
-          </Text>
+        <Text style={style.subTitle}>About Ajou</Text>
 
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          style={{ flexDirection: "row", backgroundColor: "white" }}
+          style={{ flexDirection: "row" }}
         >
-          <Container style={style.preview}>
-            <Text>Hello</Text>
-          </Container>
-          <Container style={style.preview}>
-            <Text>Hello</Text>
-          </Container>
-          <Container style={style.preview}>
-            <Text>Hello</Text>
-          </Container>
+          <View style={style.preview}>
+            <Text style={style.scrollContent}>Hello</Text>
+          </View>
+          <View style={style.preview}>
+            <Text style={style.scrollContent}>Hello</Text>
+          </View>
+          <View style={style.preview}>
+            <Text style={style.scrollContent}>Hello</Text>
+          </View>
         </ScrollView>
 
-          <Text style={style.subTitle}>
-            Community
-          </Text>
-       
-        <Container style={style.community}>
-          <Container style={style.containerCommunity}>
-            <Text>Hello2</Text>
-          </Container>
-        </Container>
+        <Text style={style.subTitle}>Community</Text>
+
+        <View style={style.community}>
+          <View style={style.containerCommunity}>
+            <TouchableOpacity style={style.contentWrapper}>
+              <Ionicons
+                name="chatbubbles"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Random Chatting</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <MaterialIcons
+                name="event"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>School Events</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <FontAwesome5
+                name="school"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Near Campus</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <Ionicons
+                name="restaurant"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Vege Restaurant</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <Ionicons
+                name="restaurant-outline"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Halal Restaurant</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <MaterialIcons
+                name="sports-soccer"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Sports Mate</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <MaterialCommunityIcons
+                name="party-popper"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Finding Party Mates</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <FontAwesome5
+                name="user-friends"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Finding Roommates</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <FontAwesome
+                name="language"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Language Exchange</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <Entypo name="pencil" size={24} style={style.communityIcon} />
+              <Text style={style.communityContent}>Major Study</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.contentWrapper}>
+              <MaterialCommunityIcons
+                name="account-search"
+                size={24}
+                style={style.communityIcon}
+              />
+              <Text style={style.communityContent}>Other Hobby</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
     );
   }
@@ -79,7 +160,7 @@ class HomeTab extends Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#F6F8F8",
   },
   title: {
     fontFamily: "Dancing",
@@ -105,17 +186,37 @@ const style = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "#D7DDE2",
     borderRadius: 10,
-    marginBottom: 30,
+    marginBottom: 10,
     marginLeft: 30,
   },
   containerCommunity: {
     width: 360,
-    height: 910,
     borderWidth: 2,
     backgroundColor: "white",
     borderColor: "#D7DDE2",
     borderRadius: 10,
     marginBottom: 30,
+  },
+  contentWrapper: {
+    padding: 10,
+    flexDirection: "row",
+  },
+  scrollContent: {
+    padding: 10,
+    fontFamily: "IBMPlexSansKR-Light",
+    fontSize: 15,
+  },
+  communityIcon: {
+    flex: 1,
+    fontSize: 29,
+    color: "#2C5E9E",
+    textAlign: "center",
+  },
+  communityContent: {
+    flex: 3,
+    fontFamily: "IBMPlexSansKR-Light",
+    fontSize: 20,
+    textAlign: "center",
   },
 });
 
