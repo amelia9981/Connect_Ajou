@@ -19,8 +19,9 @@ function TimetableTab(props) {
   const [courses, setCourses] = useState([]);
   const userRef = firebase.firestore().collection("users").doc(user.email);
   const [myCourses, setMyCourses] = useState([]);
+  const [isReRendering, setReRendering] = useState(0);
   let array = [];
-  let temp_array = [];
+  let update_array = [];
 
   useEffect(() => {
     const unsubscribe = firebase
@@ -37,10 +38,7 @@ function TimetableTab(props) {
 
     const clear = userRef.onSnapshot((snapshot) => {
       const getUser = snapshot.data();
-      getUser.my_courses.forEach((course) => {
-        temp_array.push(course);
-        setMyCourses(temp_array);
-      });
+      setMyCourses(getUser.my_courses);
     });
 
     return () => {
@@ -49,7 +47,33 @@ function TimetableTab(props) {
     };
   }, []);
 
-  const handleClickCourse = (courseName) => {
+  const getCourseCode = (courseName) => {
+    for (var i = 0; i < courses.length; i++) {
+      if (courses[i].name == courseName) {
+        console.log(courses[i].name);
+        return courses[i].code;
+      }
+    }
+    return "";
+  };
+
+  const removeBackground = (bgColor) => {
+    for (var i = 0; i < 7; i++) {
+      for (var j = 0; j < 5; j++) {
+        if (isSelected[i][j] == bgColor) {
+          isSelected[i][j] = "#FFFFFF";
+          courseName[i][j] = "";
+        }
+      }
+    }
+    setMyCourses([]);
+    console.log("here!!!");
+    console.log(myCourses);
+    console.log("finish!!!");
+    setReRendering(isReRendering + 1);
+  };
+
+  const handleClickCourse = (courseName, row, col) => {
     Alert.alert("Do you want to remove this course?", courseName, [
       {
         text: "No",
@@ -59,6 +83,24 @@ function TimetableTab(props) {
         text: "Yes",
         onPress: () => {
           console.log("Yes");
+          removeBackground(isSelected[row][col]);
+          let selected_code = getCourseCode(courseName);
+          update_array = myCourses.filter(
+            (element) => element !== selected_code
+          );
+          console.log("--------");
+          console.log(myCourses.length);
+          console.log(update_array.length);
+          userRef
+            .set(
+              {
+                my_courses: update_array,
+              },
+              { merge: true }
+            )
+            .catch(function (error) {
+              console.error("Error: ", error);
+            });
         },
         style: "destructive",
       },
@@ -119,7 +161,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[0][0])}
+              onPress={() => handleClickCourse(courseName[0][0], 0, 0)}
             >
               {courseName[0][0]}
             </Text>
@@ -133,7 +175,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[0][1])}
+              onPress={() => handleClickCourse(courseName[0][1], 0, 1)}
             >
               {courseName[0][1]}
             </Text>
@@ -147,7 +189,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[0][2])}
+              onPress={() => handleClickCourse(courseName[0][2], 0, 2)}
             >
               {courseName[0][2]}
             </Text>
@@ -161,7 +203,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[0][3])}
+              onPress={() => handleClickCourse(courseName[0][3], 0, 3)}
             >
               {courseName[0][3]}
             </Text>
@@ -175,7 +217,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[0][4])}
+              onPress={() => handleClickCourse(courseName[0][4], 0, 4)}
             >
               {courseName[0][4]}
             </Text>
@@ -202,7 +244,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[1][0])}
+              onPress={() => handleClickCourse(courseName[1][0], 1, 0)}
             >
               {courseName[1][0]}
             </Text>
@@ -216,7 +258,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[1][1])}
+              onPress={() => handleClickCourse(courseName[1][1], 1, 1)}
             >
               {courseName[1][1]}
             </Text>
@@ -230,7 +272,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[1][2])}
+              onPress={() => handleClickCourse(courseName[1][2], 1, 2)}
             >
               {courseName[1][2]}
             </Text>
@@ -244,7 +286,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[1][3])}
+              onPress={() => handleClickCourse(courseName[1][3], 1, 3)}
             >
               {courseName[1][3]}
             </Text>
@@ -258,7 +300,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[1][4])}
+              onPress={() => handleClickCourse(courseName[1][4], 1, 4)}
             >
               {courseName[1][4]}
             </Text>
@@ -285,7 +327,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[2][0])}
+              onPress={() => handleClickCourse(courseName[2][0], 2, 0)}
             >
               {courseName[2][0]}
             </Text>
@@ -299,7 +341,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[2][1])}
+              onPress={() => handleClickCourse(courseName[2][1], 2, 1)}
             >
               {courseName[2][1]}
             </Text>
@@ -313,7 +355,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[2][2])}
+              onPress={() => handleClickCourse(courseName[2][2], 2, 2)}
             >
               {courseName[2][2]}
             </Text>
@@ -327,7 +369,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[2][3])}
+              onPress={() => handleClickCourse(courseName[2][3], 2, 3)}
             >
               {courseName[2][3]}
             </Text>
@@ -341,7 +383,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[2][4])}
+              onPress={() => handleClickCourse(courseName[2][4], 2, 4)}
             >
               {courseName[2][4]}
             </Text>
@@ -368,7 +410,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[3][0])}
+              onPress={() => handleClickCourse(courseName[3][0], 3, 0)}
             >
               {courseName[3][0]}
             </Text>
@@ -382,7 +424,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[3][1])}
+              onPress={() => handleClickCourse(courseName[3][1], 3, 1)}
             >
               {courseName[3][1]}
             </Text>
@@ -396,7 +438,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[3][2])}
+              onPress={() => handleClickCourse(courseName[3][2], 3, 2)}
             >
               {courseName[3][2]}
             </Text>
@@ -410,7 +452,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[3][3])}
+              onPress={() => handleClickCourse(courseName[3][3], 3, 3)}
             >
               {courseName[3][3]}
             </Text>
@@ -424,7 +466,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[3][4])}
+              onPress={() => handleClickCourse(courseName[3][4], 3, 4)}
             >
               {courseName[3][4]}
             </Text>
@@ -451,7 +493,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[4][0])}
+              onPress={() => handleClickCourse(courseName[4][0], 4, 0)}
             >
               {courseName[4][0]}
             </Text>
@@ -465,7 +507,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[4][1])}
+              onPress={() => handleClickCourse(courseName[4][1], 4, 1)}
             >
               {courseName[4][1]}
             </Text>
@@ -479,7 +521,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[4][2])}
+              onPress={() => handleClickCourse(courseName[4][2], 4, 2)}
             >
               {courseName[4][2]}
             </Text>
@@ -493,7 +535,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[4][3])}
+              onPress={() => handleClickCourse(courseName[4][3], 4, 3)}
             >
               {courseName[4][3]}
             </Text>
@@ -507,7 +549,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[4][4])}
+              onPress={() => handleClickCourse(courseName[4][4], 4, 4)}
             >
               {courseName[4][4]}
             </Text>
@@ -534,7 +576,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[5][0])}
+              onPress={() => handleClickCourse(courseName[5][0], 5, 0)}
             >
               {courseName[5][0]}
             </Text>
@@ -548,7 +590,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[5][1])}
+              onPress={() => handleClickCourse(courseName[5][1], 5, 1)}
             >
               {courseName[5][1]}
             </Text>
@@ -562,7 +604,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[5][2])}
+              onPress={() => handleClickCourse(courseName[5][2], 5, 2)}
             >
               {courseName[5][2]}
             </Text>
@@ -576,7 +618,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[5][3])}
+              onPress={() => handleClickCourse(courseName[5][3], 5, 3)}
             >
               {courseName[5][3]}
             </Text>
@@ -590,7 +632,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[5][4])}
+              onPress={() => handleClickCourse(courseName[5][4], 5, 4)}
             >
               {courseName[5][4]}
             </Text>
@@ -617,7 +659,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[6][0])}
+              onPress={() => handleClickCourse(courseName[6][0], 6, 0)}
             >
               {courseName[6][0]}
             </Text>
@@ -631,7 +673,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[6][1])}
+              onPress={() => handleClickCourse(courseName[6][1], 6, 1)}
             >
               {courseName[6][1]}
             </Text>
@@ -645,7 +687,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[6][2])}
+              onPress={() => handleClickCourse(courseName[6][2], 6, 2)}
             >
               {courseName[6][2]}
             </Text>
@@ -659,7 +701,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[6][3])}
+              onPress={() => handleClickCourse(courseName[6][3], 6, 3)}
             >
               {courseName[6][3]}
             </Text>
@@ -673,7 +715,7 @@ function TimetableTab(props) {
           >
             <Text
               style={style.content}
-              onPress={() => handleClickCourse(courseName[6][4])}
+              onPress={() => handleClickCourse(courseName[6][4], 6, 4)}
             >
               {courseName[6][4]}
             </Text>

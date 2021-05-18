@@ -78,7 +78,7 @@ function TimetableTab(props) {
   const userRef = firebase.firestore().collection("users").doc(user.email);
   const [myCourses, setMyCourses] = useState([]);
   let array = [];
-  let temp_array = [];
+  let key = -1;
 
   useEffect(() => {
     const unsubscribe = firebase
@@ -95,10 +95,7 @@ function TimetableTab(props) {
 
     const clear = userRef.onSnapshot((snapshot) => {
       const getUser = snapshot.data();
-      getUser.my_courses.forEach((course) => {
-        temp_array.push(course);
-        setMyCourses(temp_array);
-      });
+      setMyCourses(getUser.my_courses);
     });
 
     return () => {
@@ -121,11 +118,12 @@ function TimetableTab(props) {
       isSelected[matchTime(time)][matchDays(day)] = background;
       courseName[matchTime(time)][matchDays(day)] = name;
     }
-    myCourses.push(code);
+    let update_array = myCourses;
+    update_array.push(code);
     userRef
       .set(
         {
-          my_courses: myCourses,
+          my_courses: update_array,
         },
         { merge: true }
       )
@@ -597,7 +595,7 @@ function TimetableTab(props) {
                 schedule={course.schedule}
                 credits={course.credits}
                 code={course.code}
-                key={course.code}
+                key={key + 1}
               />
             </TouchableOpacity>
           ))}
