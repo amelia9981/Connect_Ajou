@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { Container, Header, Row } from "native-base";
 import {
   Ionicons,
   MaterialIcons,
@@ -18,6 +17,37 @@ import {
 } from "@expo/vector-icons";
 
 class HomeTab extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentDay: 0,
+      todayCourses: [],
+    };
+  }
+
+  componentDidMount() {
+    let day = new Date().getDay();
+    this.setState({
+      currentDay: day - 1,
+    });
+
+    let temp_array = [];
+    for (var row = 0; row < 7; row++) {
+      let courseName = this.props.courseName;
+      temp_array.push(courseName[row][this.currentDay]);
+      console.log(courseName[row][this.currentDay]);
+    }
+    if (temp_array.size) {
+      this.setState({
+        todayCourses: temp_array,
+      });
+    } else {
+      this.setState({
+        todayCourses: "Nothing's for Today",
+      });
+    }
+  }
+
   render() {
     return (
       <ScrollView style={style.container}>
@@ -52,14 +82,54 @@ class HomeTab extends Component {
           style={{ flexDirection: "row" }}
         >
           <View style={style.preview}>
-            <Text style={style.scrollContent}>Hello</Text>
+            <Text style={style.scrollTitle}>Today's Lunch Menu</Text>
+            <Text style={style.scrollContent}>
+              해물짬뽕&면사리(hot noodles soup),{" "}
+              <Text style={style.both}>쌀밥(white rice)</Text>,{" "}
+              <Text style={style.halal}>
+                크리미치킨가라아게(chicken karaage)
+              </Text>
+              , <Text style={style.both}>열무나물무침(young radish)</Text>,{" "}
+              <Text style={style.both}>단무지무침(pickled radish)</Text>,{" "}
+              <Text style={style.both}>배추김치(Kimchi)</Text>,{" "}
+              <Text style={style.both}>
+                샐러드&포도드레싱(salad&grape dressing)
+              </Text>
+              , <Text style={style.both}>수제수정과(cinnamon tea)</Text>
+            </Text>
+            <Text style={[style.scrollContent, { paddingTop: 10 }]}>
+              <Text style={style.vege}>Vege: Green,</Text>{" "}
+              <Text style={style.halal}>Halal: Orange,</Text>{" "}
+              <Text style={style.both}>Both: Blue</Text>
+            </Text>
           </View>
           <View style={style.preview}>
-            <Text style={style.scrollContent}>Hello</Text>
+            <Text style={style.scrollTitle}>Today's Dinner Menu</Text>
+            <Text style={style.scrollContent}>
+              <Text style={style.halal}>육개장(spicy beef soup)</Text>,{" "}
+              <Text style={style.both}>쌀밥(white rice)</Text>,{" "}
+              <Text style={style.halal}>새우까스&소스(shrimp cutlet)</Text>,{" "}
+              <Text style={style.halal}>메밀막국수(buckwheat noodles)</Text>,
+              <Text style={style.both}>땅콩조림(boiled peanuts)</Text>,{" "}
+              <Text style={style.both}>배추김치(Kimchi)</Text>,{" "}
+              <Text style={style.both}>
+                샐러드&포도드레싱(salad&grape dressing)
+              </Text>
+              , <Text style={style.both}>수제수정과(cinnamon tea)</Text>
+            </Text>
+            <Text style={[style.scrollContent, { paddingTop: 10 }]}>
+              <Text style={style.vege}>Vege: Green,</Text>{" "}
+              <Text style={style.halal}>Halal: Orange,</Text>{" "}
+              <Text style={style.both}>Both: Blue</Text>
+            </Text>
           </View>
-          <View style={style.preview}>
-            <Text style={style.scrollContent}>Hello</Text>
-          </View>
+          <TouchableOpacity
+            style={style.preview}
+            onPress={() => this.props.navigation.navigate("Timetable")}
+          >
+            <Text style={style.scrollTitle}>Today's Class</Text>
+            <Text style={style.scrollContent}>{this.state.todayCourses}</Text>
+          </TouchableOpacity>
         </ScrollView>
 
         <Text style={style.subTitle}>Community</Text>
@@ -201,10 +271,26 @@ const style = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
   },
-  scrollContent: {
+  scrollTitle: {
     padding: 10,
-    fontFamily: "IBMPlexSansKR-Light",
+    fontFamily: "IBM-SB",
     fontSize: 15,
+    color: "#2C5E9E",
+  },
+  scrollContent: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    fontFamily: "IBMPlexSansKR-Light",
+    fontSize: 13,
+  },
+  vege: {
+    color: "#008000",
+  },
+  halal: {
+    color: "#FFA500",
+  },
+  both: {
+    color: "#5995DD",
   },
   communityIcon: {
     flex: 1,

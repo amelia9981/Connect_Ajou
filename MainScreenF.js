@@ -137,13 +137,14 @@ function MainScreen(props) {
     >
       <Tab.Screen
         name="Home"
-        component={HomeTab}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="home" size={24} color={color} />
           ),
         }}
-      />
+      >
+        {(props) => <HomeTab {...props} courseName={courseName} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Community"
         component={CommunityMain}
