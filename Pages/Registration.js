@@ -17,13 +17,14 @@ export default function Registration({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [picture, setPicture] = useState(false);
   const [url, setUrl] = useState("");
+  const [myCourses, setMyCourses] = useState([]);
   const onFooterLinkPress = () => {
     navigation.navigate("LogIn");
   };
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
-      alert("Passwoards don't match.");
+      alert("Passwords don't match.");
       return;
     }
     firebase
@@ -36,6 +37,7 @@ export default function Registration({ navigation }) {
           fullName,
           picture,
           url,
+          myCourses,
         };
         const usersRef = firebase.firestore().collection("users");
         usersRef

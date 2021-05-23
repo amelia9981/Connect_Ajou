@@ -85,7 +85,12 @@ function MainScreen(props) {
       .doc(user.email)
       .onSnapshot((snapshot) => {
         const getUser = snapshot.data();
-        getUser.my_courses.forEach((course) => {
+        if (!getUser.myCourses.size) {
+          return () => {
+            unsubscribe();
+          };
+        }
+        getUser.myCourses.forEach((course) => {
           let background = randomHex();
           const courseRef = firebase
             .firestore()

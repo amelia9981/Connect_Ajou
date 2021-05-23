@@ -95,7 +95,7 @@ function TimetableTab(props) {
 
     const clear = userRef.onSnapshot((snapshot) => {
       const getUser = snapshot.data();
-      setMyCourses(getUser.my_courses);
+      setMyCourses(getUser.myCourses);
     });
 
     return () => {
@@ -123,7 +123,7 @@ function TimetableTab(props) {
     userRef
       .set(
         {
-          my_courses: update_array,
+          myCourses: update_array,
         },
         { merge: true }
       )

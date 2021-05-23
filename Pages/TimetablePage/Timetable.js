@@ -38,7 +38,7 @@ function TimetableTab(props) {
 
     const clear = userRef.onSnapshot((snapshot) => {
       const getUser = snapshot.data();
-      setMyCourses(getUser.my_courses);
+      setMyCourses(getUser.myCourses);
     });
 
     return () => {
@@ -67,9 +67,6 @@ function TimetableTab(props) {
       }
     }
     setMyCourses([]);
-    console.log("here!!!");
-    console.log(myCourses);
-    console.log("finish!!!");
     setReRendering(isReRendering + 1);
   };
 
@@ -88,13 +85,10 @@ function TimetableTab(props) {
           update_array = myCourses.filter(
             (element) => element !== selected_code
           );
-          console.log("--------");
-          console.log(myCourses.length);
-          console.log(update_array.length);
           userRef
             .set(
               {
-                my_courses: update_array,
+                myCourses: update_array,
               },
               { merge: true }
             )
