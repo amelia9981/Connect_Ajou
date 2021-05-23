@@ -1,45 +1,127 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { GiftedChat } from "react-native-gifted-chat";
-import Firebase from "../../Utilities/Firebase";
-class Message extends Component {
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) => (
-      <Feather name="layout" size={24} style={{ color: tintColor }} />
-    ),
-  };
-  state = {
-    messages: [],
-  };
-  /*
-componentDidMount() {
-Firebase.shared.on((message) =>
-this.setState((previous) => ({
-messages: GiftedChat.append(previous.messages, message),
-}))
-);
-}
-componentWillUnmount() {
-Firebase.shared.off();
-}
-get user() {
-return {
-name: "Jeanine Han",
-_id: Firebase.shared.uid,
-avatar: "https://facebook.github.io/react/img/logo_og.png",
-};
-}
-*/
-  render() {
-    return (
-      <GiftedChat
-      // messages={this.state.messages}
-      // onSend={Firebase.shared.send}
-      // user={this.user}
-      />
-    );
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { firebase } from "../../Utilities/Firebase";
+
+function Chat({ route }) {
+  const thread = route.params.thread;
+  console.log(thread);
+  const user = route.params.user;
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("chat")
+      .doc(thread._id)
+      .collection("messages")
+      .orderBy("createdAt", "desc")
+      .onSnapshot((snapshot) => {
+        const messages = snapshot.docs.map((docSnapshot) => {
+          const data = {
+            _id: docSnapshot.id,
+            text: "",
+            createdAt: new Date().getTime(),
+            ...docSnapshot.data(),
+          };
+          if (!docSnapshot.data().system) {
+            data.user = {
+              ...docSnapshot.data().user,
+              name: docSnapshot.data().user.fullName,
+            };
+          }
+
+          return data;
+        });
+
+        setMessages(messages);
+      });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  async function onSend(messages) {
+    const text = messages[0].text;
+
+    firebase
+      .firestore()
+      .collection("chat")
+      .doc(thread._id)
+      .collection("messages")
+      .add({
+        text,
+        createdAt: new Date().getTime(),
+        user: {
+          _id: user.email,
+          name: user.fullName,
+        },
+      });
+
+    await firebase
+      .firestore()
+      .collection("chat")
+      .doc(thread._id)
+      .set(
+        {
+          latestMessage: {
+            text,
+            createdAt: new Date().getTime(),
+          },
+        },
+        { merge: true }
+      );
   }
+
+  const renderBubble = (props) => (
+    <Bubble
+      {...props}
+      wrapperStyle={{
+        left: {
+          backgroundColor: "#5995DD",
+        },
+        right: {
+          backgroundColor: "#D7DDE2",
+        },
+      }}
+      textStyle={{
+        left: {
+          color: "#ffffff",
+          fontFamily: "IBMPlexSansKR-Regular",
+        },
+        right: {
+          color: "#000000",
+          fontFamily: "IBMPlexSansKR-Regular",
+        },
+      }}
+      timeTextStyle={{
+        left: {
+          color: "#ffffff",
+          fontFamily: "IBMPlexSansKR-Regular",
+        },
+        right: {
+          color: "#000000",
+          fontFamily: "IBMPlexSansKR-Regular",
+        },
+      }}
+      style={style.container}
+    />
+  );
+
+  return (
+    <GiftedChat
+      messages={messages}
+      onSend={onSend}
+      user={{
+        _id: user.email,
+      }}
+      renderAvatar={null}
+      showAvatarForEveryMessage={true}
+      alwaysShowSend={true}
+      renderBubble={renderBubble}
+    />
+  );
 }
 const style = StyleSheet.create({
   container: {
@@ -48,4 +130,4 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
 });
-export default Message;
+export default Chat;
