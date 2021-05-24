@@ -7,7 +7,7 @@ import LogInScreen from "./Pages/LogIn";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Registration from "./Pages/Registration";
-import { firebase } from './Utilities/Firebase';
+import { firebase } from "./Utilities/Firebase";
 
 //추가할 폰트는 여기에 먼저쓰고 fontFamily에서 쓰면 됩니당~
 const getFont = () =>
@@ -18,8 +18,8 @@ const getFont = () =>
     EBS훈민정음새론SB: require("./assets/fonts/EBS훈민정음새론SB.ttf"),
     "IBMPlexSansKR-Light": require("./assets/fonts/IBMPlexSansKR-Light.ttf"),
     "IBMPlexSansKR-Regular": require("./assets/fonts/IBMPlexSansKR-Regular.ttf"),
-    "IBM-SB": require('./assets/fonts/IBMPlexSans-SemiBold.ttf'),
-    'Mono-SB': require('./assets/fonts/RobotoMono-SemiBold.ttf'),
+    "IBM-SB": require("./assets/fonts/IBMPlexSans-SemiBold.ttf"),
+    "Mono-SB": require("./assets/fonts/RobotoMono-SemiBold.ttf"),
   });
 
 const RootStack = createStackNavigator();
@@ -27,54 +27,58 @@ const RootStack = createStackNavigator();
 export default function App() {
   const [fontloaded, setFontsLoaded] = useState(false);
   const [loaded, setLoaded] = useState(true);
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const usersRef = firebase.firestore().collection('users');
-    firebase.auth().onAuthStateChanged(user => {
+    const usersRef = firebase.firestore().collection("users");
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         usersRef
           .doc(user.email)
           .get()
           .then((document) => {
-            const userData = document.data()
-            setLoaded(false)
-            setUser(userData)
+            const userData = document.data();
+            setLoaded(false);
+            setUser(userData);
           })
           .catch((error) => {
-            setLoaded(false)
+            setLoaded(false);
           });
       } else {
-        setLoaded(false)
+        setLoaded(false);
       }
     });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  if (fontloaded&&!loaded) {
+  if (fontloaded && !loaded) {
     return (
       <NavigationContainer>
-        <RootStack.Navigator  options={{headerShown:false}}>
-          {user?(
+        <RootStack.Navigator options={{ headerShown: false }}>
+          {user ? (
             <RootStack.Screen name="Main" options={{ headerShown: false }}>
-              {props => <MainScreen {...props} extraData={user} />}
+              {(props) => <MainScreen {...props} extraData={user} />}
             </RootStack.Screen>
-          ):(
+          ) : (
             <>
-            <RootStack.Screen
-            name="Registration"
-            component={Registration}
-            options={{ headerShown: false }}
-          />
-          <RootStack.Screen
-            name="LogIn"
-            component={LogInScreen}
-            options={{ headerShown: false }}
-          />
-          <RootStack.Screen name="Main" options={{ headerShown: false }}>
-            {props => <MainScreen {...props} extraData={user} />}
-          </RootStack.Screen>
-          </>
-          )}  
+              <RootStack.Screen
+                name="Registration"
+                component={Registration}
+                options={{ headerShown: false }}
+              />
+              <RootStack.Screen
+                name="LogIn"
+                component={LogInScreen}
+                options={{ headerShown: false }}
+              />
+              <RootStack.Screen name="Main" options={{ headerShown: false }}>
+                {(props) => <MainScreen {...props} extraData={user} />}
+              </RootStack.Screen>
+            </>
+          )}
         </RootStack.Navigator>
       </NavigationContainer>
     );
@@ -87,5 +91,4 @@ export default function App() {
       />
     );
   }
-  
 }

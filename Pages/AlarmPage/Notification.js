@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,82 +7,107 @@ import {
   FlatList,
   Linking,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { firebase } from "../../Utilities/Firebase";
 
-const data = [
-  {
-    id: "1",
-    title: "Notice 1",
-    time: "10 min ago",
-    content:
-      "[OIA] COVID-19 Caution Letter from the Director of Office of International Affairs",
-    url:
-      "https://www.ajou.ac.kr/oia/notice/notice.do?mode=view&articleNo=107992&article.offset=0&articleLimit=10&srCategoryId=108",
-  },
-  {
-    id: "2",
-    title: "Notice 2",
-    time: "15 min ago",
-    content:
-      "[OIA] COVID-19 Social Distancing Level 2 in Seoul Metropolitan Area (extended until May 2nd)",
-    url:
-      "https://www.ajou.ac.kr/oia/notice/notice.do?mode=view&articleNo=107411&article.offset=0&articleLimit=10&srCategoryId=108",
-  },
-  {
-    id: "3",
-    title: "Notice 3",
-    time: "20 min ago",
-    content: "Change of Immigration Information",
-    url:
-      "https://www.ajou.ac.kr/oia/notice/notice.do?mode=view&articleNo=107619&article.offset=0&articleLimit=10&srCategoryId=108",
-  },
-];
+function Notification(props) {
+  const [data, setData] = useState([]);
+  const notiCount = props.notiCount;
 
-const noticeClick = async (url) => {
-  Linking.canOpenURL(url).then((supported) => {
-    if (supported) {
-      Linking.openURL(url);
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("notification")
+      .orderBy("createdAt")
+      .onSnapshot((querySnapshot) => {
+        if (querySnapshot.size) {
+          const notices = querySnapshot.docs.map((docSnapshot) => {
+            return {
+              ...docSnapshot.data(),
+            };
+          });
+          setData(notices);
+        } else {
+          console.log("No such document!");
+        }
+      });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const calculateTime = (messageTime) => {
+    const current = new Date().getTime();
+    const messageDate = new Date(messageTime);
+    let quotient = Math.floor((current - messageTime) / 60000);
+
+    if (quotient <= 0) {
+      return "just now";
+    } else if (quotient < 60) {
+      let result = quotient.toString();
+      return result + " min ago";
+    } else if (quotient < 24 * 60) {
+      quotient = Math.floor(quotient / 60);
+      let result = quotient.toString();
+      return result + " hour ago";
     } else {
-      Linking.openURL(
-        "https://www.ajou.ac.kr/oia/notice/notice.do?mode=list&srCategoryId=108&srSearchKey=&srSearchVal="
-      );
+      return messageDate.toString().slice(0, 10);
     }
-  });
-};
-
-const renderItem = ({ item }) => {
-  const url = item.url;
-
-  return (
-    <TouchableOpacity style={style.box} onPress={() => noticeClick(url)}>
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        <Text style={style.title}>{item.title}</Text>
-        <Text style={style.time}>{item.time}</Text>
-      </View>
-      <Text style={style.content}>{item.content}</Text>
-    </TouchableOpacity>
-  );
-};
-
-class Notification extends Component {
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) => (
-      <Feather name="layout" size={24} style={{ color: tintColor }} />
-    ),
   };
 
-  render() {
+  const renderItem = ({ item }) => {
+    const isRead = item.isRead;
+
     return (
-      <View style={style.container}>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(notice) => notice.id}
-          contentContainerStyle={style.list}
-        />
-      </View>
+      <TouchableOpacity
+        style={[style.box, isRead ? style.boxRead : style.boxUnRead]}
+        onPress={() => noticeClick(item)}
+      >
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <Text style={style.title}>{item.title}</Text>
+          <Text style={style.time}>{calculateTime(item.createdAt)}</Text>
+        </View>
+        <Text style={style.content}>{item.content}</Text>
+      </TouchableOpacity>
     );
-  }
+  };
+
+  const noticeClick = async (item) => {
+    Linking.canOpenURL(item.url).then((supported) => {
+      if (supported) {
+        Linking.openURL(item.url);
+      } else {
+        Linking.openURL(
+          "https://www.ajou.ac.kr/oia/notice/notice.do?mode=list&srCategoryId=108&srSearchKey=&srSearchVal="
+        );
+      }
+    });
+
+    await firebase
+      .firestore()
+      .collection("notification")
+      .doc(`${item.id}`)
+      .set(
+        {
+          isRead: true,
+        },
+        { merge: true }
+      )
+      .catch(function (error) {
+        console.error("Error: ", error);
+      });
+  };
+
+  return (
+    <View style={style.container}>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={style.list}
+      />
+    </View>
+  );
 }
 
 const style = StyleSheet.create({
@@ -98,13 +123,18 @@ const style = StyleSheet.create({
   },
   box: {
     backgroundColor: "#FFFFFF",
-    borderColor: "#D7DDE2",
     borderWidth: 1,
     borderRadius: 10,
     marginBottom: "5%",
     padding: "5%",
     width: 380,
     height: 120,
+  },
+  boxRead: {
+    borderColor: "#D7DDE2",
+  },
+  boxUnRead: {
+    borderColor: "#2C5E9E",
   },
   title: {
     flex: 1,
