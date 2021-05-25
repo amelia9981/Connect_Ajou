@@ -35,7 +35,6 @@ class HomeTab extends Component {
     for (var row = 0; row < 7; row++) {
       let courseName = this.props.courseName;
       temp_array.push(courseName[row][this.currentDay]);
-      console.log(courseName[row][this.currentDay]);
     }
     if (temp_array.size) {
       this.setState({
@@ -200,7 +199,12 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Finding Roommates</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { navigation.navigate("ViewList", {name: "Language Exchange"})}}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                navigation.navigate("ViewList", { name: "Language Exchange" });
+              }}
+            >
               <FontAwesome
                 name="language"
                 size={24}

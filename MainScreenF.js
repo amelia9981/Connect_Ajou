@@ -85,7 +85,7 @@ function MainScreen(props) {
       .doc(user.email)
       .onSnapshot((snapshot) => {
         const getUser = snapshot.data();
-        if (!getUser.myCourses.size) {
+        if (!getUser.myCourses.length) {
           return () => {
             unsubscribe();
           };

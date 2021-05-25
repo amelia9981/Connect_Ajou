@@ -19,7 +19,6 @@ function AlarmTab(props) {
         notiCount = 0;
         if (querySnapshot.size) {
           querySnapshot.forEach((doc) => {
-            console.log(doc.data().isRead);
             if (doc.data().isRead == true) {
               notiCount++;
             }
