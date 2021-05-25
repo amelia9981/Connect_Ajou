@@ -32,7 +32,7 @@ const viewList=({ navigation, route })=>{
         headerRight: () => (
             <View style={{flexDirection:'row'}}>
                 <TouchableOpacity 
-                    onPress={() => navigation.navigate('Search')}>
+                    onPress={() => navigation.navigate('Search',{listName:listName})}>
                     <Feather name='search' size={25}/>
                 </TouchableOpacity>
                 <TouchableOpacity

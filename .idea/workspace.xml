@@ -2,18 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61f64223-6990-4579-be80-52e27e1ab869" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainScreenF.js" beforeDir="false" afterPath="$PROJECT_DIR$/MainScreenF.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/CommunityMain.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/CommunityMain.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/FindFriend.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/CommunityPage/FindFriend.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/Foody.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/showAll.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/CommunityPage/showAll.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/study.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/addWriting.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/addWriting.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/searchWriting.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/searchWriting.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/seeWriting.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/seeWriting.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/showList.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/CommunityPage/subCommunityPage/showList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pages/HomeTabF.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/HomeTabF.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/LogIn.js" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/LogIn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,10 +48,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="95" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.680@0.0.1280.680" timestamp="1618395899007" />
-    <state x="110" y="120" width="1060" height="440" key="AVDManager" timestamp="1618538300565">
+    <state x="110" y="120" width="1060" height="440" key="AVDManager" timestamp="1621921711974">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="110" y="120" width="1060" height="440" key="AVDManager/0.0.1280.680@0.0.1280.680" timestamp="1618538300565" />
+    <state x="110" y="120" width="1060" height="440" key="AVDManager/0.0.1280.680@0.0.1280.680" timestamp="1621921711974" />
     <state x="421" y="81" key="FileChooserDialogImpl" timestamp="1618398203999">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

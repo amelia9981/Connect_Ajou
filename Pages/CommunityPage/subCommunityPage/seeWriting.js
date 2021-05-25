@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect} from 'react';
-import { ScrollView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { CardItem, Card, Left, Container } from 'native-base';
 import { Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 import { firebase } from '../../../Utilities/Firebase';
@@ -11,53 +11,48 @@ import { Directions } from 'react-native-gesture-handler';
 //DB => 하트 수
 
 const seeWriting = ({ navigation, route }) => {
-    const [com,setCom] =useState("")
-    const [like, setLike] = useState()
-    const [comments,setComments] = useState([])
-
+    const [like, setLike] = useState(false)
+    const [text,setText] = useState("")
+    const [allcomment,setAllComment] = useState([])
     const writing = route.params.data;
     const listName = route.params.listName;
-    const db = firebase.firestore().collection(listName)
+    
     const user = route.params.extraData
-    //댓글달기
+    //1. add reader => comment, time, like, user
+    //2. if comment added => update 
+    //3. if liked it => update
     const onSubmit = () => {
-        const comment={
+        const comment = {
             user,
-            text:com,
-            time:Date.now()
+            text: text,
+            time: Date.now()
         };
-        console.log(comment)
-        setComments((prev) => [comment, ...prev]);
-        db.doc(writing.title)
+        firebase.firestore().collection(listName).doc(writing.title)
             .update({
-                comments:comments
+                comments: firebase.firestore.FieldValue.arrayUnion(comment)
             })
             .then(() => {
-               console.log("update!!!")
+                console.log("Document successfully updated!");
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
             });
-        setCom("");
+        setText("");
     };
-    console.log(com)
 
     //가져오기
     const getData = () => {
-        db.doc(writing.title).get().then((doc) => {
-            const data = doc.data().comments
-            setComments(data);
+        const dbCom = firebase.firestore().collection(listName).doc(writing.title)       
+        dbCom.get().then((doc) => {
+                const data = doc.data().comments
+                setAllComment(data);
         })
     }
     useEffect(() => {
         getData();
     }, []);
-
-    const likeCnt = () => {
-        if (click) {
-            alert("You already liked it")
-        }
-        click = true; //색 칠할 수 있도록
-        setLike(writing.like + 1);
-    }
-
+ 
     navigation.setOptions({
         headerTitle:null,
         headerRightContainerStyle: {
@@ -104,27 +99,25 @@ const seeWriting = ({ navigation, route }) => {
                     </Left>
                 </CardItem>
             </Card>
-            {
-                comments.map((comment) => (
-                    <TouchableOpacity onPress={() => { navigation.push("See", { data: writing, listName: listName }) }}>
-                        <Card style={style.box} >
-                            <CardItem>
-                                <Text style={style.title}> {comment.user.fullName} </Text>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Text style={style.content}> {comment.text} </Text>
-                            </CardItem>
-                        </Card>
-                    </TouchableOpacity>
-                ))
-            }
+                {
+                    allcomment.map((comment) => (
+                            <Card style={style.box} >
+                                <CardItem>
+                                    <Text style={style.title}> {comment.user.fullName} </Text>
+                                </CardItem>
+                                <CardItem cardBody>
+                                    <Text style={style.content}> {comment.text} </Text>
+                                </CardItem>
+                            </Card>
+                    ))
+                }
         </ScrollView>
         <Container style={{flexDirection:'row'}}>
                 <TextInput style={style.input_id} placeholder="Comment"
-                    onChangeText={(text) => setCom(text)}
-                    value={com}
+                    onChangeText={(text) => { setText(text)}}
+                    value={text}
                 />
-                <Button style={style.btn} value="ADD" onPress={() => { onSubmit() }} />
+                <Button style={style.btn} title="ADD" onPress={() => { onSubmit() }} />
         </Container>   
         </>
     )

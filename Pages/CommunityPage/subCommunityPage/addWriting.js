@@ -47,7 +47,7 @@ const AddWriting = ({ navigation, route}) => {
         ),
         headerRight: () => (
             //저장하고 리프레스
-            <Button style={style.button} onPress={() => { onSubmit() }}title='Save'/>
+            <Button style={style.button} onPress={() => { onSubmit() }} title='Save'/>
         ),
     });
 
