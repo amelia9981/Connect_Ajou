@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import ProfilePicture from "react-native-profile-picture";
 import UserPermissions from "../Utilities/UserPermissions";
@@ -13,18 +14,29 @@ import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../Utilities/Firebase";
 
 function UserTab(props) {
-  const [picture, setPicture] = useState(false);
-  const [url, setUrl] = useState("");
   const user = props.extraData;
+  const [picture, setPicture] = useState(user.picture);
+  const [url, setUrl] = useState(user.url);
+  const [isReRendering, setReRendering] = useState(0);
   const usersRef = firebase.firestore().collection("users").doc(user.email);
 
-  usersRef.get().then((doc) => {
-    const getuser = doc.data();
-    if (getuser.picture) {
-      setPicture(true);
-      setUrl(getuser.url);
-    }
-  });
+  useEffect(() => {
+    usersRef.get().then((doc) => {
+      const getuser = doc.data();
+      if (getuser.picture) {
+        setPicture(true);
+        const storageRef = firebase.storage().ref(`${user.email}`);
+        storageRef
+          .getDownloadURL()
+          .then((url) => {
+            setUrl(url);
+          })
+          .catch((error) => {
+            console.error("Error updating document: ", error);
+          });
+      }
+    });
+  }, []);
 
   const pickGalleryImage = async () => {
     UserPermissions.getCameraPermission();
@@ -33,21 +45,68 @@ function UserTab(props) {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    if (!result.cancelled) {
+    if (!result.cancelled && result.uri) {
+      uploadImageToStorage(result.uri, user.email);
       setPicture(true);
       setUrl(result.uri);
-      //console.log(picture)
-      //console.log(url)
+
       usersRef
-        .update({ picture: picture, url: url })
+        .set({ picture: true, url: result.uri }, { merge: true })
         .then(() => {
           console.log("Document successfully updated!");
+          setReRendering(isReRendering + 1);
         })
         .catch((error) => {
-          // The document probably doesn't exist.
           console.error("Error updating document: ", error);
         });
     }
+  };
+
+  const uploadImageToStorage = async (path, imageName) => {
+    const response = await fetch(path);
+    const blob = await response.blob();
+    const ref = firebase.storage().ref().child(imageName);
+    return ref.put(blob);
+  };
+
+  const setProfileImgToDefault = () => {
+    Alert.alert(
+      "Do you want to set your profile photo to the default one?",
+      "",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("No"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            console.log("Yes");
+            setPicture(false);
+            setUrl("");
+            const storageRef = firebase.storage().ref(`${user.email}`);
+            storageRef
+              .delete()
+              .then(() => {
+                console.log("Your profile has been reset");
+              })
+              .catch((error) => {
+                console.error("Error updating document: ", error);
+              });
+
+            usersRef
+              .set({ picture: false, url: "" }, { merge: true })
+              .then(() => {
+                console.log("Document successfully updated!");
+                setReRendering(isReRendering + 1);
+              })
+              .catch((error) => {
+                console.error("Error updating document: ", error);
+              });
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -92,6 +151,14 @@ function UserTab(props) {
         </TouchableOpacity>
         <TouchableOpacity style={style.box_content_wrapper}>
           <Text style={style.box_content}>Change name</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={style.box_content_wrapper}
+          onPress={() => setProfileImgToDefault()}
+        >
+          <Text style={style.box_content}>
+            Change into the default profile photo
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={style.box_content_wrapper}>
           <Text style={style.box_content}>Logout</Text>
@@ -186,7 +253,7 @@ const style = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     width: "95%",
-    height: "17%",
+    height: "19%",
     top: "57%",
   },
   box_3: {
@@ -201,7 +268,7 @@ const style = StyleSheet.create({
     borderRadius: 10,
     width: "95%",
     height: "14%",
-    top: "77%",
+    top: "79%",
   },
   box_label: {
     flex: 1,
@@ -227,6 +294,7 @@ const style = StyleSheet.create({
   box_content: {
     fontFamily: "IBMPlexSansKR-Light",
     fontSize: 13,
+    paddingTop: 5,
   },
 });
 
