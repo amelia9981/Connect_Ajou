@@ -1,18 +1,13 @@
-import React, { Component, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TextInput,
-  Button,
-  KeyboardAvoidingView,
-} from "react-native";
+import React, { Component, useEffect, useState } from "react";
+import { StyleSheet, View, Image, TextInput, Button } from "react-native";
 import { firebase } from "../Utilities/Firebase";
+import { useNavigation } from "@react-navigation/core";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation();
+
   const onLoginPress = () => {
     firebase
       .auth()
@@ -20,15 +15,11 @@ export default function LoginScreen({ navigation }) {
       .then((response) => {
         const usersRef = firebase.firestore().collection("users");
         usersRef
-          .doc(email)
+          .doc(response.user.providerData[0].email)
           .get()
           .then((firestoreDocument) => {
-            /*if(!firestoreDocument.exists){
-            alert("User does not exist anymore.")
-            return;
-          }*/
-            const user = firestoreDocument.data();
-            navigation.navigate("Main", { user });
+            // const user = firestoreDocument.data();
+            navigation.navigate("Main");
           })
           .catch((error) => {
             alert(error);
@@ -38,6 +29,7 @@ export default function LoginScreen({ navigation }) {
         alert(error);
       });
   };
+
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/logo1.png")} />

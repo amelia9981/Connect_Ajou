@@ -44,7 +44,7 @@ export default function Registration({ navigation }) {
           .doc(email)
           .set(data)
           .then(() => {
-            navigation.navigate("Main", { user: data });
+            navigation.navigate("Main");
           })
           .catch((error) => {
             alert(error);
