@@ -12,6 +12,7 @@ import ProfilePicture from "react-native-profile-picture";
 import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../Utilities/Firebase";
+import * as Update from "expo-updates";
 
 function UserTab(props) {
   const user = props.extraData;
@@ -109,6 +110,38 @@ function UserTab(props) {
     );
   };
 
+  const signOut = () => {
+    Alert.alert("Do you want to sign out?", "", [
+      {
+        text: "No",
+      },
+      {
+        text: "Yes",
+        onPress: () => {
+          var user = firebase.auth().currentUser;
+
+          if (user) {
+            console.log(user);
+          } else {
+            // No user is signed in.
+          }
+
+          firebase
+            .auth()
+            .signOut()
+            .then(() => {
+              console.log("Sign-out successful");
+              Update.reloadAsync();
+            })
+            .catch((error) => {
+              console.log("Error: ", error);
+            });
+        },
+        style: "destructive",
+      },
+    ]);
+  };
+
   return (
     <ScrollView contentContainerStyle={style.container}>
       <Text style={style.my_page}>My Page</Text>
@@ -160,7 +193,10 @@ function UserTab(props) {
             Change into the default profile photo
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={style.box_content_wrapper}>
+        <TouchableOpacity
+          style={style.box_content_wrapper}
+          onPress={() => signOut()}
+        >
           <Text style={style.box_content}>Logout</Text>
         </TouchableOpacity>
       </View>
