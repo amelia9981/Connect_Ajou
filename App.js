@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Text } from "react-native";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import MainScreen from "./MainScreenF";
@@ -10,6 +11,12 @@ import { firebase } from "./Utilities/Firebase";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs(["Setting a timer"]);
+
+Text.defaultProps = Text.defaultProps || {};
+Text.defaultProps.allowFontScaling = false;
 
 //추가할 폰트는 여기에 먼저쓰고 fontFamily에서 쓰면 됩니당~
 const getFont = () =>
@@ -40,33 +47,20 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
   const [notification, setNotification] = useState({});
-
-  const registerForPushNotification = async () => {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("It requires your permissions");
-      return;
-    }
-    const getToken = (await Notifications.getExpoPushTokenAsync()).data;
-    setToken(getToken);
-
-    if (Platform.OS === "android") {
-      Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-      });
-    }
-  };
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   useEffect(() => {
+    registerForPushNotification().then((token) => setToken(token));
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
     const usersRef = firebase.firestore().collection("users");
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -87,22 +81,13 @@ export default function App() {
     });
 
     return () => {
-      unsubscribe();
-      registerForPushNotification();
-      Notifications.addNotificationReceivedListener(_handleNotification);
-      Notifications.addNotificationResponseReceivedListener(
-        _handleNotificationResponse
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
       );
+      Notifications.removeNotificationSubscription(responseListener.current);
+      unsubscribe();
     };
   }, []);
-
-  const _handleNotification = (notification) => {
-    setNotification({ notification: notification });
-  };
-
-  const _handleNotificationResponse = (response) => {
-    console.log(response);
-  };
 
   if (fontloaded && !loaded) {
     return (
@@ -110,7 +95,9 @@ export default function App() {
         <RootStack.Navigator options={{ headerShown: false }}>
           {user ? (
             <RootStack.Screen name="Main" options={{ headerShown: false }}>
-              {(props) => <MainScreen {...props} extraData={user} />}
+              {(props) => (
+                <MainScreen {...props} extraData={user} token={token} />
+              )}
             </RootStack.Screen>
           ) : (
             <>
@@ -143,4 +130,36 @@ export default function App() {
       />
     );
   }
+}
+
+async function registerForPushNotification() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
 }

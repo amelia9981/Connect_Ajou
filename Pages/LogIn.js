@@ -1,7 +1,8 @@
 import React, { Component, useEffect, useState } from "react";
-import { StyleSheet, View, Image, TextInput, Button } from "react-native";
+import { StyleSheet, View, Image, TextInput, Text } from "react-native";
 import { firebase } from "../Utilities/Firebase";
 import { useNavigation } from "@react-navigation/core";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -48,14 +49,14 @@ export default function LoginScreen() {
         value={password}
       />
       <View style={styles.button_register}>
-        <Button
-          title="Register"
-          color="#FFFFFF"
-          onPress={() => navigation.replace("Registration")}
-        />
+        <TouchableOpacity onPress={() => navigation.replace("Registration")}>
+          <Text style={styles.button_text}>Register</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.button_login}>
-        <Button title="Login" color="#FFFFFF" onPress={() => onLoginPress()} />
+        <TouchableOpacity onPress={() => onLoginPress()}>
+          <Text style={styles.button_text}>Login</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -116,6 +117,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 140,
     height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
   button_login: {
     fontFamily: "IBMPlexSansKR-Regular",
@@ -138,5 +142,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 140,
     height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  button_text: {
+    justifyContent: "center",
+    color: "#FFFFFF",
+    fontSize: 17,
   },
 });

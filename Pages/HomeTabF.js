@@ -80,7 +80,7 @@ class HomeTab extends Component {
           showsHorizontalScrollIndicator={false}
           style={{ flexDirection: "row" }}
         >
-          <View style={style.preview}>
+          <ScrollView style={style.preview} nestedScrollEnabled={true}>
             <Text style={style.scrollTitle}>Today's Lunch Menu</Text>
             <Text style={style.scrollContent}>
               해물짬뽕&면사리(hot noodles soup),{" "}
@@ -101,8 +101,8 @@ class HomeTab extends Component {
               <Text style={style.halal}>Halal: Orange,</Text>{" "}
               <Text style={style.both}>Both: Blue</Text>
             </Text>
-          </View>
-          <View style={style.preview}>
+          </ScrollView>
+          <ScrollView style={style.preview} nestedScrollEnabled={true}>
             <Text style={style.scrollTitle}>Today's Dinner Menu</Text>
             <Text style={style.scrollContent}>
               <Text style={style.halal}>육개장(spicy beef soup)</Text>,{" "}
@@ -121,7 +121,7 @@ class HomeTab extends Component {
               <Text style={style.halal}>Halal: Orange,</Text>{" "}
               <Text style={style.both}>Both: Blue</Text>
             </Text>
-          </View>
+          </ScrollView>
           <TouchableOpacity
             style={style.preview}
             onPress={() => this.props.navigation.navigate("Timetable")}

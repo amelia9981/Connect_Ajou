@@ -69,7 +69,7 @@ let matchTime = (time) => {
   }
 };
 
-function MainScreen() {
+function MainScreen(props) {
   const [user, setUser] = useState({});
   let selected_array = Array.from({ length: 8 }, () =>
     Array(5).fill("#FFFFFF")
@@ -150,7 +150,9 @@ function MainScreen() {
           ),
         }}
       >
-        {(props) => <HomeTab {...props} courseName={courseName} />}
+        {(props) => (
+          <HomeTab {...props} courseName={courseName} token={props.token} />
+        )}
       </Tab.Screen>
       <Tab.Screen
         name="Community"
