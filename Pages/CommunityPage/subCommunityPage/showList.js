@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Icon } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { CardItem, Card,  Left } from 'native-base';
+import { Feather, Ionicons } from '@expo/vector-icons';
+import { CardItem, Card, Left, Body, Thumbnail } from 'native-base';
 import { firebase } from '../../../Utilities/Firebase';
 
 //하트수 표시 & 댓글수 표시
@@ -52,13 +52,16 @@ const viewList=({ navigation, route })=>{
                                 <CardItem>
                                     <Text style={style.title}> {writing.title} </Text>
                                 </CardItem>
-                                <CardItem cardBody>
+                                <CardItem>
                                     <Text style={style.content}> {writing.content} </Text>
                                 </CardItem>
-                                <CardItem>
+                    
+                                <CardItem style={{ height: 45 }}>
                                     <Left>
-                                        <Feather name='heart' size ={25} style={{ color: 'black', marginRight: 5 }} />
-                                        <Text>{writing.like}</Text>
+                                        <Ionicons name='ios-heart' size={10} style={{ color: 'black', marginRight: 5 }} />
+                                        <Text style={{ marginRight: 5, fontFamily:'IBMPlexSansKR-Light'}}>{writing.like.length}</Text>
+                                        <Ionicons name="chatbubble" size ={10} style={{ color: 'black', marginRight: 5 }} />
+                                        <Text style={{ marginRight: 5 }}>{writing.comments.length}</Text>
                                     </Left>
                                 </CardItem>
                             </Card>
@@ -111,6 +114,7 @@ const style = StyleSheet.create({
         fontFamily: "IBMPlexSansKR-Regular",
         fontSize: 13,
         color: "#3D3D3D",
+        textAlign:'left'
     },
 });
 export default viewList;

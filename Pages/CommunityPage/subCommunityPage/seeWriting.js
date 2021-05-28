@@ -1,26 +1,41 @@
 import React, { Component, useState, useEffect} from 'react';
-import { ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import { CardItem, Card, Left, Container } from 'native-base';
-import { Feather, MaterialCommunityIcons} from '@expo/vector-icons';
+import { ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert} from 'react-native';
+import { Card, Container,CardItem, Thumbnail, Body, Left, Right,  Icon } from 'native-base';
+import { Feather, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import { firebase } from '../../../Utilities/Firebase';
 import { Button } from 'react-native-paper';
 import { Directions } from 'react-native-gesture-handler';
 
-
-//하트 누르기 
-//DB => 하트 수
-
-const seeWriting = ({ navigation, route }) => {
-    const [like, setLike] = useState(false)
+const seeWriting = ({ navigation, route }) => {;
     const [text,setText] = useState("")
     const [allcomment,setAllComment] = useState([])
+    const [currentLike,setCurrentLike] = useState([])
     const writing = route.params.data;
     const listName = route.params.listName;
-    
     const user = route.params.extraData
-    //1. add reader => comment, time, like, user
-    //2. if comment added => update 
-    //3. if liked it => update
+    const userEmail = route.params.extraData.email
+    const listener =()=>{
+        firebase.firestore().collection(listName).onSnapshot(snapshot=>{
+            let changes = snapshot.docChanges();
+            console.log(changes.type)
+        })
+        getData()
+    }
+    const addLike=()=>{
+        if(currentLike.indexOf(userEmail) != -1){
+            firebase.firestore().collection(listName).doc(writing.title).update({
+                like: firebase.firestore.FieldValue.arrayRemove(userEmail)
+            })
+        }
+        else{
+            firebase.firestore().collection(listName).doc(writing.title)
+                .update({
+                    like: firebase.firestore.FieldValue.arrayUnion(userEmail)
+                })
+        }
+        listener()
+        //없으면 추가
+    }
     const onSubmit = () => {
         const comment = {
             user,
@@ -39,6 +54,7 @@ const seeWriting = ({ navigation, route }) => {
                 console.error("Error updating document: ", error);
             });
         setText("");
+        listener()
     };
 
     //가져오기
@@ -47,6 +63,8 @@ const seeWriting = ({ navigation, route }) => {
         dbCom.get().then((doc) => {
                 const data = doc.data().comments
                 setAllComment(data);
+                const likeList = doc.data().like
+                setCurrentLike(likeList);
         })
     }
     useEffect(() => {
@@ -81,34 +99,48 @@ const seeWriting = ({ navigation, route }) => {
     return (
         <>
         <ScrollView style={style.container}>
-            <Card style={style.box} >
-                <CardItem>
-                    <Text style={style.title}> {writing.title}</Text>
-                </CardItem>
-                <CardItem cardBody>
-                    <Text style={style.content}> {writing.content} </Text>
-                </CardItem>
-                <CardItem>
-                    <Left>
-                        <Button>
-                            <Feather name='heart' style={{ color: 'black', marginRight: 5 }} />
-                        </Button>
-                        <Text>{writing.like}</Text>
-                        <Feather name='heart' style={{ color: 'black', marginRight: 5 }} />
-                        <Text>count</Text>
-                    </Left>
-                </CardItem>
-            </Card>
+                <Card style={style.box}>
+                    <CardItem>
+                        <Left>
+                            <Thumbnail source={{uri:writing.creator.url}} />
+                            <Body>
+                                <Text>{writing.creator.fullName}</Text>
+                            </Body>
+                        </Left>
+                    </CardItem>
+                    <CardItem>
+                        <Text style={style.title}> {writing.title}</Text>
+                    </CardItem>
+                    <CardItem>
+                        <Text style={style.content}> {writing.content} </Text>
+                    </CardItem>
+                    <CardItem style={{ height: 45 }}>
+                        <Left>
+                            <TouchableOpacity onPress={() => { addLike() }}>
+                                <Ionicons name='ios-heart' style={{ color: 'black', marginRight: 5 }} />
+                            </TouchableOpacity>
+                            <Text>{writing.like.length}</Text>
+                            <Ionicons name="chatbubble" style={{ color: 'black', marginRight: 5 }} />
+                            <Text>{writing.comments.length}</Text>
+                        </Left>
+                    </CardItem>
+                </Card>
                 {
                     allcomment.map((comment) => (
-                            <Card style={style.box} >
-                                <CardItem>
-                                    <Text style={style.title}> {comment.user.fullName} </Text>
-                                </CardItem>
-                                <CardItem cardBody>
-                                    <Text style={style.content}> {comment.text} </Text>
-                                </CardItem>
-                            </Card>
+                        <Card style={style.box} >
+                            <CardItem>
+                                <Left>
+                                    <Thumbnail source={{uri:comment.user.url}} />
+                                    <Body>
+                                        <Text style={style.title}> {comment.user.fullName} </Text>
+                                    </Body>
+                                </Left>
+                            </CardItem>
+
+                            <CardItem cardBody>
+                                <Text style={style.content}> {comment.text} </Text>
+                            </CardItem>
+                        </Card>
                     ))
                 }
         </ScrollView>
@@ -131,7 +163,7 @@ const style = StyleSheet.create({
     },
     headerTitle: {
         fontFamily: 'EBS훈민정음새론SB',
-        marginTop: 15,
+        marginTop: '5%',
         fontSize: 20,
         alignContent: "flex-start",
 
@@ -191,3 +223,4 @@ const style = StyleSheet.create({
     }
 });
 export default seeWriting;
+

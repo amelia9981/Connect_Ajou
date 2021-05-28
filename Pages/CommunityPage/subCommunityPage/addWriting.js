@@ -1,11 +1,12 @@
 import React, { Component, useEffect, useState } from 'react';
 import { ScrollView, View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
 import {  Left, Header, Form} from 'native-base';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import {firebase} from '../../../Utilities/Firebase';
 //디자인만 이쁘게 수정하기!! 
 
 const AddWriting = ({ navigation, route}) => {
+    const [isReRender,setReRender] = useState(0);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [Writing,setWriting] = useState({title,content});
@@ -20,7 +21,7 @@ const AddWriting = ({ navigation, route}) => {
             content : content,
             creator: user,
             createdAt: Date.now(),
-            like:0,
+            like:[],
             comments:[]
         })
         .then(() => {

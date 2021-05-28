@@ -136,7 +136,7 @@ class HomeTab extends Component {
 
         <View style={style.community}>
           <View style={style.containerCommunity}>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Random Chatting" }) }}>
               <Ionicons
                 name="chatbubbles"
                 size={24}
@@ -144,7 +144,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Random Chatting</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "School Events" }) }}>
               <MaterialIcons
                 name="event"
                 size={24}
@@ -152,7 +152,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>School Events</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Near Campus" }) }}>
               <FontAwesome5
                 name="school"
                 size={24}
@@ -160,7 +160,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Near Campus</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Vege Restaurant" }) }}>
               <Ionicons
                 name="restaurant"
                 size={24}
@@ -168,7 +168,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Vege Restaurant</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Halal Restaurant" }) }}>
               <Ionicons
                 name="restaurant-outline"
                 size={24}
@@ -176,7 +176,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Halal Restaurant</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Sports Mate" }) }}>
               <MaterialIcons
                 name="sports-soccer"
                 size={24}
@@ -184,7 +184,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Sports Mate</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Finding Party Mates" }) }}>
               <MaterialCommunityIcons
                 name="party-popper"
                 size={24}
@@ -192,7 +192,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Finding Party Mates</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Finding Roommates" }) }}>
               <FontAwesome5
                 name="user-friends"
                 size={24}
@@ -200,7 +200,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Finding Roommates</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { navigation.navigate("ViewList", {name: "Language Exchange"})}}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", {name: "Language Exchange"})}}>
               <FontAwesome
                 name="language"
                 size={24}
@@ -208,11 +208,11 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Language Exchange</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Major Study" }) }}>
               <Entypo name="pencil" size={24} style={style.communityIcon} />
               <Text style={style.communityContent}>Major Study</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper}>
+            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Other Hobby" }) }}>
               <MaterialCommunityIcons
                 name="account-search"
                 size={24}

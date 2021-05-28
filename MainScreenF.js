@@ -3,7 +3,7 @@ import { StyleSheet, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 // 하단 탭에 들어갈 컴포넌트들
-import HomeTab from "./Pages/HomeTabF";
+import HomeTab from "./Pages/handleHome";
 import CommunityMain from "./Pages/CommunityMain";
 import TimetableTab from "./Pages/TimetableTab";
 import AlarmTab from "./Pages/Alarm";
@@ -142,13 +142,14 @@ function MainScreen(props) {
     >
       <Tab.Screen
         name="Home"
+        component={HomeTab}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="home" size={24} color={color} />
           ),
         }}
+        initialParams={{ extraData: user, courseName:courseName }}
       >
-        {(props) => <HomeTab {...props} courseName={courseName} />}
       </Tab.Screen>
       <Tab.Screen
         name="Community"
