@@ -6,16 +6,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { Feather, AntDesign } from "@expo/vector-icons";
 import ProfilePicture from "react-native-profile-picture";
 import { firebase } from "../../Utilities/Firebase";
 import { useNavigation } from "@react-navigation/core";
-
-ChatList["navigationOptions"] = (screenProps) => ({
-  tabBarIcon: ({ tintColor }) => (
-    <Feather name="layout" size={24} style={{ color: tintColor }} />
-  ),
-});
 
 function ChatList(props) {
   const user = props.extraData;
@@ -36,10 +29,9 @@ function ChatList(props) {
             docSnapshot.data().target.email == user.email
           ) {
             let thread = {
-              _id: docSnapshot.id,
+              _id: docSnapshot.data().target.email,
               ...docSnapshot.data(),
             };
-            console.log(thread);
             threads.push(thread);
           }
         });
@@ -50,27 +42,6 @@ function ChatList(props) {
       unsubscribe();
     };
   }, []);
-
-  // const handlePlusButton = () => {
-  //   firebase
-  //     .firestore()
-  //     .collection("chat")
-  //     .add({
-  //       name: "Shay",
-  //       latestMessage: {
-  //         text: "",
-  //         createdAt: new Date().getTime(),
-  //       },
-  //       user: user,
-  //     })
-  //     .then((docRef) => {
-  //       docRef.collection("messages").add({
-  //         text: "Your chat room has been created.",
-  //         createdAt: new Date().getTime(),
-  //         system: true,
-  //       });
-  //     });
-  // };
 
   const calculateTime = (messageTime) => {
     const current = new Date().getTime();
@@ -123,14 +94,6 @@ function ChatList(props) {
 
   return (
     <View style={style.container}>
-      {/* <TouchableOpacity
-        style={{ alignSelf: "left", padding: 10 }}
-        onPress={() => {
-          handlePlusButton();
-        }}
-      >
-        <AntDesign name="plus" size={24} color="black" />
-      </TouchableOpacity> */}
       <FlatList
         data={threads}
         renderItem={renderItem}

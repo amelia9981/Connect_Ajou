@@ -5,7 +5,6 @@ import { firebase } from "../../Utilities/Firebase";
 
 function Chat({ route }) {
   const thread = route.params.thread;
-  console.log(thread);
   const user = route.params.user;
   const [messages, setMessages] = useState([]);
 
@@ -30,7 +29,6 @@ function Chat({ route }) {
               name: docSnapshot.data().user.fullName,
             };
           }
-
           return data;
         });
 
