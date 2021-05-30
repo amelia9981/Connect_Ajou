@@ -199,16 +199,7 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Finding Roommates</Text>
             </TouchableOpacity>
-<<<<<<< HEAD
             <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", {name: "Language Exchange"})}}>
-=======
-            <TouchableOpacity
-              style={style.contentWrapper}
-              onPress={() => {
-                navigation.navigate("ViewList", { name: "Language Exchange" });
-              }}
-            >
->>>>>>> 6833e3cb010f233c0c389ba3d2d844b3f3ea86f0
               <FontAwesome
                 name="language"
                 size={24}

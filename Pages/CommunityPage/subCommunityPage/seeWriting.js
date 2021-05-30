@@ -1,19 +1,38 @@
 import React, { Component, useState, useEffect} from 'react';
-import { ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert} from 'react-native';
+import { ScrollView,View, Text, StyleSheet, TouchableOpacity, TextInput, Alert} from 'react-native';
 import { Card, Container,CardItem, Thumbnail, Body, Left, Right,  Icon } from 'native-base';
-import { Feather, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { firebase } from '../../../Utilities/Firebase';
 import { Button } from 'react-native-paper';
 import { Directions } from 'react-native-gesture-handler';
 
+//실시간 좋아요 업데이트 & 폰트들 정리
 const seeWriting = ({ navigation, route }) => {;
     const [text,setText] = useState("")
     const [allcomment,setAllComment] = useState([])
     const [currentLike,setCurrentLike] = useState([])
     const writing = route.params.data;
     const listName = route.params.listName;
-    const user = route.params.extraData
-    const userEmail = route.params.extraData.email
+    const [user, setUser] = useState({});
+    const [isReRendering,setReRendering]=useState(0);
+
+    useEffect(() => {
+        const curUserEmail = firebase.auth().currentUser.providerData[0].email;
+        const unsubscribe = firebase
+            .firestore()
+            .collection("users")
+            .doc(curUserEmail)
+            .onSnapshot((snapshot) => {
+                const getUser = snapshot.data();
+                setUser(getUser);
+            });
+        //getData();
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
     const listener =()=>{
         firebase.firestore().collection(listName).onSnapshot(snapshot=>{
             let changes = snapshot.docChanges();
@@ -22,15 +41,23 @@ const seeWriting = ({ navigation, route }) => {;
         getData()
     }
     const addLike=()=>{
-        if(currentLike.indexOf(userEmail) != -1){
+        if(currentLike.indexOf(user.email) != -1){
             firebase.firestore().collection(listName).doc(writing.title).update({
-                like: firebase.firestore.FieldValue.arrayRemove(userEmail)
+                like: firebase.firestore.FieldValue.arrayRemove(user.email)
+            })
+            .then(()=>{
+                setReRendering(isReRendering+1);
+                getData()
             })
         }
         else{
             firebase.firestore().collection(listName).doc(writing.title)
                 .update({
-                    like: firebase.firestore.FieldValue.arrayUnion(userEmail)
+                    like: firebase.firestore.FieldValue.arrayUnion(user.email)
+                })
+                .then(() => {
+                    setReRendering(isReRendering + 1);
+                    getData()
                 })
         }
         listener()
@@ -48,6 +75,7 @@ const seeWriting = ({ navigation, route }) => {;
             })
             .then(() => {
                 console.log("Document successfully updated!");
+                setReRendering(isReRendering + 1);
             })
             .catch((error) => {
                 // The document probably doesn't exist.
@@ -79,37 +107,31 @@ const seeWriting = ({ navigation, route }) => {;
             alignItems: "center",
             justifyContent: "center",
         },
-
         headerRight: () => (
-            //메세지 보내기 페이지로 이동
-            <Container style={{ flexDirection: 'row' }}>
-                <Button style={{}} onPress={()=>{}}>
-                    <MaterialCommunityIcons name="refresh" size={30} color="black" />
-                </Button>
-                <TouchableOpacity onPress={()=>{navigation.navigate("Chat", {receiver: writing.user})}}>
-                    <Feather name='message-square' size={30} />
+            <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity>
+                    <MaterialCommunityIcons name="refresh" size={25} style={{marginRight:10}}/>
                 </TouchableOpacity>
-                
-            </Container>
-            
+                <TouchableOpacity>
+                    <Feather name='message-square' size={25} />
+                </TouchableOpacity>
+            </View>
         ),
     });
-    //썸네일 추가 이미지 & 이름
-    //댓글 입력할 수 있는
+
+
     return (
         <>
         <ScrollView style={style.container}>
                 <Card style={style.box}>
                     <CardItem>
                         <Left>
-                            <Thumbnail source={{uri:writing.creator.url}} />
-                            <Body>
-                                <Text>{writing.creator.fullName}</Text>
+                            <Thumbnail style={{width:50,height:50}} source={{uri:writing.creator.url}} />
+                            <Body style={{flexDirection:'column'}}>
+                                <Text style={{ fontFamily:'EBS훈민정음새론L'}}> From : {writing.creator.fullName}</Text>
+                                <Text style={style.title}> Title:  {writing.title}</Text>
                             </Body>
                         </Left>
-                    </CardItem>
-                    <CardItem>
-                        <Text style={style.title}> {writing.title}</Text>
                     </CardItem>
                     <CardItem>
                         <Text style={style.content}> {writing.content} </Text>
@@ -117,10 +139,10 @@ const seeWriting = ({ navigation, route }) => {;
                     <CardItem style={{ height: 45 }}>
                         <Left>
                             <TouchableOpacity onPress={() => { addLike() }}>
-                                <Ionicons name='ios-heart' style={{ color: 'black', marginRight: 5 }} />
+                                <AntDesign name="hearto" size={15} style={{ color: 'red', marginRight: 5 }} />
                             </TouchableOpacity>
-                            <Text>{writing.like.length}</Text>
-                            <Ionicons name="chatbubble" style={{ color: 'black', marginRight: 5 }} />
+                            <Text style={{  marginRight: 5 }}>{writing.like.length}</Text>
+                            <MaterialCommunityIcons name="comment-outline" size={15} style={{ color: 'black', marginRight: 5 }} />
                             <Text>{writing.comments.length}</Text>
                         </Left>
                     </CardItem>
@@ -130,21 +152,22 @@ const seeWriting = ({ navigation, route }) => {;
                         <Card style={style.box} >
                             <CardItem>
                                 <Left>
-                                    <Thumbnail source={{uri:comment.user.url}} />
+                                    <Thumbnail style={{width:30,height:30, color:'#1E3D6B'}} source={{uri:comment.user.url}} />
                                     <Body>
-                                        <Text style={style.title}> {comment.user.fullName} </Text>
+                                        <Text style={{ fontFamily: 'EBS훈민정음새론L' }}> {comment.user.fullName} </Text>
                                     </Body>
                                 </Left>
                             </CardItem>
 
                             <CardItem cardBody>
-                                <Text style={style.content}> {comment.text} </Text>
+                                <Text style={style.content}> {'>'}{'>'} {comment.text} </Text>
                             </CardItem>
                         </Card>
                     ))
                 }
+                <Container style={{height:60}}></Container>
         </ScrollView>
-        <Container style={{flexDirection:'row'}}>
+            <Container style={{ flexDirection: 'row', backgroundColor: "#F6F8F8"}}>
                 <TextInput style={style.input_id} placeholder="Comment"
                     onChangeText={(text) => { setText(text)}}
                     value={text}
@@ -178,8 +201,9 @@ const style = StyleSheet.create({
     },
     title: {
         flex: 1,
-        fontFamily: "IBM-SB",
-        fontSize: 15,
+        fontFamily: "EBS훈민정음새론SB",
+        paddingTop:2,
+        fontSize: 20,
         color: "#3D3D3D",
     },
     headerButtonL: {
@@ -192,10 +216,11 @@ const style = StyleSheet.create({
     },
     content: {
         flex: 2,
-        paddingTop: "3%",
-        fontFamily: "IBMPlexSansKR-Regular",
-        fontSize: 13,
+        fontFamily: "Balloo2-SB",
+        fontSize: 15,
         color: "#3D3D3D",
+        paddingLeft:50,
+        paddingBottom:10
     }, 
     input_id: {
         fontFamily: "IBMPlexSansKR-Light",

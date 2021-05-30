@@ -1,16 +1,32 @@
 import React, { Component, useState, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Icon } from 'react-native';
-import { Feather, Ionicons } from '@expo/vector-icons';
-import { CardItem, Card, Left, Body, Thumbnail } from 'native-base';
+import { Feather, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { CardItem, Card, Left, Body, Thumbnail, Right } from 'native-base';
 import { firebase } from '../../../Utilities/Firebase';
 
-//하트수 표시 & 댓글수 표시
-//리스트보기
+//실시간 업데이트
 const viewList=({ navigation, route })=>{
     const [writing,setWriting] = useState([])
     const listName = route.params.name;
     const db = firebase.firestore().collection(listName)
-    const user = route.params.extraData
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const curUserEmail = firebase.auth().currentUser.providerData[0].email;
+        const unsubscribe = firebase
+            .firestore()
+            .collection("users")
+            .doc(curUserEmail)
+            .onSnapshot((snapshot) => {
+                const getUser = snapshot.data();
+                setUser(getUser);
+            });
+        //getData();
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
     const getData=()=>{
         db.get().then((querySnapshot)=>{
             querySnapshot.forEach(doc => {
@@ -33,7 +49,7 @@ const viewList=({ navigation, route })=>{
             <View style={{flexDirection:'row'}}>
                 <TouchableOpacity 
                     onPress={() => navigation.navigate('Search',{listName:listName})}>
-                    <Feather name='search' size={25}/>
+                    <Feather name='search' size={25} style={{ marginRight: 10 }}/>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.push('Add',{listName:listName})}>
@@ -49,19 +65,18 @@ const viewList=({ navigation, route })=>{
                     writing.map((writing) => (
                         <TouchableOpacity onPress={() => {navigation.push("See", {data : writing, listName:listName} )}}>
                             <Card style={style.box} >
-                                <CardItem>
+                                <CardItem style={{height:40}}>
                                     <Text style={style.title}> {writing.title} </Text>
                                 </CardItem>
-                                <CardItem>
+                                <CardItem style={{height:30}}>
                                     <Text style={style.content}> {writing.content} </Text>
                                 </CardItem>
-                    
-                                <CardItem style={{ height: 45 }}>
+                                <CardItem style={{ height: 40 }}>
                                     <Left>
-                                        <Ionicons name='ios-heart' size={10} style={{ color: 'black', marginRight: 5 }} />
-                                        <Text style={{ marginRight: 5, fontFamily:'IBMPlexSansKR-Light'}}>{writing.like.length}</Text>
-                                        <Ionicons name="chatbubble" size ={10} style={{ color: 'black', marginRight: 5 }} />
-                                        <Text style={{ marginRight: 5 }}>{writing.comments.length}</Text>
+                                        <AntDesign name="hearto" size={15} style={{ color: 'red', marginRight: 5 }} />
+                                        <Text style={{ marginRight: 5, fontFamily:'EBS훈민정음새론L'}}>{writing.like.length}</Text>
+                                        <MaterialCommunityIcons name="comment-outline" size ={15} style={{ color: 'black', marginRight: 5 }} />
+                                        <Text style={{ marginRight: 5, fontFamily:'EBS훈민정음새론L'}}>{writing.comments.length}</Text>
                                     </Left>
                                 </CardItem>
                             </Card>
@@ -86,17 +101,19 @@ const style = StyleSheet.create({
         alignContent: "flex-start",
 
     },
+    item:{
+    },
     box: {
         backgroundColor: "#FFFFFF",
         borderColor: "#D7DDE2",
         borderWidth: 1,
         borderRadius: 10,
         marginBottom: "0.5%",
-        padding: "1%",
+        paddingLeft:'2%',
     },
     title: {
         flex: 1,
-        fontFamily: "IBM-SB",
+        fontFamily: "EBS훈민정음새론SB",
         fontSize: 15,
         color: "#3D3D3D",
     },
@@ -109,12 +126,13 @@ const style = StyleSheet.create({
         marginRight: '5%',
     },
     content: {
-        flex: 2,
-        paddingTop: "3%",
+        flex: 1,
+        paddingTop: "1%",
         fontFamily: "IBMPlexSansKR-Regular",
         fontSize: 13,
         color: "#3D3D3D",
-        textAlign:'left'
+        textAlign:'left',
+        paddingLeft: '2%'
     },
 });
 export default viewList;

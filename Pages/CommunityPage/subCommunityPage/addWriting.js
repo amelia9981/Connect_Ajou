@@ -3,15 +3,29 @@ import { ScrollView, View, Text, TextInput, StyleSheet, Button, TouchableOpacity
 import {  Left, Header, Form} from 'native-base';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import {firebase} from '../../../Utilities/Firebase';
-//디자인만 이쁘게 수정하기!! 
 
 const AddWriting = ({ navigation, route}) => {
-    const [isReRender,setReRender] = useState(0);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [Writing,setWriting] = useState({title,content});
     const listName=route.params.listName;
-    const user = route.params.extraData
+    const [user, setUser] = useState({});
+    useEffect(() => {
+        const curUserEmail = firebase.auth().currentUser.providerData[0].email;
+        const unsubscribe = firebase
+            .firestore()
+            .collection("users")
+            .doc(curUserEmail)
+            .onSnapshot((snapshot) => {
+                const getUser = snapshot.data();
+                setUser(getUser);
+            });
+        //getData();
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
     
     const onSubmit = async (event) => {
         firebase
@@ -56,13 +70,13 @@ const AddWriting = ({ navigation, route}) => {
         <KeyboardAvoidingView style={{ padding: 10 }}>
             <Form>
             <TextInput
-                style={{ height: 40 }}
+                style={{ height: 20 ,paddingLeft:10}}
                 placeholder="Title"
                 onChangeText={(text) => setTitle(text)}
                 value={title}
             />
             <TextInput
-                style={{height:300}}
+                style={{height:300, paddingLeft:10}}
                 placeholder="Content"
                 onChangeText={(text) => setContent(text)}
                 value={content}

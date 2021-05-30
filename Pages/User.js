@@ -13,6 +13,7 @@ import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../Utilities/Firebase";
 import * as Update from "expo-updates";
+import { Input } from "native-base";
 
 function UserTab(props) {
   const user = props.extraData;
@@ -69,6 +70,51 @@ function UserTab(props) {
     const ref = firebase.storage().ref().child(imageName);
     return ref.put(blob);
   };
+  const setNameAno =() =>{
+    Alert.alert(
+      "Do you want to set your name as Anonymous?",
+      "",
+      [
+        {
+          text:"No",
+          onPress:() =>console.log("NO"),
+        },
+        {//input 받아야하는데??hmmm
+          text:"Yes",
+          onPress:()=>{
+            usersRef.update({
+              fullName:"Anonymous",
+              picture:false,
+              url:""
+            })
+            .then(() => {
+              setReRendering(isReRendering + 1);
+            })
+          }
+        }
+      ]
+    )
+  }
+  const setNameFull = () => {
+    Alert.alert(
+      "Do you want to set your name?",
+      "",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("NO"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            usersRef.update({
+              fullName: "Name",
+            })
+          }
+        }
+      ]
+    )
+  }
 
   const setProfileImgToDefault = () => {
     Alert.alert(
@@ -179,11 +225,12 @@ function UserTab(props) {
 
       <View style={style.box_2}>
         <Text style={style.box_title}>Account</Text>
-        <TouchableOpacity style={style.box_content_wrapper}>
-          <Text style={style.box_content}>Change password</Text>
+        <TouchableOpacity style={style.box_content_wrapper} onPress={() => setNameFull()}>
+          <Text style={style.box_content}>Change Name to your own name</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={style.box_content_wrapper}>
-          <Text style={style.box_content}>Change name</Text>
+        <TouchableOpacity style={style.box_content_wrapper}
+        onPress={()=>setNameAno()}>
+          <Text style={style.box_content}>Change Name to Anonymous</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={style.box_content_wrapper}

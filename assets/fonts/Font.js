@@ -9,6 +9,9 @@ export const Fonts=()=> Font.loadAsync({
     'EBS훈민정음새론SB': require('./EBS훈민정음새론SB.ttf'),
     'IBMPlexSansKR-Light': require('./IBMPlexSansKR-Light.ttf'),
     'IBMPlexSansKR-Regular': require('./IBMPlexSansKR-Regular.ttf'),
+    'Balloo2-SB':require('./Baloo2-SemiBold.ttf'),
+    'Balloo2-R': require('./Baloo2-Regular.ttf'),
+
 });
 export default function(){
     const [fontLoad, setFontLoad] = useState(false);

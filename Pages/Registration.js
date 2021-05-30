@@ -21,7 +21,6 @@ export default function Registration({ navigation }) {
   const onFooterLinkPress = () => {
     navigation.navigate("LogIn");
   };
-
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
       alert("Passwords don't match.");

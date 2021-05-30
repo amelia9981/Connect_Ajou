@@ -1,27 +1,52 @@
 import React, { Component, useState, useEffect } from 'react';
-import {TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-
-import { Feather, Ionicons} from '@expo/vector-icons';
+import { TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { Feather, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Body, Container, Header, Left, Right } from 'native-base';
+import { Body, CardItem, Card, Container, Header, Left, Right } from 'native-base';
+
 import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view';
 import { firebase } from '../../../Utilities/Firebase';
 
 const SearchWriting = ({ navigation, route }) => {
-    const user = route.params.extraData
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const curUserEmail = firebase.auth().currentUser.providerData[0].email;
+        const unsubscribe = firebase
+            .firestore()
+            .collection("users")
+            .doc(curUserEmail)
+            .onSnapshot((snapshot) => {
+                const getUser = snapshot.data();
+                setUser(getUser);
+            });
+        //getData();
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
     const [search,setSearch] = useState("")
     const listName = route.params.listName;
     const [isSearch,setisSearch] = useState(false);
     const listRf = firebase.firestore().collection(listName)
     const [writing,setWriting] = useState([])
-    const getData = () => {
-        const data = listRf.where("title","==",search).get()
-        setWriting(data)
-    }
-    useEffect(() => {
-        getData();
-    }, []);
 
+    const fetchWriting = () => {
+        listRf
+            .where('title', '==', search)
+            .get()
+            .then((snapshot) => {
+                writing = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const id = doc.id;
+                    return { id, ...data }
+                });
+                setWriting(writing);
+            })
+        
+    }
+ 
     navigation.setOptions({
         headerShown:false
     });
@@ -41,33 +66,37 @@ const SearchWriting = ({ navigation, route }) => {
                         value={search}/>
                </Body>
                <Right>
-                    <TouchableOpacity onPress={() => {setisSearch(true)}}>
+                    <TouchableOpacity onPress={fetchWriting()}>
                         <Feather name='search' size={30} />
                     </TouchableOpacity>
                </Right>
            </Header>
        </KeyboardAwareScrollView>
-            {isSearch ? writing.map((writing) => (
-                <TouchableOpacity onPress={() => { navigation.push("See", { data: writing, listName: listName }) }}>
-                    <Card style={style.box} >
-                        <CardItem>
-                            <Text style={style.title}> {writing.title} </Text>
-                        </CardItem>
-                        <CardItem cardBody>
-                            <Text style={style.content}> {writing.content} </Text>
-                        </CardItem>
-                        <CardItem style={{ height: 45 }}>
-                            <Left>
-                                <Ionicons name='ios-heart' style={{ color: 'black', marginRight: 5 }} />
-                                <Text>{writing.like.length}</Text>
-                                <Ionicons name="chatbubble" style={{ color: 'black', marginRight: 5 }} />
-                                <Text>{writing.comments.length}</Text>
-                            </Left>
-                        </CardItem>
-                    </Card>
-                </TouchableOpacity>
-            ))
-       :null}
+       <ScrollView>
+                {
+                    writing.map((writing) => (
+                        <TouchableOpacity onPress={() => { navigation.push("See", { data: writing, listName: listName }) }}>
+                            <Card style={style.box} >
+                                <CardItem style={{ height: 40 }}>
+                                    <Text style={style.title}> {writing.title} </Text>
+                                </CardItem>
+                                <CardItem style={{ height: 30 }}>
+                                    <Text style={style.content}> {writing.content} </Text>
+                                </CardItem>
+                                <CardItem style={{ height: 40 }}>
+                                    <Left>
+                                        <AntDesign name="hearto" size={15} style={{ color: 'red', marginRight: 5 }} />
+                                        <Text style={{ marginRight: 5, fontFamily: 'EBS훈민정음새론L' }}>{writing.like.length}</Text>
+                                        <MaterialCommunityIcons name="comment-outline" size={15} style={{ color: 'black', marginRight: 5 }} />
+                                        <Text style={{ marginRight: 5, fontFamily: 'EBS훈민정음새론L' }}>{writing.comments.length}</Text>
+                                    </Left>
+                                </CardItem>
+                            </Card>
+                        </TouchableOpacity>
+                    ))
+                }
+       </ScrollView>
+            
     </>
     )
 }
