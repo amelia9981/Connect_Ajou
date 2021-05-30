@@ -35,7 +35,6 @@ class HomeTab extends Component {
     for (var row = 0; row < 7; row++) {
       let courseName = this.props.courseName;
       temp_array.push(courseName[row][this.currentDay]);
-      console.log(courseName[row][this.currentDay]);
     }
     if (temp_array.size) {
       this.setState({
@@ -81,7 +80,7 @@ class HomeTab extends Component {
           showsHorizontalScrollIndicator={false}
           style={{ flexDirection: "row" }}
         >
-          <View style={style.preview}>
+          <ScrollView style={style.preview} nestedScrollEnabled={true}>
             <Text style={style.scrollTitle}>Today's Lunch Menu</Text>
             <Text style={style.scrollContent}>
               해물짬뽕&면사리(hot noodles soup),{" "}
@@ -102,8 +101,8 @@ class HomeTab extends Component {
               <Text style={style.halal}>Halal: Orange,</Text>{" "}
               <Text style={style.both}>Both: Blue</Text>
             </Text>
-          </View>
-          <View style={style.preview}>
+          </ScrollView>
+          <ScrollView style={style.preview} nestedScrollEnabled={true}>
             <Text style={style.scrollTitle}>Today's Dinner Menu</Text>
             <Text style={style.scrollContent}>
               <Text style={style.halal}>육개장(spicy beef soup)</Text>,{" "}
@@ -122,7 +121,7 @@ class HomeTab extends Component {
               <Text style={style.halal}>Halal: Orange,</Text>{" "}
               <Text style={style.both}>Both: Blue</Text>
             </Text>
-          </View>
+          </ScrollView>
           <TouchableOpacity
             style={style.preview}
             onPress={() => this.props.navigation.navigate("Timetable")}
@@ -200,7 +199,16 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Finding Roommates</Text>
             </TouchableOpacity>
+<<<<<<< HEAD
             <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", {name: "Language Exchange"})}}>
+=======
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                navigation.navigate("ViewList", { name: "Language Exchange" });
+              }}
+            >
+>>>>>>> 6833e3cb010f233c0c389ba3d2d844b3f3ea86f0
               <FontAwesome
                 name="language"
                 size={24}

@@ -78,7 +78,6 @@ function TimetableTab(props) {
   const userRef = firebase.firestore().collection("users").doc(user.email);
   const [myCourses, setMyCourses] = useState([]);
   let array = [];
-  let key = -1;
 
   useEffect(() => {
     const unsubscribe = firebase
@@ -588,6 +587,7 @@ function TimetableTab(props) {
               onPress={() =>
                 handlePickCourse(course.schedule, course.code, course.name)
               }
+              key={course.code}
             >
               <CourseItem
                 name={course.name}
@@ -595,7 +595,6 @@ function TimetableTab(props) {
                 schedule={course.schedule}
                 credits={course.credits}
                 code={course.code}
-                key={key + 1}
               />
             </TouchableOpacity>
           ))}

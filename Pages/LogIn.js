@@ -1,18 +1,14 @@
-import React, { Component, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TextInput,
-  Button,
-  KeyboardAvoidingView,
-} from "react-native";
+import React, { Component, useEffect, useState } from "react";
+import { StyleSheet, View, Image, TextInput, Text } from "react-native";
 import { firebase } from "../Utilities/Firebase";
+import { useNavigation } from "@react-navigation/core";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation();
+
   const onLoginPress = () => {
     firebase
       .auth()
@@ -20,15 +16,11 @@ export default function LoginScreen({ navigation }) {
       .then((response) => {
         const usersRef = firebase.firestore().collection("users");
         usersRef
-          .doc(email)
+          .doc(response.user.providerData[0].email)
           .get()
           .then((firestoreDocument) => {
-            /*if(!firestoreDocument.exists){
-            alert("User does not exist anymore.")
-            return;
-          }*/
-            const user = firestoreDocument.data();
-            navigation.navigate("Main", { user });
+            // const user = firestoreDocument.data();
+            navigation.navigate("Main");
           })
           .catch((error) => {
             alert(error);
@@ -38,6 +30,7 @@ export default function LoginScreen({ navigation }) {
         alert(error);
       });
   };
+
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/logo1.png")} />
@@ -56,14 +49,14 @@ export default function LoginScreen({ navigation }) {
         value={password}
       />
       <View style={styles.button_register}>
-        <Button
-          title="Register"
-          color="#FFFFFF"
-          onPress={() => navigation.replace("Registration")}
-        />
+        <TouchableOpacity onPress={() => navigation.replace("Registration")}>
+          <Text style={styles.button_text}>Register</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.button_login}>
-        <Button title="Login" color="#FFFFFF" onPress={() => onLoginPress()} />
+        <TouchableOpacity onPress={() => onLoginPress()}>
+          <Text style={styles.button_text}>Login</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -124,6 +117,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 140,
     height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
   button_login: {
     fontFamily: "IBMPlexSansKR-Regular",
@@ -146,5 +142,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 140,
     height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  button_text: {
+    justifyContent: "center",
+    color: "#FFFFFF",
+    fontSize: 17,
   },
 });

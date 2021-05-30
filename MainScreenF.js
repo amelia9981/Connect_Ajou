@@ -70,7 +70,7 @@ let matchTime = (time) => {
 };
 
 function MainScreen(props) {
-  const user = props.extraData;
+  const [user, setUser] = useState({});
   let selected_array = Array.from({ length: 8 }, () =>
     Array(5).fill("#FFFFFF")
   );
@@ -79,13 +79,15 @@ function MainScreen(props) {
   const [courseName, setCourseName] = useState(course_array);
 
   useEffect(() => {
+    const curUserEmail = firebase.auth().currentUser.providerData[0].email;
     const unsubscribe = firebase
       .firestore()
       .collection("users")
-      .doc(user.email)
+      .doc(curUserEmail)
       .onSnapshot((snapshot) => {
         const getUser = snapshot.data();
-        if (!getUser.myCourses.size) {
+        setUser(getUser);
+        if (!getUser.myCourses.length) {
           return () => {
             unsubscribe();
           };
