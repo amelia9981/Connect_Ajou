@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Icon } from 'react-native';
+import { RefreshControl,View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Icon } from 'react-native';
 import { Feather, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { CardItem, Card, Left, Body, Thumbnail, Right } from 'native-base';
 import { firebase } from '../../../Utilities/Firebase';
@@ -10,6 +10,7 @@ const viewList=({ navigation, route })=>{
     const listName = route.params.name;
     const db = firebase.firestore().collection(listName)
     const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const curUserEmail = firebase.auth().currentUser.providerData[0].email;
@@ -35,6 +36,18 @@ const viewList=({ navigation, route })=>{
             });
         })
     }
+    const onRefresh = React.useCallback(() => {
+        setLoading(true);
+        setWriting([])
+        db.get().then((querySnapshot) => {
+            querySnapshot.forEach(doc => {
+                const data = doc.data()
+                if (writing.indexOf(data) == -1) {
+                    setWriting((prev) => [data, ...prev]);
+                }
+            });
+        }).then(() => setLoading(false));
+    }, []);
     useEffect(() => {
         getData();
     }, []);        
@@ -60,7 +73,13 @@ const viewList=({ navigation, route })=>{
     });
         
     return(
-        <ScrollView style={style.container}>
+        <ScrollView style={style.container} 
+            refreshControl={
+            <RefreshControl
+                refreshing={loading}
+                onRefresh={onRefresh}
+            />
+        }>
                 {
                     writing.map((writing) => (
                         <TouchableOpacity onPress={() => {navigation.push("See", {data : writing, listName:listName} )}}>

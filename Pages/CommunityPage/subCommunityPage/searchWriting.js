@@ -46,6 +46,7 @@ const SearchWriting = ({ navigation, route }) => {
                     setWriting((prev) => [data, ...prev]);
                 });
             });
+        
         setisSearch(false);
     }
     

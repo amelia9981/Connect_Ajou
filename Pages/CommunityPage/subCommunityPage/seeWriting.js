@@ -218,9 +218,9 @@ const seeWriting = ({ navigation, route }) => {;
                             <TouchableOpacity onPress={() => { addLike() }}>
                                 <AntDesign name="hearto" size={15} style={{ color: 'red', marginRight: 5 }} />
                             </TouchableOpacity>
-                            <Text style={{  marginRight: 5 }}>{writing.like.length}</Text>
+                            <Text style={{  marginRight: 5 }}>{currentLike.length}</Text>
                             <MaterialCommunityIcons name="comment-outline" size={15} style={{ color: 'black', marginRight: 5 }} />
-                            <Text>{writing.comments.length}</Text>
+                            <Text>{allcomment.length}</Text>
                         </Left>
                     </CardItem>
                 </Card>
