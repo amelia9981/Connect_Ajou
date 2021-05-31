@@ -86,7 +86,7 @@ const seeWriting = ({ navigation, route }) => {;
     };
 
     //가져오기
-    const getData = () => {
+    function getData(){
         const dbCom = firebase.firestore().collection(listName).doc(writing.title)       
         dbCom.get().then((doc) => {
                 const data = doc.data().comments

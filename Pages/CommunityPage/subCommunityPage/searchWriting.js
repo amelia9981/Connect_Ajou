@@ -1,5 +1,6 @@
 import React, { Component, useState, useEffect } from 'react';
 import { TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
+
 import { Feather, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Body, CardItem, Card, Container, Header, Left, Right } from 'native-base';
@@ -33,27 +34,31 @@ const SearchWriting = ({ navigation, route }) => {
     const [writing,setWriting] = useState([])
 
     const fetchWriting = () => {
+        if(writing){
+            setWriting([]);
+        }
         listRf
             .where('title', '==', search)
             .get()
-            .then((snapshot) => {
-                writing = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const id = doc.id;
-                    return { id, ...data }
+            .then((querySnapshot) => {
+                querySnapshot.forEach(doc => {
+                    const data = doc.data()
+                    setWriting((prev) => [data, ...prev]);
                 });
-                setWriting(writing);
-            })
-        
+            });
+        setisSearch(false);
     }
- 
+    
+    useEffect(() => {
+        fetchWriting();
+    }, []);
+
     navigation.setOptions({
         headerShown:false
     });
     console.log(writing)
     return (
         <>
-       <KeyboardAwareScrollView>
             <Header style={{ backgroundColor: 'white', borderColor:"#D7DDE2"}}>
                <Left>
                     <TouchableOpacity onPress={() => { navigation.goBack() }}>
@@ -66,35 +71,33 @@ const SearchWriting = ({ navigation, route }) => {
                         value={search}/>
                </Body>
                <Right>
-                    <TouchableOpacity onPress={fetchWriting()}>
+                    <TouchableOpacity onPress={()=>{fetchWriting();setisSearch(true)}}>
                         <Feather name='search' size={30} />
                     </TouchableOpacity>
                </Right>
            </Header>
-       </KeyboardAwareScrollView>
-       <ScrollView>
-                {
-                    writing.map((writing) => (
-                        <TouchableOpacity onPress={() => { navigation.push("See", { data: writing, listName: listName }) }}>
-                            <Card style={style.box} >
-                                <CardItem style={{ height: 40 }}>
-                                    <Text style={style.title}> {writing.title} </Text>
-                                </CardItem>
-                                <CardItem style={{ height: 30 }}>
-                                    <Text style={style.content}> {writing.content} </Text>
-                                </CardItem>
-                                <CardItem style={{ height: 40 }}>
-                                    <Left>
-                                        <AntDesign name="hearto" size={15} style={{ color: 'red', marginRight: 5 }} />
-                                        <Text style={{ marginRight: 5, fontFamily: 'EBS훈민정음새론L' }}>{writing.like.length}</Text>
-                                        <MaterialCommunityIcons name="comment-outline" size={15} style={{ color: 'black', marginRight: 5 }} />
-                                        <Text style={{ marginRight: 5, fontFamily: 'EBS훈민정음새론L' }}>{writing.comments.length}</Text>
-                                    </Left>
-                                </CardItem>
-                            </Card>
-                        </TouchableOpacity>
-                    ))
-                }
+            <ScrollView style={style.container}>
+            {isSearch? writing.map((writing) => (
+                <TouchableOpacity onPress={() => { navigation.push("See", { data: writing, listName: listName }) }}>
+                    <Card style={style.box} >
+                        <CardItem style={{ height: 40 }}>
+                            <Text style={style.title}> {writing.title} </Text>
+                        </CardItem>
+                        <CardItem style={{ height: 30 }}>
+                            <Text style={style.content}> {writing.content} </Text>
+                        </CardItem>
+                        <CardItem style={{ height: 40 }}>
+                            <Left>
+                                <AntDesign name="hearto" size={15} style={{ color: 'red', marginRight: 5 }} />
+                                <Text style={{ marginRight: 5, fontFamily: 'EBS훈민정음새론L' }}>{writing.like.length}</Text>
+                                <MaterialCommunityIcons name="comment-outline" size={15} style={{ color: 'black', marginRight: 5 }} />
+                                <Text style={{ marginRight: 5, fontFamily: 'EBS훈민정음새론L' }}>{writing.comments.length}</Text>
+                            </Left>
+                        </CardItem>
+                    </Card>
+                </TouchableOpacity>
+            ))
+       :null}
        </ScrollView>
             
     </>
@@ -103,7 +106,6 @@ const SearchWriting = ({ navigation, route }) => {
 
 const style = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: "#F6F8F8",
     },
     header: {
@@ -126,7 +128,7 @@ const style = StyleSheet.create({
     },
     title: {
         flex: 1,
-        fontFamily: "IBM-SB",
+        fontFamily: "EBS훈민정음새론SB",
         fontSize: 15,
         color: "#3D3D3D",
     },
@@ -139,11 +141,13 @@ const style = StyleSheet.create({
         marginRight: '5%',
     },
     content: {
-        flex: 2,
-        paddingTop: "3%",
+        flex: 1,
+        paddingTop: "1%",
         fontFamily: "IBMPlexSansKR-Regular",
         fontSize: 13,
         color: "#3D3D3D",
+        textAlign: 'left',
+        paddingLeft: '2%'
     },
 });
 export default SearchWriting;
