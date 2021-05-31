@@ -85,6 +85,83 @@ const seeWriting = ({ navigation, route }) => {;
         listener()
     };
 
+    const moveToChat = async (commentAuthor) => {
+      let thread = {};
+      if (commentAuthor.email !== user.email) {
+        firebase
+          .firestore()
+          .collection("chat")
+          .onSnapshot((snapshot) => {
+            snapshot.docs.map((docSnapshot) => {
+              if (docSnapshot.data().target.email == commentAuthor.email) {
+                thread = {
+                  _id: docSnapshot.data().target.email,
+                  ...docSnapshot.data(),
+                };
+                navigation.navigate("Alarm", {
+                  screen: "Message",
+                  params: {
+                    screen: "Chat",
+                    params: { thread: thread, user: user },
+                  },
+                });
+                return;
+              }
+            });
+            if (
+              Object.keys(thread).length === 0 &&
+              thread.constructor === Object
+            ) {
+              thread = {
+                latestMessage: {
+                  text: "",
+                  createdAt: new Date().getTime(),
+                },
+                name: commentAuthor.fullName,
+                target: {
+                  email: commentAuthor.email,
+                },
+                user: user,
+              };
+  
+              firebase
+                .firestore()
+                .collection("chat")
+                .doc(commentAuthor.email)
+                .set(thread, { merge: true });
+  
+              firebase
+                .firestore()
+                .collection("chat")
+                .doc(commentAuthor.email)
+                .collection("messages")
+                .add({
+                  text: "Your chat room has been created.",
+                  createdAt: new Date().getTime(),
+                  system: true,
+                });
+  
+              navigation.navigate("Alarm", {
+                screen: "Message",
+                params: {
+                  screen: "Chat",
+                  params: {
+                    thread: {
+                      _id: commentAuthor.email,
+                      ...thread,
+                    },
+                    user: user,
+                  },
+                },
+              });
+            }
+            return;
+          });
+      } else {
+        navigation.navigate("User");
+      }
+    };
+
     //가져오기
     function getData(){
         const dbCom = firebase.firestore().collection(listName).doc(writing.title)       
@@ -152,7 +229,9 @@ const seeWriting = ({ navigation, route }) => {;
                         <Card style={style.box} >
                             <CardItem>
                                 <Left>
+                                  <TouchableOpacity onPress={() => {moveToChat(comment.user)}}>
                                     <Thumbnail style={{width:30,height:30, color:'#1E3D6B'}} source={{uri:comment.user.url}} />
+                                  </TouchableOpacity>
                                     <Body>
                                         <Text style={{ fontFamily: 'EBS훈민정음새론L' }}> {comment.user.fullName} </Text>
                                     </Body>
