@@ -14,6 +14,8 @@ import * as Notifications from "expo-notifications";
 import { LogBox } from "react-native";
 
 LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreLogs(["Warning: ..."]);
+LogBox.ignoreAllLogs();
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -29,8 +31,8 @@ const getFont = () =>
     "IBMPlexSansKR-Regular": require("./assets/fonts/IBMPlexSansKR-Regular.ttf"),
     "IBM-SB": require("./assets/fonts/IBMPlexSans-SemiBold.ttf"),
     "Mono-SB": require("./assets/fonts/RobotoMono-SemiBold.ttf"),
-    "Balloo2-SB":require('./assets/fonts/Baloo2-SemiBold.ttf'),
-    "Balloo2-R": require('./assets/fonts/Baloo2-Regular.ttf'),
+    "Balloo2-SB": require("./assets/fonts/Baloo2-SemiBold.ttf"),
+    "Balloo2-R": require("./assets/fonts/Baloo2-Regular.ttf"),
   });
 
 const RootStack = createStackNavigator();
