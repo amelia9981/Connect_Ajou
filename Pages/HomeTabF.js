@@ -13,7 +13,8 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
   FontAwesome5,
-  Entypo,
+  Feather,
+  AntDesign,
 } from "@expo/vector-icons";
 
 class HomeTab extends Component {
@@ -73,7 +74,9 @@ class HomeTab extends Component {
           <Text style={style.title}>Connect Ajou</Text>
         </View>
 
-        <Text style={style.subTitle}>About Ajou</Text>
+        <View style={style.subTitleView}>
+          <Text style={style.subTitle}>About Ajou</Text>
+        </View>
 
         <ScrollView
           horizontal={true}
@@ -83,43 +86,44 @@ class HomeTab extends Component {
           <ScrollView style={style.preview} nestedScrollEnabled={true}>
             <Text style={style.scrollTitle}>Today's Lunch Menu</Text>
             <Text style={style.scrollContent}>
-              해물짬뽕&면사리(hot noodles soup),{" "}
-              <Text style={style.both}>쌀밥(white rice)</Text>,{" "}
+              <Text style={style.bothNot}>
+                해물짬뽕&면사리(hot noodles soup)
+              </Text>
+              , <Text>쌀밥(white rice)</Text>,{" "}
               <Text style={style.halal}>
                 크리미치킨가라아게(chicken karaage)
               </Text>
-              , <Text style={style.both}>열무나물무침(young radish)</Text>,{" "}
-              <Text style={style.both}>단무지무침(pickled radish)</Text>,{" "}
-              <Text style={style.both}>배추김치(Kimchi)</Text>,{" "}
-              <Text style={style.both}>
-                샐러드&포도드레싱(salad&grape dressing)
-              </Text>
-              , <Text style={style.both}>수제수정과(cinnamon tea)</Text>
+              , <Text>열무나물무침(young radish)</Text>,{" "}
+              <Text>단무지무침(pickled radish)</Text>,{" "}
+              <Text>배추김치(Kimchi)</Text>,{" "}
+              <Text>샐러드&포도드레싱(salad&grape dressing)</Text>,{" "}
+              <Text>수제수정과(cinnamon tea)</Text>
             </Text>
-            <Text style={[style.scrollContent, { paddingTop: 10 }]}>
-              <Text style={style.vege}>Vege: Green,</Text>{" "}
-              <Text style={style.halal}>Halal: Orange,</Text>{" "}
-              <Text style={style.both}>Both: Blue</Text>
+            <Text style={style.category}>
+              <Text style={style.vege}>For Vege: Green</Text>,{" "}
+              <Text style={style.halal}>For Halal: Orange</Text>,{"\n"}
+              <Text>For Both: Black</Text>,{" "}
+              <Text style={style.bothNot}>NOT for both: Blue</Text>
             </Text>
           </ScrollView>
+
           <ScrollView style={style.preview} nestedScrollEnabled={true}>
             <Text style={style.scrollTitle}>Today's Dinner Menu</Text>
             <Text style={style.scrollContent}>
               <Text style={style.halal}>육개장(spicy beef soup)</Text>,{" "}
-              <Text style={style.both}>쌀밥(white rice)</Text>,{" "}
+              <Text>쌀밥(white rice)</Text>,{" "}
               <Text style={style.halal}>새우까스&소스(shrimp cutlet)</Text>,{" "}
               <Text style={style.halal}>메밀막국수(buckwheat noodles)</Text>,
-              <Text style={style.both}>땅콩조림(boiled peanuts)</Text>,{" "}
-              <Text style={style.both}>배추김치(Kimchi)</Text>,{" "}
-              <Text style={style.both}>
-                샐러드&포도드레싱(salad&grape dressing)
-              </Text>
-              , <Text style={style.both}>수제수정과(cinnamon tea)</Text>
+              <Text>땅콩조림(boiled peanuts)</Text>,{" "}
+              <Text>배추김치(Kimchi)</Text>,{" "}
+              <Text>샐러드&포도드레싱(salad&grape dressing)</Text>,{" "}
+              <Text>수제수정과(cinnamon tea)</Text>
             </Text>
-            <Text style={[style.scrollContent, { paddingTop: 10 }]}>
-              <Text style={style.vege}>Vege: Green,</Text>{" "}
-              <Text style={style.halal}>Halal: Orange,</Text>{" "}
-              <Text style={style.both}>Both: Blue</Text>
+            <Text style={style.category}>
+              <Text style={style.vege}>For Vege: Green</Text>,{" "}
+              <Text style={style.halal}>For Halal: Orange</Text>,{"\n"}
+              <Text>For Both: Black</Text>,{" "}
+              <Text style={style.bothNot}>NOT for both: Blue</Text>
             </Text>
           </ScrollView>
           <TouchableOpacity
@@ -131,11 +135,23 @@ class HomeTab extends Component {
           </TouchableOpacity>
         </ScrollView>
 
-        <Text style={style.subTitle}>Community</Text>
+        <View style={style.subTitleView}>
+          <Text style={[style.subTitle, { flex: 5 }]}>Community Favorites</Text>
+          <TouchableOpacity style={{ flex: 1 }}>
+            <Feather name="plus-square" size={24} />
+          </TouchableOpacity>
+        </View>
 
         <View style={style.community}>
           <View style={style.containerCommunity}>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Random Chatting" }) }}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                this.props.navigation.push("ViewList", {
+                  name: "Random Chatting",
+                });
+              }}
+            >
               <Ionicons
                 name="chatbubbles"
                 size={24}
@@ -143,7 +159,14 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Random Chatting</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "School Events" }) }}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                this.props.navigation.push("ViewList", {
+                  name: "School Events",
+                });
+              }}
+            >
               <MaterialIcons
                 name="event"
                 size={24}
@@ -151,7 +174,12 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>School Events</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Near Campus" }) }}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                this.props.navigation.push("ViewList", { name: "Near Campus" });
+              }}
+            >
               <FontAwesome5
                 name="school"
                 size={24}
@@ -159,7 +187,14 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Near Campus</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Vege Restaurant" }) }}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                this.props.navigation.push("ViewList", {
+                  name: "Vege Restaurant",
+                });
+              }}
+            >
               <Ionicons
                 name="restaurant"
                 size={24}
@@ -167,23 +202,14 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Vege Restaurant</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Halal Restaurant" }) }}>
-              <Ionicons
-                name="restaurant-outline"
-                size={24}
-                style={style.communityIcon}
-              />
-              <Text style={style.communityContent}>Halal Restaurant</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Sports Mate" }) }}>
-              <MaterialIcons
-                name="sports-soccer"
-                size={24}
-                style={style.communityIcon}
-              />
-              <Text style={style.communityContent}>Sports Mate</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Finding Party Mates" }) }}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                this.props.navigation.push("ViewList", {
+                  name: "Finding Party Mates",
+                });
+              }}
+            >
               <MaterialCommunityIcons
                 name="party-popper"
                 size={24}
@@ -191,7 +217,14 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Finding Party Mates</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Finding Roommates" }) }}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                this.props.navigation.push("ViewList", {
+                  name: "Finding Roommates",
+                });
+              }}
+            >
               <FontAwesome5
                 name="user-friends"
                 size={24}
@@ -199,25 +232,20 @@ class HomeTab extends Component {
               />
               <Text style={style.communityContent}>Finding Roommates</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", {name: "Language Exchange"})}}>
+            <TouchableOpacity
+              style={style.contentWrapper}
+              onPress={() => {
+                this.props.navigation.push("ViewList", {
+                  name: "Language Exchange",
+                });
+              }}
+            >
               <FontAwesome
                 name="language"
                 size={24}
                 style={style.communityIcon}
               />
               <Text style={style.communityContent}>Language Exchange</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Major Study" }) }}>
-              <Entypo name="pencil" size={24} style={style.communityIcon} />
-              <Text style={style.communityContent}>Major Study</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.contentWrapper} onPress={() => { this.props.navigation.push("ViewList", { name: "Other Hobby" }) }}>
-              <MaterialCommunityIcons
-                name="account-search"
-                size={24}
-                style={style.communityIcon}
-              />
-              <Text style={style.communityContent}>Other Hobby</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -233,15 +261,18 @@ const style = StyleSheet.create({
   },
   title: {
     fontFamily: "Dancing",
-    marginTop: 42,
+    marginTop: 45,
     marginLeft: 10,
     fontSize: 25,
   },
-  subTitle: {
-    fontFamily: "EBS훈민정음새론R",
-    marginTop: 10,
+  subTitleView: {
+    marginTop: 20,
     marginBottom: 10,
     marginLeft: 20,
+    flexDirection: "row",
+  },
+  subTitle: {
+    fontFamily: "EBS훈민정음새론R",
     fontSize: 20,
   },
   community: {
@@ -250,7 +281,7 @@ const style = StyleSheet.create({
   },
   preview: {
     width: 280,
-    height: 210,
+    height: 220,
     borderWidth: 2,
     backgroundColor: "white",
     borderColor: "#D7DDE2",
@@ -282,13 +313,24 @@ const style = StyleSheet.create({
     fontFamily: "IBMPlexSansKR-Light",
     fontSize: 13,
   },
+  category: {
+    marginTop: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    fontFamily: "IBMPlexSansKR-Regular",
+    fontSize: 13,
+    backgroundColor: "rgba(215, 221, 226, 0.5)",
+    borderRadius: 5,
+  },
   vege: {
     color: "#008000",
   },
   halal: {
     color: "#FFA500",
   },
-  both: {
+  bothNot: {
     color: "#5995DD",
   },
   communityIcon: {
