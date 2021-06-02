@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useEffect, useLayoutEffect, useState } from "react";
 import {
   ScrollView,
   View,
@@ -21,6 +21,7 @@ const AddWriting = ({ navigation, route }) => {
   const [Writing, setWriting] = useState({ title, content });
   const listName = route.params.listName;
   const [user, setUser] = useState({});
+
   useEffect(() => {
     const curUserEmail = firebase.auth().currentUser.providerData[0].email;
     const unsubscribe = firebase
@@ -31,12 +32,44 @@ const AddWriting = ({ navigation, route }) => {
         const getUser = snapshot.data();
         setUser(getUser);
       });
-    //getData();
 
     return () => {
       unsubscribe();
     };
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: null,
+      headerRightContainerStyle: {
+        marginRight: "3%",
+        padding: "1%",
+      },
+      headerLeftContainerStyle: {
+        marginLeft: "3%",
+        padding: "1%",
+      },
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Feather name="x" size={30} />
+        </TouchableOpacity>
+      ),
+      headerRight: () => (
+        //저장하고 리프레스
+        <Button
+          style={style.button}
+          onPress={() => {
+            onSubmit();
+          }}
+          title="Save"
+        />
+      ),
+    });
+  });
 
   const onSubmit = async (event) => {
     firebase
@@ -44,6 +77,7 @@ const AddWriting = ({ navigation, route }) => {
       .collection(listName)
       .doc(title)
       .set({
+        _id: Math.random().toString(36).slice(2),
         title: title,
         content: content,
         creator: user,
@@ -57,37 +91,6 @@ const AddWriting = ({ navigation, route }) => {
     setTitle("");
     setContent("");
   };
-
-  navigation.setOptions({
-    headerTitle: null,
-    headerRightContainerStyle: {
-      marginRight: "3%",
-      padding: "1%",
-    },
-    headerLeftContainerStyle: {
-      marginLeft: "3%",
-      padding: "1%",
-    },
-    headerLeft: () => (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Feather name="x" size={30} />
-      </TouchableOpacity>
-    ),
-    headerRight: () => (
-      //저장하고 리프레스
-      <Button
-        style={style.button}
-        onPress={() => {
-          onSubmit();
-        }}
-        title="Save"
-      />
-    ),
-  });
 
   return (
     <KeyboardAvoidingView style={{ padding: 10 }}>

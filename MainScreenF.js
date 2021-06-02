@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
-
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 // 하단 탭에 들어갈 컴포넌트들
 import HomeTab from "./Pages/handleHome";
 import CommunityMain from "./Pages/CommunityMain";
@@ -119,6 +119,23 @@ function MainScreen(props) {
     };
   }, []);
 
+  function getHeaderTitle(route) {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? "Main";
+
+    switch (routeName) {
+      case "Main":
+        return "Main";
+      case "ViewList":
+        return "ViewList";
+      case "Add":
+        return "Add";
+      case "Search":
+        return "Search";
+      case "See":
+        return "See";
+    }
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{}}
@@ -150,17 +167,18 @@ function MainScreen(props) {
             <Feather name="home" size={24} color={color} />
           ),
         }}
-        initialParams={{ extraData: user, courseName:courseName }}
-      >
-      </Tab.Screen>
+        initialParams={{ extraData: user, courseName: courseName }}
+      ></Tab.Screen>
       <Tab.Screen
         name="Community"
         component={CommunityMain}
-        options={{
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <Feather name="list" size={24} color={color} />
           ),
-        }}
+        })}
         initialParams={{ extraData: user }}
       />
       <Tab.Screen

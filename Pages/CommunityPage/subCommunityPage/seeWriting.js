@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import {
   ScrollView,
   View,
@@ -38,6 +38,32 @@ const seeWriting = ({ navigation, route }) => {
       unsubscribe();
     };
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: null,
+      headerRightContainerStyle: {
+        marginRight: "3%",
+        padding: "3%",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      headerRight: () => (
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity>
+            <MaterialCommunityIcons
+              name="refresh"
+              size={25}
+              style={{ marginRight: 10 }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => moveToChat(writing.creator)}>
+            <Feather name="message-square" size={25} />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
 
   const listener = () => {
     firebase
@@ -94,6 +120,7 @@ const seeWriting = ({ navigation, route }) => {
   };
   const onSubmit = () => {
     const comment = {
+      _id: Math.random().toString(36).slice(2),
       user,
       text: text,
       time: Date.now(),
@@ -197,37 +224,13 @@ const seeWriting = ({ navigation, route }) => {
   //가져오기
   function getData() {
     const dbCom = firebase.firestore().collection(listName).doc(writing.title);
-    dbCom.get().then((doc) => {
+    dbCom.onSnapshot((doc) => {
       const data = doc.data().comments;
       setAllComment(data);
       const likeList = doc.data().like;
       setCurrentLike(likeList);
     });
   }
-
-  navigation.setOptions({
-    headerTitle: null,
-    headerRightContainerStyle: {
-      marginRight: "3%",
-      padding: "3%",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    headerRight: () => (
-      <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity>
-          <MaterialCommunityIcons
-            name="refresh"
-            size={25}
-            style={{ marginRight: 10 }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => moveToChat(writing.creator)}>
-          <Feather name="message-square" size={25} />
-        </TouchableOpacity>
-      </View>
-    ),
-  });
 
   return (
     <>
@@ -280,13 +283,14 @@ const seeWriting = ({ navigation, route }) => {
           </CardItem>
         </Card>
         {allcomment.map((comment) => (
-          <Card style={style.box}>
+          <Card style={style.box} key={comment._id}>
             <CardItem>
               <Left>
                 <TouchableOpacity
                   onPress={() => {
                     moveToChat(comment.user);
                   }}
+                  key={comment._id}
                 >
                   <ProfilePicture
                     style={{ resizeMode: "contain" }}

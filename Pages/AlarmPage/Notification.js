@@ -17,7 +17,7 @@ function Notification(props) {
     const unsubscribe = firebase
       .firestore()
       .collection("notification")
-      .orderBy("createdAt")
+      .orderBy("createdAt", "desc")
       .onSnapshot((querySnapshot) => {
         if (querySnapshot.size) {
           const notices = querySnapshot.docs.map((docSnapshot) => {
