@@ -21,7 +21,6 @@ const seeWriting = ({ navigation, route }) => {
   const listName = route.params.listName;
   const [user, setUser] = useState({});
   const [isReRendering, setReRendering] = useState(0);
-  const [url, setUrl] = useState("");
 
   useEffect(() => {
     const curUserEmail = firebase.auth().currentUser.providerData[0].email;
@@ -82,22 +81,17 @@ const seeWriting = ({ navigation, route }) => {
   };
 
   const fetchProfileUrlFromStorage = (author) => {
+    let authorUrl = author.url;
     if (author.picture) {
       const storageRef = firebase.storage().ref(`${author.email}`);
-      storageRef
-        .getDownloadURL()
-        .then((downloadUrl) => {
-          setUrl(downloadUrl);
-        })
-        .catch((error) => {
-          console.log("Error updating document: ", error);
-        });
-      return url;
-    } else {
-      return "";
+      storageRef.getDownloadURL().then((url) => {
+        if (author.url !== url) {
+          authorUrl = url;
+        }
+      });
     }
+    return authorUrl;
   };
-
   const onSubmit = () => {
     const comment = {
       user,
@@ -228,7 +222,7 @@ const seeWriting = ({ navigation, route }) => {
             style={{ marginRight: 10 }}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => moveToChat(writing.creator)}>
           <Feather name="message-square" size={25} />
         </TouchableOpacity>
       </View>
@@ -248,11 +242,6 @@ const seeWriting = ({ navigation, route }) => {
                 backgroundColor={"#2c5e9e"}
                 isPicture={writing.creator.picture}
                 user={writing.creator.fullName}
-                requirePicture={
-                  fetchProfileUrlFromStorage(writing.creator) !== null
-                    ? null
-                    : require("../../../assets/user.png")
-                }
                 URLPicture={fetchProfileUrlFromStorage(writing.creator)}
               />
               <Body style={{ flexDirection: "column" }}>
@@ -306,11 +295,6 @@ const seeWriting = ({ navigation, route }) => {
                     backgroundColor={"#2c5e9e"}
                     isPicture={comment.user.picture}
                     user={comment.user.fullName}
-                    requirePicture={
-                      fetchProfileUrlFromStorage(comment.user) !== null
-                        ? null
-                        : require("../../../assets/user.png")
-                    }
                     URLPicture={fetchProfileUrlFromStorage(comment.user)}
                   />
                 </TouchableOpacity>
