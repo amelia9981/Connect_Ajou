@@ -24,3 +24,4 @@
 [0525/172932.069:ERROR:process_info.cc(556)] ReadMemoryInfo failed
 [0525/174523.389:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
 [0525/214730.540:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+[0603/003712.733:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)

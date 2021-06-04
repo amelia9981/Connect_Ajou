@@ -12,7 +12,7 @@ const DATA = [
     },
     {
         title: 'Find Friend Group',
-        data: ["Sports mate", "Finding Party Mates", "Finding Roommates", "Languague Exchange", "Major Study", "Other Hobby"]
+        data: ["Sports mate", "Finding Party Mates", "Finding Roommates", "Language Exchange", "Major Study", "Other Hobby"]
     },
 ];
 const Item = ({ title, navigation}) => (
