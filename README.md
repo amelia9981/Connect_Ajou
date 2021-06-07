@@ -65,8 +65,72 @@ yarn start
 
 ### 3. device emulator
 
-- iOS: Click 'Run on iOS simulator' on Expo Developer Tools
-- Android: Download Expo app in your phone and scan the QR code on Expo Developer Tools
+- iOS:
+  - 1) Click 'Run on iOS simulator' on Expo Developer Tools
+  
+    ***Warning: You must encounter this alert when you run this app on the emulator***
+    <div style="text-align: center">
+      <img width="30%" src="https://user-images.githubusercontent.com/57990029/120945800-5a98da80-c775-11eb-8f78-6b732845edd1.png"/>
+    </div>
+    
+    You should change App.js like this:
+    ```
+    export default function App() {
+    const [fontloaded, setFontsLoaded] = useState(false);
+    const [loaded, setLoaded] = useState(true);
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState("");
+    const [notification, setNotification] = useState({});
+    const notificationListener = useRef();
+    const responseListener = useRef();
+
+    useEffect(() => {
+      // SKIP THESE LINES!
+      // registerForPushNotification().then((token) => setToken(token));
+      // notificationListener.current =
+      //   Notifications.addNotificationReceivedListener((notification) => {
+      //     setNotification(notification);
+      //   });
+      // responseListener.current =
+      //   Notifications.addNotificationResponseReceivedListener((response) => {
+      //     console.log(response);
+      //   });
+
+      const usersRef = firebase.firestore().collection("users");
+      const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          usersRef
+            .doc(user.email)
+            .get()
+            .then((document) => {
+              const userData = document.data();
+              setLoaded(false);
+              setUser(userData);
+            })
+            .catch((error) => {
+              setLoaded(false);
+            });
+        } else {
+          setLoaded(false);
+        }
+      });
+
+      return () => {
+        // SKIP THESE LINES!
+        // Notifications.removeNotificationSubscription(
+        //   notificationListener.current
+        // );
+        // Notifications.removeNotificationSubscription(responseListener.current);
+        unsubscribe();
+      };
+    }, []);
+    ```
+    
+    
+  - 2) Download Expo app in your phone and scan the QR code with your camera **(RECOMMENDED)**
+
+
+- Android: Download Expo app in your phone and scan the QR code on Expo Developer Tools **(RECOMMENDED)**
 
 ## Contact
 
