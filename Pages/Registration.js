@@ -11,6 +11,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { firebase } from "../Utilities/Firebase";
 
 export default function Registration({ navigation }) {
+  const [isReRendering, setReRendering] = useState(0);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +19,28 @@ export default function Registration({ navigation }) {
   const [picture, setPicture] = useState(false);
   const [url, setUrl] = useState("");
   const [myCourses, setMyCourses] = useState([]);
+  const [allCommunities, setAllCommunities] = useState([
+    "About Course",
+    "Campus",
+    "Finding Party Mates",
+    "Finding Roommates",
+    "Halal Restaurant",
+    "Language Exchange",
+    "Major Study",
+    "Near Campus",
+    "Official Announcement",
+    "Other Hobby",
+    "Random Chatting",
+    "Random Question",
+    "School Events",
+    "Sports Mate",
+    "Vege Resaurant",
+  ]);
+
   const onFooterLinkPress = () => {
     navigation.navigate("LogIn");
   };
+
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
       alert("Passwords don't match.");
@@ -38,16 +58,35 @@ export default function Registration({ navigation }) {
           url,
           myCourses,
         };
+
         const usersRef = firebase.firestore().collection("users");
         usersRef
           .doc(email)
           .set(data)
           .then(() => {
-            navigation.navigate("Main");
+            setReRendering(isReRendering + 1);
           })
           .catch((error) => {
-            alert(error);
+            console.error("Error: ", error);
           });
+
+        const favoritesRef = firebase.firestore().collection("favorites");
+        favoritesRef.doc(email).set(
+          {
+            selectedItemsArray: [],
+          },
+          { merge: true }
+        );
+
+        allCommunities.forEach((element) => {
+          favoritesRef
+            .doc(email)
+            .collection("all")
+            .doc(element)
+            .set({}, { merge: true });
+        });
+
+        favoritesRef.doc(email).collection("selectedItems").add({});
       })
       .catch((error) => {
         alert(error);
