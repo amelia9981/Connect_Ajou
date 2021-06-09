@@ -1,65 +1,82 @@
-import React, { Component, useState } from 'react';
-import { SafeAreaView, ScrollView, View, Text, StyleSheet, SectionList, TouchableOpacity, Alert } from 'react-native';
+import React, { Component, useState } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  SectionList,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 
 const DATA = [
-    {
-        title: 'Find Friend Group',
-        data: ["Sports mate", "Finding Party Mates", "Finding Roommates", "Languague Exchange", "Major Study", "Other Hobby"]
-    }
+  {
+    title: "Find Friend Group",
+    data: [
+      "Sports Mate",
+      "Finding Party Mates",
+      "Finding Roommates",
+      "Languague Exchange",
+      "Major Study",
+      "Other Hobby",
+    ],
+  },
 ];
 
 const Item = ({ title, navigation }) => (
-    <TouchableOpacity style={styles.itemView} onPress={() => {
-        navigation.push("ViewList", { name: title })
-    }} >
-        <Text style={styles.itemView}>{title}</Text>
-    </TouchableOpacity>
+  <TouchableOpacity
+    style={styles.itemView}
+    onPress={() => {
+      navigation.push("ViewList", { name: title });
+    }}
+  >
+    <Text style={styles.itemView}>{title}</Text>
+  </TouchableOpacity>
 );
 const Title = ({ title }) => (
-    <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{title}</Text>
-    </View>
+  <View style={styles.sectionHeader}>
+    <Text style={styles.sectionTitle}>{title}</Text>
+  </View>
 );
 const findFriend = ({ navigation }) => (
-    <SafeAreaView style={styles.container}>
-        <SectionList
-            sections={DATA}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => <Item title={item} navigation={navigation} />}
-            renderSectionHeader={({ section: { title } }) => (
-                <Title title={title} />
-            )}
-        />
-    </SafeAreaView>
+  <SafeAreaView style={styles.container}>
+    <SectionList
+      sections={DATA}
+      keyExtractor={(item) => item}
+      renderItem={({ item }) => <Item title={item} navigation={navigation} />}
+      renderSectionHeader={({ section: { title } }) => <Title title={title} />}
+    />
+  </SafeAreaView>
 );
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#F6F8F8",
-    },
-    sectionHeader: {
-        padding: "1.5%",
-        backgroundColor: "#5995DD",
-    },
-    sectionTitle: {
-        padding: "1.5%",
-        backgroundColor: "#5995DD",
-        marginLeft: "5%",
-        flex: 1,
-        fontFamily: "Mono-SB",
-        fontSize: 20,
-        color: "white",
-    },
-    itemView: {
-        marginLeft: "5%",
-        padding: '1.5%',
-        flex: 1,
-        flexDirection: 'row',
-        fontFamily: "IBMPlexSansKR-Regular",
-        fontSize: 15,
-        color: "#3D3D3D",
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#F6F8F8",
+  },
+  sectionHeader: {
+    padding: "1.5%",
+    backgroundColor: "#5995DD",
+  },
+  sectionTitle: {
+    padding: "1.5%",
+    backgroundColor: "#5995DD",
+    marginLeft: "5%",
+    flex: 1,
+    fontFamily: "Mono-SB",
+    fontSize: 20,
+    color: "white",
+  },
+  itemView: {
+    marginLeft: "5%",
+    padding: "1.5%",
+    flex: 1,
+    flexDirection: "row",
+    fontFamily: "IBMPlexSansKR-Regular",
+    fontSize: 15,
+    color: "#3D3D3D",
+  },
 });
 
 export default findFriend;
