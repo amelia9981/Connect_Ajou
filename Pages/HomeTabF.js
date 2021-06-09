@@ -29,7 +29,7 @@ function HomeTab(props) {
       let courseName = props.courseName;
       temp_array.push(courseName[row][currentDay]);
     }
-    if (temp_array.size) {
+    if (temp_array.length) {
       setTodayCourses(temp_array);
     } else {
       setTodayCourses("Nothing's for Today");
