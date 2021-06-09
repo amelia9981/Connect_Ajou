@@ -41,7 +41,7 @@ const SearchWriting = ({ navigation, route }) => {
       setWriting([]);
     }
     listRf
-      .where("title", "==", search)
+      .where("title", "<=", search)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {

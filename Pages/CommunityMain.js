@@ -18,6 +18,10 @@ function CommunityMain({ route, navigation }) {
   //커뮤니티 세부페이지 들어가면 탭안보이는 코드
   const [user, setUser] = useState({});
 
+  route.state && route.state.index > 0
+    ? navigation.setOptions({ tabBarVisible: false })
+    : navigation.setOptions({ tabBarVisible: true });
+
   useEffect(() => {
     const curUserEmail = firebase.auth().currentUser.providerData[0].email;
     const unsubscribe = firebase
@@ -28,10 +32,6 @@ function CommunityMain({ route, navigation }) {
         const getUser = snapshot.data();
         setUser(getUser);
       });
-
-    route.state && route.state.index > 0
-      ? navigation.setOptions({ tabBarVisible: false })
-      : navigation.setOptions({ tabBarVisible: true });
 
     return () => {
       unsubscribe();

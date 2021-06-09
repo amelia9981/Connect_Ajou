@@ -7,6 +7,9 @@ const MsgStack = createStackNavigator();
 
 function MessageNav(props) {
   const user = props.extraData;
+  route.state && route.state.index > 0
+    ? this.navigation.setOptions({ tabBarVisible: false })
+    : this.navigation.setOptions({ tabBarVisible: true });
 
   return (
     <MsgStack.Navigator initialRouteName="Message">

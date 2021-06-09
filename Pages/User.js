@@ -14,6 +14,7 @@ import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../Utilities/Firebase";
 import * as Update from "expo-updates";
 import { Input } from "native-base";
+import { Button } from "react-native-elements/dist/buttons/Button";
 
 function UserTab(props) {
   const user = props.extraData;
@@ -21,7 +22,8 @@ function UserTab(props) {
   const [url, setUrl] = useState(user.url);
   const [isReRendering, setReRendering] = useState(0);
   const usersRef = firebase.firestore().collection("users").doc(user.email);
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [newname, setNetName] = useState()
   useEffect(() => {
     usersRef.get().then((doc) => {
       const getuser = doc.data();
@@ -95,25 +97,29 @@ function UserTab(props) {
       ]
     )
   }
+  //modal
   const setNameFull = () => {
     Alert.alert(
-      "Do you want to set your name?",
+      "Are you sure to change your name?",
       "",
       [
         {
           text: "No",
-          onPress: () => console.log("NO"),
+          onPress: () => console.log("No"),
         },
         {
           text: "Yes",
           onPress: () => {
-            usersRef.update({
-              fullName: "Name",
-            })
-          }
-        }
+            firebase.firestore().collection('users').doc(user.email)
+            .update(
+              {
+                fullName: newname
+              }
+            )
+          },
+        },
       ]
-    )
+    );
   }
 
   const setProfileImgToDefault = () => {
@@ -190,6 +196,69 @@ function UserTab(props) {
 
   return (
     <ScrollView contentContainerStyle={style.container}>
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={{ margin: 50, backgroundColor: "#F6F8F8", padding: 20,alignContent:'center' ,justifyContent: 'center'}}>
+          <Text>Type Your Name</Text>
+          <TextInput style={styles.input}
+            placeholder="Name"
+            placeholderTextColor="#aaaaaa"
+            onChangeText={(text) => setNewName(text)}
+            value={newname}
+            autoCapitalize="none"/>
+          <TouchableOpacity onPress={()=>setModalOpen(false)}>
+            <Button style={{
+              fontFamily: "IBMPlexSansKR-Regular",
+              position: "absolute",
+              bottom: "28%",
+              left: "10%",
+              backgroundColor: "rgba(30, 61, 107, 0.8)",
+              borderRadius: 20,
+              shadowColor: "rgb(215,  221,  226)",
+              shadowOpacity: 1,
+              shadowOffset: {
+                width: 0,
+                height: 0,
+              },
+              shadowRadius: 3,
+              color: "rgba(255, 255, 255, 1)",
+              fontSize: 25,
+              fontWeight: "400",
+              fontStyle: "normal",
+              textAlign: "center",
+              width: 140,
+              height: 43,
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1}}> Close </Button>
+          </TouchableOpacity>
+          <TouchableOpacity onpress={()=>setNameFull()}>
+            <Button style={{
+              fontFamily: "IBMPlexSansKR-Regular",
+              position: "absolute",
+              bottom: "28%",
+              left: "10%",
+              backgroundColor: "rgba(30, 61, 107, 0.8)",
+              borderRadius: 20,
+              shadowColor: "rgb(215,  221,  226)",
+              shadowOpacity: 1,
+              shadowOffset: {
+                width: 0,
+                height: 0,
+              },
+              shadowRadius: 3,
+              color: "rgba(255, 255, 255, 1)",
+              fontSize: 25,
+              fontWeight: "400",
+              fontStyle: "normal",
+              textAlign: "center",
+              width: 140,
+              height: 43,
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1}}> Change </Button>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <Text style={style.my_page}>My Page</Text>
 
       <View style={style.profile_photo}>
@@ -225,7 +294,7 @@ function UserTab(props) {
 
       <View style={style.box_2}>
         <Text style={style.box_title}>Account</Text>
-        <TouchableOpacity style={style.box_content_wrapper} onPress={() => setNameFull()}>
+        <TouchableOpacity style={style.box_content_wrapper} onPress={() => setModalOpen(true)}>
           <Text style={style.box_content}>Change Name to your own name</Text>
         </TouchableOpacity>
         <TouchableOpacity style={style.box_content_wrapper}

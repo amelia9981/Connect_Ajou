@@ -5,15 +5,17 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
+  TextInput, Modal,Pressable, Alert
 } from "react-native";
-import { Card, Container, CardItem, Body, Left } from "native-base";
+import { Divider } from 'react-native-elements';
+import { Card, Container, CardItem, Body, Left, Right } from "native-base";
 import { Feather, MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import { firebase } from "../../../Utilities/Firebase";
 import ProfilePicture from "react-native-profile-picture";
 
 //실시간 좋아요 업데이트 & 폰트들 정리
 const seeWriting = ({ navigation, route }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState("");
   const [allcomment, setAllComment] = useState([]);
   const [currentLike, setCurrentLike] = useState([]);
@@ -48,23 +50,28 @@ const seeWriting = ({ navigation, route }) => {
         alignItems: "center",
         justifyContent: "center",
       },
+      //글 삭제, 수정
+      //if cur user == wrting.user=> 삭제 수정 선택가능
+      //comment 도 동일하게 
       headerRight: () => (
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => moveToChat(writing.creator)}>
+            <Feather name="message-square" size={25} style={{ marginRight: 10 }} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
             <MaterialCommunityIcons
-              name="refresh"
+              name="menu"
               size={25}
               style={{ marginRight: 10 }}
             />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => moveToChat(writing.creator)}>
-            <Feather name="message-square" size={25} />
           </TouchableOpacity>
         </View>
       ),
     });
   }, [navigation]);
 
+  
   const listener = () => {
     firebase
       .firestore()
@@ -81,7 +88,7 @@ const seeWriting = ({ navigation, route }) => {
       firebase
         .firestore()
         .collection(listName)
-        .doc(writing.title)
+        .doc(writing.title)  
         .update({
           like: firebase.firestore.FieldValue.arrayRemove(user.email),
         })
@@ -232,8 +239,80 @@ const seeWriting = ({ navigation, route }) => {
     });
   }
 
+  const delWriting =()=>{
+    //if current user == writing user
+    if(user.email == writing.creator.email){
+      Alert.alert(
+        "Do you Really want to delete it?",
+        "",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("NO"),
+          },
+          {//input 받아야하는데??hmmm
+            text: "Yes",
+            onPress: () => { 
+              firebase.firestore().collection(listName).doc(writing.title).delete();
+              navigation.goBack();
+            }
+          }
+        ]
+      )
+    }
+  }
+  function delComment(comment){
+    if(user.email ==comment.user.email){
+      Alert.alert(
+        "Do you Really want to delete it?",
+        "",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("NO"),
+          },
+          {//input 받아야하는데??hmmm
+            text: "Yes",
+            onPress: () => {
+              firebase.firestore().collection(listName).doc(writing.title)
+                .update({
+                  comments: firebase.firestore.FieldValue.arrayRemove(comment),
+                })
+            }
+          }
+        ]
+      )
+    }
+  }
+  const reWriting =()=>{
+    if(user==writing.creator){
+      Alert.alert("change")
+    }
+  }
+
   return (
     <>
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={{ marginLeft: '50%', marginTop: 50, marginRight: 10, backgroundColor: "#F6F8F8", padding: 20,alignContent:'center' ,justifyContent: 'center'}}>
+            <TouchableOpacity onPress={()=>setModalVisible(false)}>
+              
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {delWriting()}}>
+              <Text style={{
+              fontFamily: "EBS훈민정음새론SB",
+              fontSize: 20,
+              color: "#3D3D3D"}}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{}}>
+              <Text style={{
+              fontFamily: "EBS훈민정음새론SB",
+              paddingTop: 5,
+              fontSize: 20,
+              color: "#3D3D3D",alignContent:'center'}}>Revise</Text>
+            </TouchableOpacity>
+        </View>
+      </Modal>
+
       <ScrollView style={style.container}>
         <Card style={style.box}>
           <CardItem>
@@ -294,8 +373,8 @@ const seeWriting = ({ navigation, route }) => {
                 >
                   <ProfilePicture
                     style={{ resizeMode: "contain" }}
-                    width={50}
-                    height={50}
+                    width={25}
+                    height={25}
                     backgroundColor={"#2c5e9e"}
                     isPicture={comment.user.picture}
                     user={comment.user.fullName}
@@ -317,6 +396,11 @@ const seeWriting = ({ navigation, route }) => {
                 {">"}
                 {">"} {comment.text}{" "}
               </Text>
+              <Right>
+                <TouchableOpacity onPress={()=>{delComment(comment)}}>
+                 <AntDesign name="delete" size={15} style={{ marginRight: 10 }}/>
+                </TouchableOpacity>
+              </Right>
             </CardItem>
           </Card>
         ))}
@@ -420,5 +504,46 @@ const style = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 17,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
 export default seeWriting;
