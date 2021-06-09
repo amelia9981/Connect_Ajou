@@ -5,11 +5,10 @@ import Chat from "./Chat";
 
 const MsgStack = createStackNavigator();
 
-function MessageNav(props) {
-  const user = props.extraData;
+function MessageNav({route,navigation}) {
   route.state && route.state.index > 0
-    ? this.navigation.setOptions({ tabBarVisible: false })
-    : this.navigation.setOptions({ tabBarVisible: true });
+    ? navigation.setOptions({ tabBarVisible: false })
+    : navigation.setOptions({ tabBarVisible: true });
 
   return (
     <MsgStack.Navigator initialRouteName="Message">

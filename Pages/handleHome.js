@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,useState,useEffect } from "react";
 import { Container, Button, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -14,15 +14,15 @@ import { useNavigation } from "@react-navigation/core";
 
 const AllStack = createStackNavigator();
 
-function handleHome(props) {
+function handleHome({ route}) {
   //커뮤니티 세부페이지 들어가면 탭안보이는 코드
-  const user = props.extraData;
-  const courseName = props.courseName;
+  const user = route.params.extraData;
+  const courseName = route.params.courseName;
   const navigation = useNavigation();
-  //   route.state && route.state.index > 0
-  //     ? navigation.setOptions({ tabBarVisible: false })
-  //     : navigation.setOptions({ tabBarVisible: true });
-
+  route.state && route.state.index > 0
+  ? navigation.setOptions({ tabBarVisible: false })
+  : navigation.setOptions({ tabBarVisible: true });
+  
   //여기에 각 페이지별 리스트 추가해주면 될 것 같아용
   return (
     <AllStack.Navigator>

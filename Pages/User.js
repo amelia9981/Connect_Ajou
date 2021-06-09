@@ -6,14 +6,14 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Alert,
+  Alert,Modal,TextInput
 } from "react-native";
 import ProfilePicture from "react-native-profile-picture";
 import UserPermissions from "../Utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../Utilities/Firebase";
 import * as Update from "expo-updates";
-import { Input } from "native-base";
+import { Container, Input } from "native-base";
 import { Button } from "react-native-elements/dist/buttons/Button";
 
 function UserTab(props) {
@@ -23,7 +23,7 @@ function UserTab(props) {
   const [isReRendering, setReRendering] = useState(0);
   const usersRef = firebase.firestore().collection("users").doc(user.email);
   const [modalOpen, setModalOpen] = useState(false);
-  const [newname, setNetName] = useState()
+  const [newname, setNewName] = useState();
   useEffect(() => {
     usersRef.get().then((doc) => {
       const getuser = doc.data();
@@ -116,6 +116,7 @@ function UserTab(props) {
                 fullName: newname
               }
             )
+            setModalOpen(false);
           },
         },
       ]
@@ -196,67 +197,28 @@ function UserTab(props) {
 
   return (
     <ScrollView contentContainerStyle={style.container}>
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={{ margin: 50, backgroundColor: "#F6F8F8", padding: 20,alignContent:'center' ,justifyContent: 'center'}}>
+      <Modal visible={modalOpen} animationType="slide" transparent={true}>
+        <View style={{ borderColor: "#5995DD", borderRadius:10,borderWidth:1,margin: 50, marginTop:100,backgroundColor: "#F6F8F8", padding: 20,alignContent:'center' ,justifyContent: 'center'}}>
           <Text>Type Your Name</Text>
-          <TextInput style={styles.input}
+          <TextInput style={style.input}
             placeholder="Name"
             placeholderTextColor="#aaaaaa"
             onChangeText={(text) => setNewName(text)}
             value={newname}
             autoCapitalize="none"/>
-          <TouchableOpacity onPress={()=>setModalOpen(false)}>
-            <Button style={{
-              fontFamily: "IBMPlexSansKR-Regular",
-              position: "absolute",
-              bottom: "28%",
-              left: "10%",
-              backgroundColor: "rgba(30, 61, 107, 0.8)",
-              borderRadius: 20,
-              shadowColor: "rgb(215,  221,  226)",
-              shadowOpacity: 1,
-              shadowOffset: {
-                width: 0,
-                height: 0,
-              },
-              shadowRadius: 3,
-              color: "rgba(255, 255, 255, 1)",
-              fontSize: 25,
-              fontWeight: "400",
-              fontStyle: "normal",
-              textAlign: "center",
-              width: 140,
-              height: 43,
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 1}}> Close </Button>
-          </TouchableOpacity>
-          <TouchableOpacity onpress={()=>setNameFull()}>
-            <Button style={{
-              fontFamily: "IBMPlexSansKR-Regular",
-              position: "absolute",
-              bottom: "28%",
-              left: "10%",
-              backgroundColor: "rgba(30, 61, 107, 0.8)",
-              borderRadius: 20,
-              shadowColor: "rgb(215,  221,  226)",
-              shadowOpacity: 1,
-              shadowOffset: {
-                width: 0,
-                height: 0,
-              },
-              shadowRadius: 3,
-              color: "rgba(255, 255, 255, 1)",
-              fontSize: 25,
-              fontWeight: "400",
-              fontStyle: "normal",
-              textAlign: "center",
-              width: 140,
-              height: 43,
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 1}}> Change </Button>
-          </TouchableOpacity>
+          <View style={{flexDirection:'row',width:'100%',height:50,justifyContent:'center',alignContent:'center',marginTop:8}}>
+            <View style={style.button_register}>
+              <TouchableOpacity onPress={() => setModalOpen(false)}>
+                <Text style={style.button_text}>Close</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={style.button_login}>
+              <TouchableOpacity onPress={() => setNameFull()}>
+                <Text style={style.button_text}>Change</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          
         </View>
       </Modal>
       <Text style={style.my_page}>My Page</Text>
@@ -422,6 +384,17 @@ const style = StyleSheet.create({
     height: "14%",
     top: "79%",
   },
+  input: {
+    height: 48,
+    borderRadius: 5,
+    overflow: "hidden",
+    backgroundColor: "white",
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    paddingLeft: 16,
+  },
   box_label: {
     flex: 1,
     color: "#2C5E9E",
@@ -447,6 +420,63 @@ const style = StyleSheet.create({
     fontFamily: "IBMPlexSansKR-Light",
     fontSize: 13,
     paddingTop: 5,
+  },
+  button_register: {
+    fontFamily: "IBMPlexSansKR-Regular",
+    position: "absolute",
+    bottom: "28%",
+    left: "10%",
+    backgroundColor: "rgba(30, 61, 107, 0.8)",
+    borderRadius: 20,
+    shadowColor: "rgb(215,  221,  226)",
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowRadius: 3,
+    color: "rgba(255, 255, 255, 1)",
+    marginTop:5,
+    fontSize: 25,
+    fontWeight: "400",
+    fontStyle: "normal",
+    textAlign: "center",
+    width: 100,
+    height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  button_login: {
+    fontFamily: "IBMPlexSansKR-Regular",
+    position: "absolute",
+    bottom: "28%",
+    right: "10%",
+    marginTop: 5,
+    backgroundColor: "rgba(30, 61, 107, 0.8)",
+    borderRadius: 20,
+    shadowColor: "rgb(215,  221,  226)",
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowRadius: 3,
+    color: "rgba(255, 255, 255, 1)",
+    fontSize: 25,
+    fontWeight: "400",
+    fontStyle: "normal",
+    textAlign: "center",
+    width: 100,
+    height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  button_text: {
+    justifyContent: "center",
+    color: "#FFFFFF",
+    fontSize: 17,
   },
 });
 

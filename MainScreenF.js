@@ -161,15 +161,14 @@ function MainScreen(props) {
     >
       <Tab.Screen
         name="Home"
+        component={HomeTab}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="home" size={24} color={color} />
           ),
         }}
+        initialParams={{ extraData: user, courseName:courseName }}
       >
-        {(props) => (
-          <HomeTab {...props} extraData={user} courseName={courseName} />
-        )}
       </Tab.Screen>
       <Tab.Screen
         name="Community"
@@ -202,13 +201,14 @@ function MainScreen(props) {
       </Tab.Screen>
       <Tab.Screen
         name="Alarm"
+        component={AlarmTab}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="bell" size={24} color={color} />
           ),
         }}
+        initialParams={{ extraData: user }}
       >
-        {(props) => <AlarmTab {...props} extraData={user} />}
       </Tab.Screen>
       <Tab.Screen
         name="User"

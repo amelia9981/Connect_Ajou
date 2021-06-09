@@ -7,9 +7,12 @@ import { firebase } from "../Utilities/Firebase";
 
 const Tab = createMaterialTopTabNavigator();
 
-function AlarmTab(props) {
-  const user = props.extraData;
+function AlarmTab({route,navigation}) {
+  const user = route.params.extraData;
   let notiCount;
+  route.state && route.state.index > 0
+    ? navigation.setOptions({ tabBarVisible: false })
+    : navigation.setOptions({ tabBarVisible: true });
 
   useEffect(() => {
     const unsubscribe = firebase

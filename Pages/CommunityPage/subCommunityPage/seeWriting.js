@@ -12,6 +12,7 @@ import { Card, Container, CardItem, Body, Left, Right } from "native-base";
 import { Feather, MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import { firebase } from "../../../Utilities/Firebase";
 import ProfilePicture from "react-native-profile-picture";
+import { Button } from "react-native-elements/dist/buttons/Button";
 
 //실시간 좋아요 업데이트 & 폰트들 정리
 const seeWriting = ({ navigation, route }) => {
@@ -23,7 +24,9 @@ const seeWriting = ({ navigation, route }) => {
   const listName = route.params.listName;
   const [user, setUser] = useState({});
   const [isReRendering, setReRendering] = useState(0);
-
+  const [reModal,setReModal] = useState(false);
+  const [reTitle,setReTitle]=useState();
+  const [reContent,setReContent ]=useState();
   useEffect(() => {
     const curUserEmail = firebase.auth().currentUser.providerData[0].email;
     const unsubscribe = firebase
@@ -285,9 +288,18 @@ const seeWriting = ({ navigation, route }) => {
     }
   }
   const reWriting =()=>{
-    if(user==writing.creator){
-      Alert.alert("change")
+    if(user.email==writing.creator.email){
+      setReModal(true);
     }
+  }
+  const reWritingUpdate=()=>{
+    setReModal(false);
+    firebase.firestore().collection(listName).doc(writing.title)
+    .update({
+      title: reTitle,
+      content: reContent
+    })
+    navigation.goBack()
   }
 
   return (
@@ -295,7 +307,7 @@ const seeWriting = ({ navigation, route }) => {
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={{ marginLeft: '50%', marginTop: 50, marginRight: 10, backgroundColor: "#F6F8F8", padding: 20,alignContent:'center' ,justifyContent: 'center'}}>
             <TouchableOpacity onPress={()=>setModalVisible(false)}>
-              
+              <AntDesign name="close" size={24} color="black" style={{justifyContent:'center',alignContent:'center'}}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {delWriting()}}>
               <Text style={{
@@ -303,13 +315,42 @@ const seeWriting = ({ navigation, route }) => {
               fontSize: 20,
               color: "#3D3D3D"}}>Delete</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={()=>{reWriting()}}>
               <Text style={{
               fontFamily: "EBS훈민정음새론SB",
               paddingTop: 5,
               fontSize: 20,
               color: "#3D3D3D",alignContent:'center'}}>Revise</Text>
             </TouchableOpacity>
+        </View>
+      </Modal>
+      
+      <Modal visible={reModal} animationType="slide" transparent={true}>
+        <View style={{borderColor:'3D3D3D',margin:50, backgroundColor: "#F6F8F8", padding: 20, flex:1 ,alignContent: 'center', justifyContent: 'center' }}>
+          <TextInput
+            style={{ height: 20, paddingLeft: 10 }}
+            placeholder={writing.title}
+            onChangeText={(text) => setReTitle(text)}
+            value={reTitle}
+          />
+          <TextInput
+            style={{ height: 300, paddingLeft: 10 }}
+            placeholder={writing.content}
+            onChangeText={(text) => setReContent(text)}
+            value={reContent}
+          />
+          <View style={{ flexDirection: 'row', width: '100%', height: 50, justifyContent: 'center', alignContent: 'center', marginTop: 8 }}>
+            <View style={style.button_register}>
+              <TouchableOpacity onPress={() => setReModal(false)}>
+                <Text style={style.button_text}>Close</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={style.button_login}>
+              <TouchableOpacity onPress={() => reWritingUpdate()}>
+                <Text style={style.button_text}>Change</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </Modal>
 
@@ -544,6 +585,63 @@ const style = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
+  },
+  button_register: {
+    fontFamily: "IBMPlexSansKR-Regular",
+    position: "absolute",
+    bottom: "28%",
+    left: "10%",
+    backgroundColor: "rgba(30, 61, 107, 0.8)",
+    borderRadius: 20,
+    shadowColor: "rgb(215,  221,  226)",
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowRadius: 3,
+    color: "rgba(255, 255, 255, 1)",
+    marginTop: 5,
+    fontSize: 25,
+    fontWeight: "400",
+    fontStyle: "normal",
+    textAlign: "center",
+    width: 100,
+    height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  button_login: {
+    fontFamily: "IBMPlexSansKR-Regular",
+    position: "absolute",
+    bottom: "28%",
+    right: "10%",
+    marginTop: 5,
+    backgroundColor: "rgba(30, 61, 107, 0.8)",
+    borderRadius: 20,
+    shadowColor: "rgb(215,  221,  226)",
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowRadius: 3,
+    color: "rgba(255, 255, 255, 1)",
+    fontSize: 25,
+    fontWeight: "400",
+    fontStyle: "normal",
+    textAlign: "center",
+    width: 100,
+    height: 43,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  button_text: {
+    justifyContent: "center",
+    color: "#FFFFFF",
+    fontSize: 17,
   }
 });
 export default seeWriting;
