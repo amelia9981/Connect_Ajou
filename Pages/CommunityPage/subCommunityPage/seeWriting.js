@@ -235,10 +235,12 @@ const seeWriting = ({ navigation, route }) => {
   function getData() {
     const dbCom = firebase.firestore().collection(listName).doc(writing.title);
     dbCom.onSnapshot((doc) => {
-      const data = doc.data().comments;
-      setAllComment(data);
-      const likeList = doc.data().like;
-      setCurrentLike(likeList);
+      if (doc.length) {
+        const data = doc.data().comments;
+        setAllComment(data);
+        const likeList = doc.data().like;
+        setCurrentLike(likeList);
+      }
     });
   }
 
