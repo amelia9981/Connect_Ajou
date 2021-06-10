@@ -14,6 +14,7 @@ function ChatList(props) {
   const user = props.extraData;
   const navigation = useNavigation();
   const [threads, setThreads] = useState([]);
+  const [isReRendering, setReRendering] = useState(0);
   const isPicture = false;
 
   useEffect(() => {
@@ -37,11 +38,12 @@ function ChatList(props) {
         });
 
         setThreads(threads);
+        setReRendering(isReRendering + 1);
       });
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [threads]);
 
   const calculateTime = (messageTime) => {
     const current = new Date().getTime();

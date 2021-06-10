@@ -37,7 +37,10 @@ function MessageNav({ route, navigation }) {
         name="Chat"
         component={Chat}
         options={({ route }) => ({
-          title: route.params.thread.name,
+          title:
+            route.params.thread.target.email == user.email
+              ? route.params.thread.user.fullName
+              : route.params.thread.name,
           headerTintColor: "#1E3D6B",
           headerStyle: {
             height: 70,

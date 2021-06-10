@@ -21,7 +21,7 @@ const seeWriting = ({ navigation, route }) => {
   const [currentLike, setCurrentLike] = useState([]);
   const writing = route.params.data;
   const listName = route.params.listName;
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(route.params.extraData);
   const [isReRendering, setReRendering] = useState(0);
   const [reModal, setReModal] = useState(false);
   const [reTitle, setReTitle] = useState();

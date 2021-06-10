@@ -82,7 +82,11 @@ const viewList = ({ navigation, route }) => {
       {writing.map((writing) => (
         <TouchableOpacity
           onPress={() => {
-            navigation.push("See", { data: writing, listName: listName });
+            navigation.push("See", {
+              extraData: user,
+              data: writing,
+              listName: listName,
+            });
           }}
           key={writing._id}
         >

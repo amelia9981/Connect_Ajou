@@ -55,15 +55,15 @@ export default function App() {
   const responseListener = useRef();
 
   useEffect(() => {
-    // registerForPushNotification().then((token) => setToken(token));
-    // notificationListener.current =
-    //   Notifications.addNotificationReceivedListener((notification) => {
-    //     setNotification(notification);
-    //   });
-    // responseListener.current =
-    //   Notifications.addNotificationResponseReceivedListener((response) => {
-    //     console.log(response);
-    //   });
+    registerForPushNotification().then((token) => setToken(token));
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
 
     const usersRef = firebase.firestore().collection("users");
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
@@ -85,10 +85,10 @@ export default function App() {
     });
 
     return () => {
-      // Notifications.removeNotificationSubscription(
-      //   notificationListener.current
-      // );
-      // Notifications.removeNotificationSubscription(responseListener.current);
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
       unsubscribe();
     };
   }, []);
