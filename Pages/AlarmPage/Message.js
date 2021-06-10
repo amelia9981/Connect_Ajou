@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ChatList from "./ChatList";
 import Chat from "./Chat";
+import { firebase } from "../../Utilities/Firebase";
 
 const MsgStack = createStackNavigator();
 
-function MessageNav({route,navigation}) {
+function MessageNav({ route, navigation }) {
+  const [user, setUser] = useState({});
   route.state && route.state.index > 0
     ? navigation.setOptions({ tabBarVisible: false })
     : navigation.setOptions({ tabBarVisible: true });
+
+  useEffect(() => {
+    const curUserEmail = firebase.auth().currentUser.providerData[0].email;
+    const unsubscribe = firebase
+      .firestore()
+      .collection("users")
+      .doc(curUserEmail)
+      .onSnapshot((snapshot) => {
+        const getUser = snapshot.data();
+        setUser(getUser);
+      });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <MsgStack.Navigator initialRouteName="Message">

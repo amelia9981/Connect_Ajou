@@ -57,13 +57,18 @@ const viewList = ({ navigation, route }) => {
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("Search", { listName: listName })
+              navigation.navigate("Search", {
+                extraData: user,
+                listName: listName,
+              })
             }
           >
             <Feather name="search" size={25} style={{ marginRight: 10 }} />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.push("Add", { listName: listName })}
+            onPress={() =>
+              navigation.push("Add", { extraData: user, listName: listName })
+            }
           >
             <Feather name="plus-square" size={25} />
           </TouchableOpacity>

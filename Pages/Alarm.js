@@ -7,7 +7,7 @@ import { firebase } from "../Utilities/Firebase";
 
 const Tab = createMaterialTopTabNavigator();
 
-function AlarmTab({route,navigation}) {
+function AlarmTab({ route, navigation }) {
   const user = route.params.extraData;
   let notiCount;
   route.state && route.state.index > 0
@@ -70,9 +70,11 @@ function AlarmTab({route,navigation}) {
       <Tab.Screen name="Notification">
         {(props) => <Notification {...props} notiCount={notiCount} />}
       </Tab.Screen>
-      <Tab.Screen name="Message">
-        {(props) => <Message {...props} extraData={user} />}
-      </Tab.Screen>
+      <Tab.Screen
+        name="Message"
+        component={Message}
+        initialParams={{ extraData: user }}
+      ></Tab.Screen>
     </Tab.Navigator>
   );
 }
