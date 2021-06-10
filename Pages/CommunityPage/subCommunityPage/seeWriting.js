@@ -5,16 +5,15 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput, Modal,Pressable, Alert
+  TextInput,
+  Modal,
+  Alert,
 } from "react-native";
-import { Divider } from 'react-native-elements';
 import { Card, Container, CardItem, Body, Left, Right } from "native-base";
 import { Feather, MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import { firebase } from "../../../Utilities/Firebase";
 import ProfilePicture from "react-native-profile-picture";
-import { Button } from "react-native-elements/dist/buttons/Button";
 
-//실시간 좋아요 업데이트 & 폰트들 정리
 const seeWriting = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState("");
@@ -24,9 +23,10 @@ const seeWriting = ({ navigation, route }) => {
   const listName = route.params.listName;
   const [user, setUser] = useState({});
   const [isReRendering, setReRendering] = useState(0);
-  const [reModal,setReModal] = useState(false);
-  const [reTitle,setReTitle]=useState();
-  const [reContent,setReContent ]=useState();
+  const [reModal, setReModal] = useState(false);
+  const [reTitle, setReTitle] = useState();
+  const [reContent, setReContent] = useState();
+
   useEffect(() => {
     const curUserEmail = firebase.auth().currentUser.providerData[0].email;
     const unsubscribe = firebase
@@ -55,11 +55,15 @@ const seeWriting = ({ navigation, route }) => {
       },
       //글 삭제, 수정
       //if cur user == wrting.user=> 삭제 수정 선택가능
-      //comment 도 동일하게 
+      //comment 도 동일하게
       headerRight: () => (
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity onPress={() => moveToChat(writing.creator)}>
-            <Feather name="message-square" size={25} style={{ marginRight: 10 }} />
+            <Feather
+              name="message-square"
+              size={25}
+              style={{ marginRight: 10 }}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
@@ -74,14 +78,12 @@ const seeWriting = ({ navigation, route }) => {
     });
   }, [navigation]);
 
-  
   const listener = () => {
     firebase
       .firestore()
       .collection(listName)
       .onSnapshot((snapshot) => {
         let changes = snapshot.docChanges();
-        console.log(changes.type);
       });
     getData();
   };
@@ -91,7 +93,7 @@ const seeWriting = ({ navigation, route }) => {
       firebase
         .firestore()
         .collection(listName)
-        .doc(writing.title)  
+        .doc(writing.title)
         .update({
           like: firebase.firestore.FieldValue.arrayRemove(user.email),
         })
@@ -128,6 +130,7 @@ const seeWriting = ({ navigation, route }) => {
     }
     return authorUrl;
   };
+
   const onSubmit = () => {
     const comment = {
       _id: Math.random().toString(36).slice(2),
@@ -147,7 +150,6 @@ const seeWriting = ({ navigation, route }) => {
         setReRendering(isReRendering + 1);
       })
       .catch((error) => {
-        // The document probably doesn't exist.
         console.error("Error updating document: ", error);
       });
     setText("");
@@ -231,11 +233,10 @@ const seeWriting = ({ navigation, route }) => {
     }
   };
 
-  //가져오기
   function getData() {
     const dbCom = firebase.firestore().collection(listName).doc(writing.title);
     dbCom.onSnapshot((doc) => {
-      if (doc.length) {
+      if (doc.data() !== undefined) {
         const data = doc.data().comments;
         setAllComment(data);
         const likeList = doc.data().like;
@@ -244,116 +245,198 @@ const seeWriting = ({ navigation, route }) => {
     });
   }
 
-  const delWriting =()=>{
-    //if current user == writing user
-    if(user.email == writing.creator.email){
-      Alert.alert(
-        "Do you Really want to delete it?",
-        "",
-        [
-          {
-            text: "No",
-            onPress: () => console.log("NO"),
-          },
-          {//input 받아야하는데??hmmm
-            text: "Yes",
-            onPress: () => { 
-              firebase.firestore().collection(listName).doc(writing.title).delete();
-              navigation.goBack();
-            }
-          }
-        ]
-      )
-    }
-  }
-  function delComment(comment){
-    if(user.email ==comment.user.email){
-      Alert.alert(
-        "Do you Really want to delete it?",
-        "",
-        [
-          {
-            text: "No",
-            onPress: () => console.log("NO"),
-          },
-          {//input 받아야하는데??hmmm
-            text: "Yes",
-            onPress: () => {
-              firebase.firestore().collection(listName).doc(writing.title)
-                .update({
-                  comments: firebase.firestore.FieldValue.arrayRemove(comment),
-                })
-            }
-          }
-        ]
-      )
-    }
-  }
-  const reWriting =()=>{
-    if(user.email==writing.creator.email){
-      setReModal(true);
-    }
-  }
-  const reWritingUpdate=()=>{
+  const delWriting = () => {
     setReModal(false);
-    firebase.firestore().collection(listName).doc(writing.title)
-    .update({
-      title: reTitle,
-      content: reContent
-    })
-    navigation.goBack()
+    if (user.email == writing.creator.email) {
+      Alert.alert("Do you Really want to delete it?", "", [
+        {
+          text: "No",
+          onPress: () => console.log("NO"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            firebase
+              .firestore()
+              .collection(listName)
+              .doc(writing.title)
+              .delete();
+            navigation.goBack();
+          },
+        },
+      ]);
+    } else {
+      alert("You cannot delete other's!");
+    }
+  };
+
+  function delComment(comment) {
+    setReModal(false);
+    if (user.email == comment.user.email) {
+      Alert.alert("Do you Really want to delete it?", "", [
+        {
+          text: "No",
+          onPress: () => console.log("NO"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            firebase
+              .firestore()
+              .collection(listName)
+              .doc(writing.title)
+              .update({
+                comments: firebase.firestore.FieldValue.arrayRemove(comment),
+              });
+          },
+        },
+      ]);
+    } else {
+      alert("You cannot delete other's!");
+    }
   }
+
+  const reWriting = () => {
+    if (user.email == writing.creator.email) {
+      setReModal(true);
+    } else {
+      alert("You cannot revise other's!");
+    }
+  };
+
+  const reWritingUpdate = () => {
+    firebase
+      .firestore()
+      .collection(listName)
+      .doc(writing.title)
+      .get()
+      .then((doc) => {
+        firebase.firestore().collection(listName).doc(reTitle).set(
+          {
+            title: reTitle,
+            content: reContent,
+            comments: doc.data().comments,
+            createdAt: doc.data().createdAt,
+            creator: doc.data().creator,
+            like: doc.data().like,
+          },
+          { merge: true }
+        );
+      });
+    firebase.firestore().collection(listName).doc(writing.title).delete();
+    setReModal(false);
+    setModalVisible(false);
+    navigation.goBack();
+  };
 
   return (
     <>
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={{ marginLeft: '50%', marginTop: 50, marginRight: 10, backgroundColor: "#F6F8F8", padding: 20,alignContent:'center' ,justifyContent: 'center'}}>
-            <TouchableOpacity onPress={()=>setModalVisible(false)}>
-              <AntDesign name="close" size={24} color="black" style={{justifyContent:'center',alignContent:'center'}}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {delWriting()}}>
-              <Text style={{
-              fontFamily: "EBS훈민정음새론SB",
-              fontSize: 20,
-              color: "#3D3D3D"}}>Delete</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{reWriting()}}>
-              <Text style={{
-              fontFamily: "EBS훈민정음새론SB",
-              paddingTop: 5,
-              fontSize: 20,
-              color: "#3D3D3D",alignContent:'center'}}>Revise</Text>
-            </TouchableOpacity>
+        <View
+          style={{
+            marginLeft: "50%",
+            marginTop: 50,
+            marginRight: 10,
+            backgroundColor: "#F6F8F8",
+            padding: 20,
+            alignContent: "center",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <AntDesign
+              name="close"
+              size={24}
+              color="black"
+              style={{ justifyContent: "center", alignContent: "center" }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              delWriting();
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "EBS훈민정음새론SB",
+                fontSize: 20,
+                color: "#3D3D3D",
+              }}
+            >
+              Delete
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              reWriting();
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "EBS훈민정음새론SB",
+                paddingTop: 5,
+                fontSize: 20,
+                color: "#3D3D3D",
+                alignContent: "center",
+              }}
+            >
+              Revise
+            </Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
-      
-      <Modal visible={reModal} animationType="slide" transparent={true}>
-        <View style={{borderColor:'3D3D3D',margin:50, backgroundColor: "#F6F8F8", padding: 20, flex:1 ,alignContent: 'center', justifyContent: 'center' }}>
-          <TextInput
-            style={{ height: 20, paddingLeft: 10 }}
-            placeholder={writing.title}
-            onChangeText={(text) => setReTitle(text)}
-            value={reTitle}
-          />
-          <TextInput
-            style={{ height: 300, paddingLeft: 10 }}
-            placeholder={writing.content}
-            onChangeText={(text) => setReContent(text)}
-            value={reContent}
-          />
-          <View style={{ flexDirection: 'row', width: '100%', height: 50, justifyContent: 'center', alignContent: 'center', marginTop: 8 }}>
-            <View style={style.button_register}>
-              <TouchableOpacity onPress={() => setReModal(false)}>
-                <Text style={style.button_text}>Close</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={style.button_login}>
-              <TouchableOpacity onPress={() => reWritingUpdate()}>
-                <Text style={style.button_text}>Change</Text>
-              </TouchableOpacity>
+
+        <Modal visible={reModal} animationType="slide">
+          <View
+            style={{
+              borderColor: "3D3D3D",
+              margin: 50,
+              backgroundColor: "#F6F8F8",
+              padding: 20,
+              flex: 1,
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TextInput
+              style={{ height: 20, paddingLeft: 10 }}
+              placeholder={writing.title}
+              onChangeText={(text) => setReTitle(text)}
+              value={reTitle}
+            />
+            <TextInput
+              style={{ height: 300, paddingLeft: 10 }}
+              placeholder={writing.content}
+              onChangeText={(text) => setReContent(text)}
+              value={reContent}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                width: "100%",
+                height: 50,
+                justifyContent: "center",
+                alignContent: "center",
+                marginTop: 8,
+              }}
+            >
+              <View style={style.button_register}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setReModal(false);
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text style={style.button_text}>Close</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={style.button_login}>
+                <TouchableOpacity onPress={() => reWritingUpdate()}>
+                  <Text style={style.button_text}>Change</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </Modal>
       </Modal>
 
       <ScrollView style={style.container}>
@@ -440,8 +523,16 @@ const seeWriting = ({ navigation, route }) => {
                 {">"} {comment.text}{" "}
               </Text>
               <Right>
-                <TouchableOpacity onPress={()=>{delComment(comment)}}>
-                 <AntDesign name="delete" size={15} style={{ marginRight: 10 }}/>
+                <TouchableOpacity
+                  onPress={() => {
+                    delComment(comment);
+                  }}
+                >
+                  <AntDesign
+                    name="delete"
+                    size={15}
+                    style={{ marginRight: 10 }}
+                  />
                 </TouchableOpacity>
               </Right>
             </CardItem>
@@ -551,7 +642,7 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -562,16 +653,16 @@ const style = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
@@ -582,11 +673,11 @@ const style = StyleSheet.create({
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   button_register: {
     fontFamily: "IBMPlexSansKR-Regular",
@@ -644,6 +735,6 @@ const style = StyleSheet.create({
     justifyContent: "center",
     color: "#FFFFFF",
     fontSize: 17,
-  }
+  },
 });
 export default seeWriting;
